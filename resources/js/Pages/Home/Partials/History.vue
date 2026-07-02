@@ -1,5 +1,4 @@
 <script setup>
-import { onMounted } from 'vue';
 import { router } from '@inertiajs/vue3';
 import historyMockData from '@/data/history';
 import { Dot } from 'lucide-vue-next';
@@ -20,11 +19,11 @@ const latestThree = historyMockData.slice(0, 3)
         <div class="flex flex-col gap-2">
             <div v-for="history in latestThree" :key="history" class="flex flex-row items-center py-2 rounded-2xl shadow border border-gray-200 dark:border-gray-700 bg-white/40 dark:bg-white/10 backdrop-blur">
                 <div class="flex-1 max-w-8 justify-center items-center">
-                    <Dot :size="42" :class="history.status === 'sent' ? 'text-green-500' : 'text-red-500'"/>
+                    <Dot :size="42" :class="blastStatus[history.status]"/>
                 </div>
                 <div class="flex-2 flex flex-col">
                     <p class="text-sm text-gray-800 dark:text-gray-200 truncate">
-                        {{ history.blast.slice(0, 40) }} ...
+                        {{ history.blast.slice(0, 40) }}...
                     </p>
                     <small class="text-gray-600 dark:text-gray-400">{{ history.recepients.length }} recipients</small>
                 </div>
