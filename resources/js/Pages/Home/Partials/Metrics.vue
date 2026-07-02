@@ -23,14 +23,14 @@ import metricsData from '@/data/metrics';
             </div>
             <div class="col-span-2 flex flex-row justify-between max-w-full gap-2">
                 <div class="flex-1 flex flex-row max-w-full gap-1">
-                    <BoxIcon :icon="UsersRound" boxColor="bg-blue-300/50" iconColor="text-blue-600 dark:text-blue-300" class="flex-1 min-w-14"/>
+                    <BoxIcon :icon="UsersRound" boxColor="bg-blue-300/50" iconColor="text-blue-600 dark:text-blue-300" class="flex-1"/>
                     <div class="flex-2 flex items-center justify-between w-full rounded-xl py-1 px-2 bg-gray-500/20 dark:bg-gray-500">
                         <small class="text-gray-600 dark:text-gray-300">Contacts</small>
                         <p class="text-end font-semibold text-gray-600 dark:text-gray-300 mr-2">{{ metricsData.contacts }}</p>
                     </div>
                 </div>
                 <div class="flex-1 flex flex-row max-w-full gap-1">
-                    <BoxIcon :icon="FileText" boxColor="bg-blue-300/50" iconColor="text-blue-600 dark:text-blue-300" class="flex-1 min-w-14"/>
+                    <BoxIcon :icon="FileText" boxColor="bg-blue-300/50" iconColor="text-blue-600 dark:text-blue-300" class="flex-1"/>
                     <div class="flex-2 flex items-center justify-between w-full rounded-xl py-1 px-2 bg-gray-500/20 dark:bg-gray-500">
                         <small class="text-gray-600 dark:text-gray-300">Templates</small>
                         <p class="text-end font-semibold text-gray-600 dark:text-gray-300 mr-2">{{ metricsData.templates }}</p>

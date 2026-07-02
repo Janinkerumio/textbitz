@@ -13,7 +13,7 @@ import { House, Settings, UsersRound, FileText, PenSquare } from 'lucide-vue-nex
             <NavLinks :pageLink="route('app.contacts')" routeName="app.contacts">
                 <UsersRound :size="26" />
             </NavLinks>
-            <NavLinks :pageLink="route('app.create-blast')" routeName="app.create-blast">
+            <NavLinks :pageLink="route('app.blast.create')" routeName="app.blast.create">
                 <PenSquare :size="26" />
             </NavLinks>
             <NavLinks :pageLink="route('app.blast-templates')" routeName="app.blast-templates">

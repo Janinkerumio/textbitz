@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Banner from './Partials/Banner.vue';
 import Metrics from './Partials/Metrics.vue';
-
+import History from './Partials/History.vue';
 
 </script>
 
@@ -16,6 +16,8 @@ import Metrics from './Partials/Metrics.vue';
                 <Banner />
 
                 <Metrics />
+
+                <History />
             </div>
         </template>
     </AppLayout>

@@ -21,7 +21,7 @@ const user = page.props.auth.user
                         Create a new SMS blast to reach your contacts instantly
                     </small>
                 </div>
-                <button @click="router.get(route('app.create-blast'))" class="flex self-start ml-2 text-sm text-blue-600 px-3 py-2 rounded-xl bg-white/80 backdrop-blur-md shadow">
+                <button @click="router.get(route('app.blast.create'))" class="flex self-start ml-2 text-sm text-blue-600 px-3 py-2 rounded-xl bg-white/80 backdrop-blur-md shadow">
                     New Blast
                 </button>
             </div>
