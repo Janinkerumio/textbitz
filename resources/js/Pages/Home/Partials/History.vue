@@ -19,7 +19,7 @@ const latestThree = historyMockData.slice(0, 3)
         <div class="flex flex-col gap-2">
             <div v-for="history in latestThree" :key="history" class="flex flex-row items-center py-2 rounded-2xl shadow border border-gray-200 dark:border-gray-700 bg-white/40 dark:bg-white/10 backdrop-blur">
                 <div class="flex-1 max-w-8 justify-center items-center">
-                    <Dot :size="42" :class="blastStatus[history.status]"/>
+                    <Dot :size="42" :class="history.status === 'sent' ? 'text-green-500' : 'text-red-500'"/>
                 </div>
                 <div class="flex-2 flex flex-col">
                     <p class="text-sm text-gray-800 dark:text-gray-200 truncate">
