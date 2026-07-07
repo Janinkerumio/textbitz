@@ -24,7 +24,7 @@ defineProps({
             <section class="flex-1 flex-col gap-2 overflow-y-auto px-4">
                 <div class="py-12"></div>
                 <slot name="content" />
-                <div class="py-10"></div>
+                <div class="py-12"></div>
             </section>
 
             <slot name="modal" />

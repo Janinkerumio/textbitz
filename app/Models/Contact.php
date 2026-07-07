@@ -14,4 +14,15 @@ class Contact extends Model
             'tags' => 'array',
         ];
     }
+
+    public static function allTags()
+    {
+        return static::query()
+            ->pluck('tags')
+            ->filter()
+            ->flatMap(fn ($tags) => $tags)
+            ->unique()
+            ->sort()
+            ->values();
+    }
 }

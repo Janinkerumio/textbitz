@@ -1,16 +1,16 @@
 <script setup>
-import { Head, router } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { ArrowLeft } from 'lucide-vue-next';
+import EmptyHistory from '@/Components/Placeholders/EmptyHistory.vue';
 </script>
 
 <template>
     <Head title="History" />
 
-    <AppLayout page-title="History" :head-button-icon="ArrowLeft" :head-button-action="() => { router.get(route('app.dashboard')) }">
+    <AppLayout page-title="History">
         <template #content>
             <div class="flex min-h-screen items-center justify-center">
-                <h1>Hello World</h1>
+                <EmptyHistory />
             </div>
         </template>
     </AppLayout>

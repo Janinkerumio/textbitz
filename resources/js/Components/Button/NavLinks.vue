@@ -21,8 +21,8 @@ const isCurrentScreen = computed(() => route().current(props.routeName))
 </script>
 
 <template>
-    <Link :href="pageLink" 
-        class="flex items-center justify-center rounded-lg p-4" 
+    <Link :href="pageLink" prefetch
+        class="flex items-center justify-center rounded-lg p-4 pb-8" 
         :class="[isCurrentScreen ? 'text-blue-600 dark:text-blue-500' : 'text-gray-500 dark:text-gray-300']"
     >
         <i class="text-2xl" :class="iconClass">

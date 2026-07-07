@@ -1,14 +1,25 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { UserPlus } from 'lucide-vue-next';
 import EmptyContacts from '@/Components/Placeholders/EmptyContacts.vue';
 import List from './Partials/List.vue';
-import contactsMockData from '@/data/contacts.js';
+import SearchAndCategorize from './Partials/SearchAndCategorize.vue';
 
 const props = defineProps({
-    contacts: Object
+    contacts: Object,
+    filters: Object,
+    tags: Array
 })
+
+const applyFilters = (filters) => {
+    router.get(route('app.contacts'), filters, {
+        preserveState: true,
+        preserveScroll: true,
+        replace: true,
+        only: ['contacts', 'filters'],
+    })
+}
 </script>
 
 <template>
@@ -16,12 +27,18 @@ const props = defineProps({
 
     <AppLayout 
         pageTitle="Contacts" 
-        :additionalText="`${contacts.data?.length ? contacts?.total : contactsMockData.length} total contacts`" 
+        :additionalText="`${contacts.data?.length ? contacts?.total : 0} total contacts`" 
         :headButtonIcon="UserPlus"
     >
         <template #content>
-            <div v-if="contacts?.total || contactsMockData.length">
-                <List :contacts="contacts ?? contactsMockData" />
+            <div v-if="contacts?.total" class="flex flex-col w-full">
+                <SearchAndCategorize 
+                    class="mt-10"
+                    :tags="tags",
+                    :filters="filters"
+                    @change="applyFilters"
+                />
+                <List :contacts="contacts" />
             </div>
             <div v-else class="flex items-center justify-center min-h-screen">
                 <EmptyContacts />
