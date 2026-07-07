@@ -1,6 +1,6 @@
 <script setup>
 import { InfiniteScroll } from '@inertiajs/vue3';
-import { randomColor } from '@/Composables/useTagColors';
+import { colorForTag } from '@/Composables/useTagColors';
 
 const props = defineProps({
     contacts: Object
@@ -15,7 +15,7 @@ const props = defineProps({
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-300">{{ contact.contact_name }}</h3>
                     <p class="text-gray-600 dark:text-gray-400 text-sm">{{ contact.phone_num }}</p>
                     <div class="flex flex-wrap gap-2 mt-1">
-                        <span v-for="tag in contact.tags" :key="tag" class="text-xs px-2 py-0.5 rounded-full" :class="randomColor()">
+                        <span v-for="tag in contact.tags" :key="tag" class="text-xs px-2 py-0.5 rounded-full" :class="colorForTag(tag)">
                             {{ tag }}
                         </span>
                     </div>

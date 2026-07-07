@@ -9,3 +9,11 @@ const colors = [
 export function randomColor() {
     return colors[Math.floor(Math.random() * colors.length)]
 }
+
+export function colorForTag(tag) {
+    let hash = 0
+    for (const c of tag) {
+        hash += c.charCodeAt(0)
+    }
+    return colors[hash % colors.length]
+}

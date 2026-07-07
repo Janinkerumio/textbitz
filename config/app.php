@@ -123,4 +123,9 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'initiate_db_seed' => array_filter(
+        array_map('trim', explode(',', env('APP_INITIATE_DB_SEED', '')))
+    ),
+
+
 ];

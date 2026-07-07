@@ -16,11 +16,11 @@ const props = defineProps({
 
     <AppLayout 
         pageTitle="Contacts" 
-        :additionalText="contacts.data?.length ? `${contacts?.total} total contacts` : contactsMockData.length" 
+        :additionalText="`${contacts.data?.length ? contacts?.total : contactsMockData.length} total contacts`" 
         :headButtonIcon="UserPlus"
     >
         <template #content>
-            <div v-if="contacts.data?.length">
+            <div v-if="contacts?.total || contactsMockData.length">
                 <List :contacts="contacts ?? contactsMockData" />
             </div>
             <div v-else class="flex items-center justify-center min-h-screen">
