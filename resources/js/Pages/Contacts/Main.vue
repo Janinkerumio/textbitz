@@ -17,7 +17,8 @@ const applyFilters = (filters) => {
         preserveState: true,
         preserveScroll: true,
         replace: true,
-        only: ['contacts', 'filters'],
+        only: ['contacts', 'filters', 'tags'],
+        reset: ['contacts']
     })
 }
 </script>
@@ -31,15 +32,18 @@ const applyFilters = (filters) => {
         :headButtonIcon="UserPlus"
     >
         <template #content>
-            <div v-if="contacts?.total" class="flex flex-col w-full">
+            <div class="flex flex-col w-full">
                 <SearchAndCategorize 
                     class="mt-10"
                     :tags="tags",
                     :filters="filters"
                     @change="applyFilters"
                 />
-                <List :contacts="contacts" />
-            </div>
+            </div>    
+            <List v-if="contacts.total || tags" 
+                :contacts="contacts"
+                :key="`${filters.search}-${JSON.stringify(filters.tags)}`"
+            />
             <div v-else class="flex items-center justify-center min-h-screen">
                 <EmptyContacts />
             </div>

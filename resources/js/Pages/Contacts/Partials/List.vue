@@ -23,8 +23,8 @@ const clickEvent = (event) => {
 </script>
 
 <template>
-    <InfiniteScroll data="contacts" class="mt-5">
-        <div class="grid grid-cols-1 gap-2">
+    <InfiniteScroll data="contacts" class="mt-5 overflow-y-auto snap-y snap-mandatory">
+        <div class="grid grid-cols-1 gap-2 h-max">
             <div v-for="contact in contacts.data" :key="contact.id" @click="clickEvent(contact)" class="bg-white/70 dark:bg-gray-500/40 backdrop-blur rounded-xl border border-gray-100 dark:border-gray-600 shadow-sm p-4">
                 <div class="flex flex-row gap-2 max-w-full">
                     <div class="rounded-full p-3 w-12 h-12 font-semibold" :class="avatarColor(contact.contact_name)">
@@ -34,7 +34,7 @@ const clickEvent = (event) => {
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-300">{{ contact.contact_name }}</h3>
                         <p class="text-gray-600 dark:text-gray-400 text-sm">{{ contact.phone_num }}</p>
                         <div class="flex flex-wrap gap-2 mt-1">
-                            <span v-for="tag in contact.tags" :key="tag" class="text-xs px-2 py-0.5 rounded-full font-semibold" :class="colorForTag(tag)">
+                            <span v-for="tag in contact.tags" :key="tag" class="text-xs px-2 py-0.5 rounded-full" :class="colorForTag(tag)">
                                 {{ tag }}
                             </span>
                         </div>

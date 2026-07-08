@@ -13,8 +13,10 @@ class ContactController extends Controller
         $query = Contact::query();
 
         if ($request->filled('search')) {
-            $query->where('contact_name', 'like', "%{$request->search}%")
-                ->orWhere('phone_num', 'like', "%{$request->search}%");
+            $query->where(function ($q) use ($request) {
+                $q->where('contact_name', 'like', "%{$request->search}%")
+                    ->orWhere('phone_num', 'like', "%{$request->search}%");
+            });
         }
 
         if ($request->filled('tags')) {
