@@ -5,7 +5,7 @@ import { House, Settings, UsersRound, FileText, PenSquare, History } from 'lucid
 </script>
 
 <template>
-    <footer class="fixed w-full bottom-0 pb-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-t border-gray-200 dark:border-gray-600 z-50">
+    <footer class="fixed w-full bottom-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-t border-gray-200 dark:border-gray-600 z-50">
         <div class="flex flex-wrap justify-between px-2">
             <NavLinks :pageLink="route('app.dashboard')" routeName="app.dashboard">
                 <House :size="24" />
