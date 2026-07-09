@@ -15,7 +15,7 @@ const props = defineProps({
     },
 })
 
-const emit = defineEmits(['change'])
+const emit = defineEmits(['emitFilters'])
 
 const form = reactive({
     search: props.filters?.search ?? '',
@@ -27,11 +27,11 @@ const removeTags = () => {
 }
 
 const emitChanges = debounce(() => {
-    emit('change', {
+    emit('emitFilters', {
         search: form.search,
         tags: form.tags,
     })
-}, 80)
+}, 200)
 
 watch(form, emitChanges, { deep: true })
 </script>

@@ -1,3 +1,12 @@
+/**
+ * Available color palettes, cycled through by hash or chosen at random.
+ * Each palette provides three class strings for different visual weights:
+ * - `light`: subtle background/text, used for default tag chips
+ * - `bold`: solid background with white text, used for emphasized tags
+ * - `border`: a matching border color, used when `bordered` is requested
+ *
+ * @type {Array<{ light: string, bold: string, border: string }>}
+ */
 const palettes = [
     {
         light: 'bg-red-100 text-red-700 dark:bg-red-200/80 dark:text-red-800',
@@ -15,7 +24,7 @@ const palettes = [
         border: 'border-green-500',
     },
     {
-        light: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-200/80 dark:text-orange-800',
+        light: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-200/80 dark:text-yellow-800',
         bold: 'bg-yellow-500 text-white dark:bg-yellow-600',
         border: 'border-yellow-500',
     },
@@ -26,6 +35,15 @@ const palettes = [
     },
 ]
 
+/**
+ * Produces a simple, deterministic non-cryptographic hash of a string by
+ * summing its character codes. Used to consistently map a tag name to the
+ * same palette index every time.
+ *
+ * @param {string} str - The string to hash (e.g. a tag name).
+ * @returns {number} A non-negative integer hash. Not unique — collisions
+ *   are expected and acceptable for palette selection.
+ */
 function hashString(str) {
     let hash = 0
 
@@ -36,6 +54,18 @@ function hashString(str) {
     return hash
 }
 
+/**
+ * Builds the final Tailwind class string for a given palette and options.
+ *
+ * @param {{ light: string, bold: string, border: string }} palette - The
+ *   palette to build classes from.
+ * @param {Object} [options={}] - Display options.
+ * @param {boolean} [options.bordered=false] - If true, appends the
+ *   palette's border class.
+ * @param {boolean} [options.bold=false] - If true, uses the palette's
+ *   `bold` classes instead of `light`.
+ * @returns {string} A space-separated Tailwind class string.
+ */
 function buildClasses(palette, options = {}) {
     const {
         bordered = false,
@@ -50,11 +80,32 @@ function buildClasses(palette, options = {}) {
         .join(' ')
 }
 
+/**
+ * Returns Tailwind classes for a randomly selected palette. Since the
+ * palette is chosen with `Math.random()`, calling this multiple times
+ * for the same input will generally return different colors — use
+ * `colorForTag` instead if you need a color that's stable across renders.
+ *
+ * @param {Object} [options={}] - Display options, see `buildClasses`.
+ * @param {boolean} [options.bordered=false] - Include the border class.
+ * @param {boolean} [options.bold=false] - Use bold (solid) styling instead of light.
+ * @returns {string} A space-separated Tailwind class string.
+ */
 export function randomColor(options = {}) {
     const palette = palettes[Math.floor(Math.random() * palettes.length)]
     return buildClasses(palette, options)
 }
 
+/**
+ * Returns Tailwind classes for a palette deterministically derived from
+ * the given tag name, so the same tag always renders with the same color.
+ *
+ * @param {string} tag - The tag name to color (e.g. "urgent", "vip").
+ * @param {Object} [options={}] - Display options, see `buildClasses`.
+ * @param {boolean} [options.bordered=false] - Include the border class.
+ * @param {boolean} [options.bold=false] - Use bold (solid) styling instead of light.
+ * @returns {string} A space-separated Tailwind class string.
+ */
 export function colorForTag(tag, options = {}) {
     const palette = palettes[hashString(tag) % palettes.length]
     return buildClasses(palette, options)

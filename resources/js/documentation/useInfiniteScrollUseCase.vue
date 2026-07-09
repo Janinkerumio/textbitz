@@ -1,11 +1,11 @@
 <script setup>
-import { useTemplateRef, computed } from 'vue';
+import { ref, useTemplateRef, watch, onMounted } from 'vue';
 import { colorForTag } from '@/Composables/useTagColors';
 import onlyInitials from '@/utils/onlyInitials';
 import avatarColors from '@/utils/avatarColors';
+import { useInfiniteScroll } from '@vueuse/core';
 import { fetchContact } from '@/data/api/fetchViaAxios';
 import MediumSpinner from '@/Components/Spinners/MediumSpinner.vue';
-import { createInfiniteScroll } from '@/Composables/createInfiniteScroll';
 
 const props = defineProps({
     filters: {
@@ -17,17 +17,11 @@ const props = defineProps({
     }
 })
 
+const contacts = ref([])
 const container = useTemplateRef('container')
-
-const { items: contacts, loading, onScroll } = createInfiniteScroll(
-    fetchContact,
-    computed(() => props.filters),
-    { distance: 20 }
-)
-
-const clickEvent = (event) => {
-    console.log(event);
-}
+const page = ref(1)
+const hasMore = ref(true)
+const loading = ref(false)
 
 const avatarColor = (name) => {
     let hash = 0
@@ -36,14 +30,78 @@ const avatarColor = (name) => {
     }
     return avatarColors[hash % avatarColors.length]
 }
+
+const loadContacts = async (reset = false) => {
+    if (loading.value) return
+    if (!reset && !hasMore.value) return
+
+    loading.value = true
+
+    try {
+        const params = new URLSearchParams()
+        params.append('page', page.value)
+
+        if (props.filters?.search) {
+            params.append('search', props.filters.search)
+        }
+
+        props.filters?.tags?.forEach(tag => {
+            params.append('tags[]', tag)
+        })
+
+        const data = await fetchContact(params)
+
+        if (reset) {
+            contacts.value = data.data
+        } else {
+            contacts.value.push(...data.data)
+        }
+
+        page.value = data.current_page + 1
+        hasMore.value = data.current_page < data.last_page
+    }
+    finally {
+        loading.value = false
+    }
+}
+
+useInfiniteScroll(
+    container,
+    () => {
+        loadContacts()
+    },
+    {
+        distance: 10,
+        canLoadMore: () => {
+            return hasMore.value && !loading.value
+        }
+    }
+)
+
+const clickEvent = (event) => {
+    console.log(event);
+}
+
+watch(
+    () => props.filters,
+    () => {
+        page.value = 1
+        hasMore.value = true
+
+        loadContacts(true)
+    },
+    {
+        deep: true,
+    }
+)
+
+onMounted(() => {
+    loadContacts()
+})
 </script>
 
 <template>
-    <div 
-        ref="container" 
-        @scroll="onScroll(container)" 
-        class="mt-5 overflow-y-auto h-screen"
-    >
+    <div ref="container" class="mt-5">
         <div class="grid grid-cols-1 gap-2 h-max">
             <div v-for="contact in contacts" :key="contact.id" @click="clickEvent(contact)" class="bg-white/70 dark:bg-gray-500/40 backdrop-blur rounded-xl border border-gray-100 dark:border-gray-600 shadow-sm p-4">
                 <div class="flex flex-row gap-2 max-w-full">

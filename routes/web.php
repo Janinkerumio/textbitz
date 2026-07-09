@@ -26,3 +26,4 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 require __DIR__.'/inertia-pages.php';
+require __DIR__.'/web-based-api.php';
