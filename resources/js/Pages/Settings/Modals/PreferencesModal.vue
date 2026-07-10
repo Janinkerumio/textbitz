@@ -7,6 +7,7 @@ import TextInput from '@/Components/TextInput.vue';
 import settings from '@/data/settings';
 import { ChevronsDownUp } from 'lucide-vue-next';
 import { darkMode } from '@/Composables/useDarkMode';
+import OptionsDropdown from '@/Components/Dropdown/OptionsDropdown.vue';
 
 const props = defineProps({
     modelValue: Boolean
@@ -99,29 +100,16 @@ watch(
                         />
                     </button>
                 </div>
-
-                <Transition
-                    enter-active-class="transition-all duration-200"
-                    enter-from-class="opacity-0 max-h-0"
-                    enter-to-class="opacity-100 max-h-40"
-                    leave-active-class="transition-all duration-200"
-                    leave-from-class="opacity-100 max-h-40"
-                    leave-to-class="opacity-0 max-h-0"
-                >
-                    <div
-                        v-if="isDarkModeOpen"
-                        class="absolute right-0 bottom-full mt-2 z-60 rounded-lg border border-gray-200 dark:border-gray-500 dark:text-gray-200 bg-white/20 dark:bg-gray-400/10 backdrop-blur-lg shadow-lg overflow-hidden"
+                <OptionsDropdown :isOpen="isDarkModeOpen">
+                    <button
+                        v-for="option in settings.darkModeChoices"
+                        :key="option"
+                        @click="selectDarkMode(option)"
+                        class="block w-full px-4 py-3 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-400"
                     >
-                        <button
-                            v-for="option in settings.darkModeChoices"
-                            :key="option"
-                            @click="selectDarkMode(option)"
-                            class="block w-full px-4 py-3 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-400"
-                        >
-                            {{ option }}
-                        </button>
-                    </div>
-                </Transition>
+                        {{ option }}
+                    </button>
+                </OptionsDropdown>
             </div>
         </div>
     </BottomModal>

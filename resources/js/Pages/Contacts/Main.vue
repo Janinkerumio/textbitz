@@ -35,12 +35,15 @@ const applyFilters = (filters) => {
                     @emitFilters="applyFilters"
                 />
             </div>    
-            <List v-if="props.tags" 
+            <List v-if="hasData" 
                 :filters="useFilters"
             />
             <div v-else class="flex items-center justify-center min-h-screen">
                 <EmptyContacts />
             </div>
+        </template>
+        <template #modal>
+
         </template>
     </AppLayout>
 </template>

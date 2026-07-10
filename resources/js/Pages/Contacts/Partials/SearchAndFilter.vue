@@ -37,7 +37,7 @@ watch(form, emitChanges, { deep: true })
 </script>
 
 <template>
-    <div class="flex flex-col gap-2 w-full">
+    <div class="sticky flex flex-col gap-2 w-full">
         <div class="flex flex-wrap items-center rounded-xl border bg-white/40 border-gray-400 py-1 px-4 focus-within:border-blue-500 transition-all duration-300">
             <Search class="text-gray-600 dark:text-gray-300"/>
             <input
@@ -51,7 +51,7 @@ watch(form, emitChanges, { deep: true })
             <div class="flex flex-row items-center gap-2 w-max">
                 <div 
                     @click="removeTags"
-                    class="px-3 py-[1.5px] rounded-full border transition-colors duration-200" 
+                    class="px-3 py-[1.5px] rounded-full border transition-colors duration-50" 
                     :class="form.tags.length === 0 ? colorForTag('All', { bordered: true, bold: true }) : 'bg-gray-300 text-gray-600'"
                 >
                     All
