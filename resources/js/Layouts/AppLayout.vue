@@ -2,11 +2,26 @@
 import FooterNav from '@/Components/Footer/FooterNav.vue';
 import AppHead from '@/Components/Header/AppHead.vue';
 defineProps({
-    pageTitle: String,
-    additionalText: String,
-    headButtonAction: Function,
-    headButtonIcon: Object,
-    headButtonText: String
+    pageTitle: {
+        type: String,
+        default: ''
+    },
+    additionalText: {
+        type: String,
+        default: ''
+    },
+    headButtonAction: {
+        type: Function,
+        default: () => {}
+    },
+    headButtonIcon: {
+        type: Object,
+        default: null
+    },
+    headButtonText: {
+        type: String,
+        default: ''
+    },
 })
 </script>
 

@@ -10,3 +10,9 @@ export const fetchContact = async (params) => {
 
     return response.data
 }
+
+export const fetchOneContact = async (id) => {
+    const response = await api.get(route('api.contacts.show', id))
+
+    return response.data
+}

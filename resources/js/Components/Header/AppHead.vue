@@ -9,9 +9,11 @@ defineProps({
     },
     headButtonAction: {
         type: Function,
+        default: () => {}
     },
     headButtonIcon: {
-        type: Object
+        type: Object,
+        dafault: null
     },
     headButtonText: {
         type: String,

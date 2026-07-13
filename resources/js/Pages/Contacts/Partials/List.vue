@@ -6,11 +6,7 @@ import avatarColors from '@/utils/avatarColors';
 import { fetchContact } from '@/data/api/fetchViaAxios';
 import MediumSpinner from '@/Components/Spinners/MediumSpinner.vue';
 import { createInfiniteScroll } from '@/Composables/createInfiniteScroll';
-import { Ellipsis, Menu, X, Trash, SendHorizontal  } from 'lucide-vue-next'
-import { Transition } from 'vue';
-import { useIsVisible } from '@/Composables/useIsVisible';
-import OptionsDropdown from '@/Components/Dropdown/OptionsDropdown.vue';
-import BottomPopUp from '@/Components/PopUps/BottomPopUp.vue';
+import { Ellipsis  } from 'lucide-vue-next'
 
 const props = defineProps({
     filters: {
@@ -24,11 +20,12 @@ const props = defineProps({
 
 const isSelectMode = ref(false);
 const selectedContacts = ref(new Set())
-const isOptionsWithinOpen = ref(false)
-const isOptionsBottomOpen = ref(false)
+const selectedIds = computed(() => Array.from(selectedContacts.value))
 
-const toolbarRef = ref(null)
-const { isVisible } = useIsVisible(toolbarRef)
+const emit = defineEmits([
+    'openActionsModal',
+    'openModalwithId'
+])
 
 const container = useTemplateRef('container')
 
@@ -51,13 +48,13 @@ const toggleSelection = (id) => {
 }
 
 const openContact = (id) => {
-    
+    emit('openModalwithId', id)
 }
 
 const longPressEvent = (id) => {
     isSelectMode.value = true
     toggleSelection(id)
-    
+    emit('openActionsModal')
 }
 
 const exitSelectMode = () => {
@@ -81,45 +78,13 @@ watch(selectedContacts,
     }
 )
 
-watch((isOptionsBottomOpen, isOptionsWithinOpen, isVisible),
-    () => {
-        if(isOptionsBottomOpen.value && isVisible.value) {
-            isOptionsBottomOpen.value = false
-        }
-
-        if(isOptionsWithinOpen && !isVisible.value) {
-            isOptionsWithinOpen.value = false
-        }
-    }
-)
+defineExpose({
+    exitSelectMode,
+    selectedIds
+})
 </script>
 
 <template>
-    <div ref="toolbarRef" v-show="isSelectMode" class="w-full flex flex-wrap items-center justify-end mt-2 bg-white dark:bg-gray-700 rounded-xl shadow transition-all duration-400 ease-in-out">
-        <p class="text-gray-600 dark:text-gray-400 px-6">{{ Array.from(selectedContacts).length }} selected</p>
-        <div class="relative">
-            <button @click="isOptionsWithinOpen = !isOptionsWithinOpen" class="text-blue-500 p-2 active:opacity-70">
-                <Menu />
-            </button>
-            <OptionsDropdown :isOpen="isOptionsWithinOpen" width="w-72">
-                <div class="flex flex-col gap-2 py-2">
-                    <button class="flex justify-between text-gray-700 py-1 px-2">
-                        <Trash class="text-red-500 dark:text-red-300 font-semibold" />
-                        <p class="text-red-500 dark:text-red-300">Delete</p>
-                        <div></div>
-                    </button>
-                    <button class="flex justify-between text-gray-700 py-1 px-2">
-                        <SendHorizontal class="text-gray-500 dark:text-gray-400 font-semibold" />
-                        <p class="text-gray-500 dark:text-gray-400">Add to Blast</p>
-                        <div></div>
-                    </button>
-                </div>
-            </OptionsDropdown>
-        </div>
-        <button @click="exitSelectMode" class="text-gray-600 dark:text-gray-400 p-2 active:opacity-70">
-            <X />
-        </button>
-    </div>
     <div 
         ref="container" 
         @scroll="onScroll(container)" 
@@ -157,29 +122,4 @@ watch((isOptionsBottomOpen, isOptionsWithinOpen, isVisible),
             </div>
         </div>
     </div>
-    <BottomPopUp :isOpen="isSelectMode && !isVisible" bottom-pos="bottom-[10%]">
-        <p class="text-gray-600 dark:text-gray-400 px-6">{{ Array.from(selectedContacts).length }} selected</p>
-        <div class="relative">
-            <button @click="isOptionsBottomOpen = !isOptionsBottomOpen" class="text-blue-500 p-2 active:opacity-70">
-                <Menu />
-            </button>
-            <OptionsDropdown :isOpen="isOptionsBottomOpen" width="w-72">
-                <div class="flex flex-col gap-2 py-2">
-                    <button class="flex justify-between text-gray-700 py-1 px-2">
-                        <Trash class="text-red-500 dark:text-red-300 font-semibold" />
-                        <p class="text-red-500 dark:text-red-300">Delete</p>
-                        <div></div>
-                    </button>
-                    <button class="flex justify-between text-gray-700 py-1 px-2">
-                        <SendHorizontal class="text-gray-500 dark:text-gray-400 font-semibold" />
-                        <p class="text-gray-500 dark:text-gray-400">Add to Blast</p>
-                        <div></div>
-                    </button>
-                </div>
-            </OptionsDropdown>
-        </div>
-        <button @click="exitSelectMode" class="text-gray-600 dark:text-gray-400 p-2 active:opacity-70">
-            <X />
-        </button>
-    </BottomPopUp>
 </template>
