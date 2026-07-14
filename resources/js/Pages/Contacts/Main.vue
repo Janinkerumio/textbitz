@@ -8,18 +8,28 @@ import List from './Partials/List.vue';
 import SearchAndFilter from './Partials/SearchAndFilter.vue';
 import LongPressActions from './Modals/LongPressActions.vue';
 import Select from './Modals/Select.vue';
+import Create from './Modals/Create.vue';
 
 const props = defineProps({
     tags: Array,
-    hasData: String|Number
+    hasData: String|Number,
+    newContact: { 
+        type: Object,
+        default: null
+    }
 })
 
 const useFilters = ref({})
 const showLongPressActions = ref(false)
-const showSelectModal = ref(false)
+const isSelectModalShown = ref(false)
+const isCreateModalShown = ref(false)
 const listRef = ref(null)
 const passedId = ref(null)
 const selectedIds = computed(() => listRef.value?.selectedIds ?? [])
+
+const showCreateModal = () => {
+    isCreateModalShown.value = true
+}
 
 const applyFilters = (filters) => {
     useFilters.value = {...filters}
@@ -31,7 +41,7 @@ const onLongPressActionsUpdate = (value) => {
 
 const passId = (id) => {
     passedId.value = id
-    showSelectModal.value = id ? true : false
+    isSelectModalShown.value = id ? true : false
 }
 
 const resetId = () => {
@@ -51,6 +61,12 @@ const handleDeleteContacts = () => {
     console.log('Delete contacts IDS: ' + ids)
     //Actions later
 }
+
+watch(() => props.newContact, (contact) => {
+    if (contact) {
+        listRef.value?.prependContact?.(contact)
+    }
+})
 </script>
 
 <template>
@@ -60,6 +76,7 @@ const handleDeleteContacts = () => {
         pageTitle="Contacts" 
         :additionalText="`${hasData ?? 0} total contacts`" 
         :headButtonIcon="UserPlus"
+        :headButtonAction="() => showCreateModal()"
     >
         <template #content>
             <div class="flex flex-col w-full">
@@ -88,12 +105,13 @@ const handleDeleteContacts = () => {
                 @deleteContactsHandler="handleDeleteContacts"
             />
             <Select
-                v-model="showSelectModal"
+                v-model="isSelectModalShown"
                 :ID="passedId"
                 @update:modelValue="resetId"
-            >
-
-            </Select>
+            />
+            <Create
+                v-model="isCreateModalShown"
+            />
         </template>
     </AppLayout>
 </template>

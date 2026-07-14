@@ -28,7 +28,7 @@ defineProps({
             <h1 class="text-xl font-bold text-gray-100">{{ headerName }}</h1>
             <p v-if="additionalText !== ''" class="text-xs text-gray-200">{{ additionalText }}</p>
         </div>
-        <button v-if="headButtonAction || headButtonIcon" @click="headButtonAction" class="rounded-xl p-2 bg-gray-200/90">
+        <button v-if="headButtonIcon" @click="headButtonAction" class="rounded-xl p-2 bg-gray-200/90">
             <component :is="headButtonIcon" :size="24" class="text-blue-500"/>
             <p v-if="headButtonText !== ''">{{ headButtonText }}</p>
         </button>

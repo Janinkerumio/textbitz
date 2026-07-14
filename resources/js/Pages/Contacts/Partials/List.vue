@@ -2,7 +2,7 @@
 import { useTemplateRef, computed, ref, watch } from 'vue';
 import { colorForTag } from '@/Composables/useTagColors';
 import onlyInitials from '@/utils/onlyInitials';
-import avatarColors from '@/utils/avatarColors';
+import randomAvatarColor from '@/utils/avatarColors';
 import { fetchContact } from '@/data/api/fetchViaAxios';
 import MediumSpinner from '@/Components/Spinners/MediumSpinner.vue';
 import { createInfiniteScroll } from '@/Composables/createInfiniteScroll';
@@ -62,12 +62,8 @@ const exitSelectMode = () => {
     selectedContacts.value = new Set()
 }
 
-const avatarColor = (name) => {
-    let hash = 0
-    for (const n of name) {
-        hash += n.charCodeAt(0)
-    }
-    return avatarColors[hash % avatarColors.length]
+const prependContact = (contact) => {
+    contacts.value.unshift(contact)
 }
 
 watch(selectedContacts, 
@@ -80,7 +76,8 @@ watch(selectedContacts,
 
 defineExpose({
     exitSelectMode,
-    selectedIds
+    selectedIds,
+    prependContact
 })
 </script>
 
@@ -88,7 +85,7 @@ defineExpose({
     <div 
         ref="container" 
         @scroll="onScroll(container)" 
-        class="mt-5 overflow-y-auto h-full"
+        class="mt-5 overflow-y-auto max-h-full"
     >
         <div class="grid grid-cols-1 gap-2 h-full">
             <div v-for="contact in contacts" 
@@ -102,7 +99,7 @@ defineExpose({
                 "
             >
                 <div class="flex flex-wrap gap-2 max-w-full">
-                    <div class="rounded-full text-xl flex items-center justify-center p-1 w-12 h-12 font-semibold" :class="avatarColor(contact.contact_name)">
+                    <div class="rounded-full text-xl flex items-center justify-center p-1 w-12 h-12 font-semibold" :class="randomAvatarColor(contact.contact_name)">
                         {{ onlyInitials(contact.contact_name) }}
                     </div>
                     <div class="flex-1 flex flex-col">

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['phone_num', 'contact_name', 'tags'])]
+#[Fillable(['phone_num', 'contact_name', 'tags', 'user_id'])]
 class Contact extends Model
 {
     protected function casts(): array

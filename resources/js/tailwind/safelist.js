@@ -1,4 +1,4 @@
-const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
+const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'gray'];
 
 export default colors.flatMap(color => [
     `bg-${color}-100`,
