@@ -4,7 +4,6 @@ import { colorForTag } from '@/Composables/useTagColors';
 import onlyInitials from '@/utils/onlyInitials';
 import randomAvatarColor from '@/utils/avatarColors';
 import { fetchContact } from '@/data/api/fetchViaAxios';
-import MediumSpinner from '@/Components/Spinners/MediumSpinner.vue';
 import AvatarCardColList from '@/Components/Skeleton/AvatarCardColList.vue';
 import { createInfiniteScroll } from '@/Composables/createInfiniteScroll';
 import { Ellipsis  } from 'lucide-vue-next'
