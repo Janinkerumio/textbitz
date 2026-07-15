@@ -39,7 +39,7 @@ class ContactController extends Controller
             });
         };
 
-        return response()->json($query->latest()->paginate(10));
+        return response()->json($query->latest()->paginate(20));
     }
 
     public function store(ContactRequest $request)

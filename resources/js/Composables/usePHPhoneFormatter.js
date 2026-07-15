@@ -88,7 +88,8 @@ export const isValidPhone = (value) => {
  * Composable providing real-time debounced validation + formatting helpers
  * for a phone number ref (typically a form field like form.phone_num).
  *
- * @param {import('vue').Ref<string>} phoneRef - a ref/reactive getter for the raw input value
+ * @param {import('@inertiajs/vue3').InertiaForm<Record<string, any>>} form - the reactive form object from `useForm()`, e.g. `useForm({ phone_num: '' })`
+ * @param {string} field - the key on `form` holding the phone number value
  * @param {number} debounceMs - debounce delay before validation runs
  */
 export function usePhoneFormatter(form, field = 'phone_num', debounceMs = 100) {

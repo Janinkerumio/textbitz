@@ -6,7 +6,7 @@ import BottomModal from '@/Components/Modal/BottomModal.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import SubmitButton from '@/Components/Button/SubmitButton.vue';
-import { BookPlus } from 'lucide-vue-next';
+import { BookPlus, UserPlus } from 'lucide-vue-next';
 import { usePhoneFormatter, normalizePhone, stripSpaces } from '@/Composables/usePHPhoneFormatter';
 
 defineProps({
@@ -51,7 +51,12 @@ const submit = () => {
         :model-value="modelValue"
         @update:model-value="emit('update:modelValue', $event)"
     >
-        <h1 class="font-semibold text-lg mb-4">New contact</h1>
+    <div class="flex justify-between items-end">
+        <h1 class="font-semibold text-lg mb-4 dark:text-gray-200">Create new contact</h1>
+        <i class="text-gray-600 rounded-full bg-gray-300 p-3">
+            <UserPlus :size="24" />
+        </i>
+    </div>
         <form @submit.prevent="submit" class="flex flex-col gap-4 px-2">
             <div class="flex flex-col gap-1 w-full">
                 <InputLabel value="Name" />
@@ -105,8 +110,8 @@ const submit = () => {
                 </Transition>
             </div>
             <div class="flex justify-end mt-5">
-                <SubmitButton :disabled="form.processing">
-                    <BookPlus :size="20" class="text-gray-100"/>Save
+                <SubmitButton width="w-full" :disabled="form.processing">
+                    <BookPlus :size="20" class="text-gray-100"/><p class="uppercase">Save</p>
                 </SubmitButton>
             </div>
         </form>

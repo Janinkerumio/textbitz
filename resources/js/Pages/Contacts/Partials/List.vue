@@ -5,8 +5,10 @@ import onlyInitials from '@/utils/onlyInitials';
 import randomAvatarColor from '@/utils/avatarColors';
 import { fetchContact } from '@/data/api/fetchViaAxios';
 import MediumSpinner from '@/Components/Spinners/MediumSpinner.vue';
+import AvatarCardColList from '@/Components/Skeleton/AvatarCardColList.vue';
 import { createInfiniteScroll } from '@/Composables/createInfiniteScroll';
 import { Ellipsis  } from 'lucide-vue-next'
+import { formatPhoneDisplay } from '@/Composables/usePHPhoneFormatter';
 
 const props = defineProps({
     filters: {
@@ -104,7 +106,7 @@ defineExpose({
                     </div>
                     <div class="flex-1 flex flex-col">
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-300">{{ contact.contact_name }}</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm">{{ contact.phone_num }}</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">{{ formatPhoneDisplay(contact.phone_num) }}</p>
                         <div class="flex flex-wrap gap-2 mt-1">
                             <span v-for="tag in contact.tags" :key="tag" class="text-xs px-2 py-0.5 rounded-full" :class="colorForTag(tag)">
                                 {{ tag }}
@@ -114,8 +116,8 @@ defineExpose({
                     <Ellipsis class="text-gray-500"/>
                 </div>
             </div>
-            <div v-if="loading" class="flex justify-center py-4">
-                <MediumSpinner />
+            <div v-if="loading" class="flex justify-center">
+                <AvatarCardColList />
             </div>
         </div>
     </div>

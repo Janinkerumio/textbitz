@@ -143,7 +143,7 @@ onUnmounted(() => {
 
             <section
                 :style="sheetStyle"
-                class="absolute bottom-0 left-0 w-full rounded-t-3xl bg-white dark:bg-gray-600 shadow-2xl"
+                class="absolute bottom-0 left-0 w-full rounded-t-3xl bg-white dark:bg-gray-700/95 backdrop-blur-xl shadow-2xl"
             >
                 <div
                     class="flex justify-center py-3 touch-none cursor-grab active:cursor-grabbing"
