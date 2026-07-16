@@ -8,7 +8,7 @@ const user = page.props.auth.user
 
 <template>
     <div class="mt-12 bg-gradient-to-br from-blue-600 via-blue-500 to-amber-500/40 p-4 rounded-2xl">
-        <h1 class="font-bold font-mono text-white text-3xl">Hello {{ user.name }}</h1>
+        <h1 class="font-bold text-white text-3xl">Hello {{ user.name }}</h1>
         <div class="flex justify-between mt-2">
             <div class="flex flex-col gap-4">
                 <small class="flex-1 max-w-32 text-white rounded-full bg-white/20 flex flex-row gap-2 items-center py-1 px-2">

@@ -79,7 +79,7 @@ watch(() => props.newContact, (contact) => {
         :headButtonAction="() => showCreateModal()"
     >
         <template #content>
-            <div class="flex flex-col w-full">
+            <div v-if="hasData" class="flex flex-col w-full">
                 <SearchAndFilter 
                     class="mt-10"
                     :tags="tags",
@@ -92,7 +92,7 @@ watch(() => props.newContact, (contact) => {
                 @openActionsModal="showLongPressActions = true"
                 @openModalwithId="passId"
             />
-            <div v-else class="flex items-center justify-center min-h-screen">
+            <div v-else class="flex items-center justify-center min-h-[100dvh]">
                 <EmptyContacts />
             </div>
         </template>
