@@ -7,9 +7,6 @@ defineProps({
         type: Object,
         default: null
     },
-    iconClass: {
-        default: ''
-    }
 })
 </script>
 

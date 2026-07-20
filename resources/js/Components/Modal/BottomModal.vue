@@ -76,6 +76,8 @@ watch(
     (value) => {
         if (value) {
             open()
+        } else if (visible.value) {
+            close()
         }
     },
     { immediate: true }

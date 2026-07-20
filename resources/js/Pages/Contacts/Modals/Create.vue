@@ -71,6 +71,8 @@ const submit = () => {
                 <InputLabel value="Phone Number" />
                 <TextInput
                     name="phone_num"
+                    type="tel"
+                    inputmode="numeric"
                     :model-value="form.phone_num"
                     @input="handlePhoneInput"
                     required

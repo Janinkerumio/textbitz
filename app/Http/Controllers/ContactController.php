@@ -89,7 +89,7 @@ class ContactController extends Controller
     {
         try {
             $contact = Contact::findOrFail($id);
-            $contact->update($request);
+            $contact->update($request->validated());
 
             return back()->with('success', 'Contact updated successfully.');
 

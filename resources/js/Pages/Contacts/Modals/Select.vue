@@ -11,6 +11,7 @@ import randomAvatarColor from '@/utils/avatarColors';
 import InputError from '@/Components/InputError.vue';
 import SubmitButton from '@/Components/Button/SubmitButton.vue';
 import IconButton from '@/Components/Button/IconButton.vue';
+import { dialog } from '#nativephp'
 
 const props = defineProps({
     modelValue: Boolean,
@@ -35,15 +36,21 @@ const form = useForm({
 })
 
 const submit = () => {
-    // form.put(route('api.contacts.update', props.ID), {
-    //     preserveScroll: true,
-    //     onSuccess: () => {
-    //         form.reset()
-    //     },
-    //     onError: (errors) => {
-    //         console.error(errors)
-    //     }
-    // })
+    form.put(route('api.contacts.update', props.ID), {
+        preserveScroll: true,
+        onSuccess: async () => {
+            form.reset()
+            emit('update:modelValue', false)
+            await dialog.toast('Contact updated successfully!')
+        },
+        onError: async (errors) => {
+            console.error(errors)
+            await dialog.alert(
+                'Update Failed',
+                errors.contact_name ?? 'Something went wrong. Please try again.'
+            )
+        }
+    })
 }
 
 const addTag = () => {
@@ -137,6 +144,8 @@ watch(() => props.ID, (id) => {
                         <InputLabel value="Phone Number"/>
                         <TextInput
                             class="w-full"
+                            type="tel"
+                            inputmode="numeric"
                             name="phone_num"
                             v-model="form.phone_num"
                         />
@@ -181,7 +190,7 @@ watch(() => props.ID, (id) => {
                         </Transition>
                     </div>
                     <div class="flex justify-end gap-2">
-                        <SubmitButton v-if="form.isDirty">
+                        <SubmitButton v-if="form.isDirty" :disabled="form.processing">
                             Save Changes
                         </SubmitButton>
                     </div>

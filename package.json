@@ -24,5 +24,8 @@
         "@vueuse/core": "^14.3.0",
         "axios": "^1.18.1",
         "lucide-vue-next": "^1.0.0"
+    },
+    "imports": {
+        "#nativephp": "./vendor/nativephp/mobile/resources/jump/dist/native"
     }
 }
