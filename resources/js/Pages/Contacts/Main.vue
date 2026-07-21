@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { UserPlus } from 'lucide-vue-next';
 import EmptyContacts from '@/Components/Placeholders/EmptyContacts.vue';
@@ -12,12 +12,10 @@ import Create from './Modals/Create.vue';
 
 const props = defineProps({
     tags: Array,
-    hasData: String|Number,
-    newContact: { 
-        type: Object,
-        default: null
-    }
+    hasData: String|Number
 })
+
+const page = usePage()
 
 const useFilters = ref({})
 const showLongPressActions = ref(false)
@@ -62,9 +60,15 @@ const handleDeleteContacts = () => {
     //Actions later
 }
 
-watch(() => props.newContact, (contact) => {
+watch(() => page.props.flash.newContact, (contact) => {
     if (contact) {
         listRef.value?.prependContact?.(contact)
+    }
+})
+
+watch(() => page.props.flash.contactUpdated, (contact) => {
+    if(contact) {
+        listRef.value?.prependContact?.(contact, true)
     }
 })
 </script>

@@ -16,7 +16,6 @@ class ContactController extends Controller
         return Inertia::render('Contacts/Main', [
             'tags' => Contact::allTags(),
             'hasData' => Contact::all()->count(),
-            'newContact' => fn () => session('contact')
         ]);
     }
 
@@ -50,7 +49,9 @@ class ContactController extends Controller
                 'user_id' => Auth::id(),
             ]);
 
-            return back()->withSuccess()->with('contact', $contact);
+            return back()
+                    ->with('success', 'Contact saved successfully')
+                    ->with('newContact', $contact);
 
         } catch (\Exception $e) {
             report($e);
@@ -91,7 +92,9 @@ class ContactController extends Controller
             $contact = Contact::findOrFail($id);
             $contact->update($request->validated());
 
-            return back()->with('success', 'Contact updated successfully.');
+            return back()
+                ->with('success', 'Contact updated successfully')
+                ->with('contactUpdated', $contact);
 
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['contact_name' => 'Contact not found.']);

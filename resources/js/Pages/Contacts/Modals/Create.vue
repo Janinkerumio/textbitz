@@ -8,6 +8,7 @@ import InputError from '@/Components/InputError.vue';
 import SubmitButton from '@/Components/Button/SubmitButton.vue';
 import { BookPlus, UserPlus } from 'lucide-vue-next';
 import { usePhoneFormatter, normalizePhone, stripSpaces } from '@/Composables/usePHPhoneFormatter';
+import { dialog } from '#nativephp'
 
 defineProps({
     modelValue: Boolean
@@ -40,9 +41,10 @@ const removeTag = (index) => {
     form.tags.splice(index, 1)
 }
 
-const submit = () => {
+const submit = async () => {
     form.phone_num = normalizePhone(stripSpaces(form.phone_num))
     console.log('Added contact: ' + JSON.stringify(form))
+    await dialog.toast('This function is under development')
 }
 </script>
 

@@ -63,8 +63,15 @@ const exitSelectMode = () => {
     selectedContacts.value = new Set()
 }
 
-const prependContact = (contact) => {
-    contacts.value.unshift(contact)
+const prependContact = (contact, updateOnly = false) => {
+    if(updateOnly) {
+        const index = contacts.value.findIndex(data => data.id === contact.id)
+        if(index !== -1) {
+            contacts.value[index] = contact
+        }
+    } else {
+        contacts.value.unshift(contact)
+    }   
 }
 
 watch(selectedContacts, 
