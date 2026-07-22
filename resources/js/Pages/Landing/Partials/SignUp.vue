@@ -23,7 +23,7 @@ const submit = () => {
 </script>
 
 <template>
-    <div class="flex flex-col w-full gap-8">
+    <div class="flex flex-col w-full max-w-lg gap-8">
         <header class="flex justify-center items-center gap-3">
             <i class="rounded-xl text-gray-100 bg-blue-500 flex item-center justify-center p-[10px]">
                 <MessageSquareShare :size="25" :stroke-width="3"/>
@@ -131,7 +131,7 @@ const submit = () => {
             </button>
             <p class="mt-8 text-center text-sm text-gray-500">
                 Already have an account?
-                <span @click="emit('switchScreen')" class="font-semibold text-gray-800 cursor-pointer">Log in</span>
+                <span @click="emit('switchScreen')" class="font-semibold text-gray-800 dark:text-gray-300 cursor-pointer">Log in</span>
             </p>
         </form>
     </div>
