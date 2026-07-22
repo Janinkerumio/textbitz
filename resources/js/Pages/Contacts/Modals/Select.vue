@@ -4,11 +4,11 @@ import { useForm } from '@inertiajs/vue3';
 import BottomModal from '@/Components/Modal/BottomModal.vue';
 import { fetchOneContact } from '@/data/api/fetchViaAxios';
 import TextInput from '@/Components/TextInput.vue';
-import InputLabel from '@/Components/InputLabel.vue';
+import InputLabel from '@/Components/Breeze/InputLabel.vue';
 import { Trash, Send } from 'lucide-vue-next';
 import onlyInitials from '@/utils/onlyInitials';
 import randomAvatarColor from '@/utils/avatarColors';
-import InputError from '@/Components/InputError.vue';
+import InputError from '@/Components/Breeze/InputError.vue';
 import SubmitButton from '@/Components/Button/SubmitButton.vue';
 import IconButton from '@/Components/Button/IconButton.vue';
 import { dialog } from '#nativephp'

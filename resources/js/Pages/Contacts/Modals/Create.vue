@@ -1,10 +1,10 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import InputLabel from '@/Components/InputLabel.vue';
+import InputLabel from '@/Components/Breeze/InputLabel.vue';
 import BottomModal from '@/Components/Modal/BottomModal.vue';
-import TextInput from '@/Components/TextInput.vue';
-import InputError from '@/Components/InputError.vue';
+import TextInput from '@/Components/Breeze/TextInput.vue';
+import InputError from '@/Components/Breeze/InputError.vue';
 import SubmitButton from '@/Components/Button/SubmitButton.vue';
 import { BookPlus, UserPlus } from 'lucide-vue-next';
 import { usePhoneFormatter, normalizePhone, stripSpaces } from '@/Composables/usePHPhoneFormatter';

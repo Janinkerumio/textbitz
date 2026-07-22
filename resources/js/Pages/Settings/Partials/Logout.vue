@@ -3,9 +3,9 @@ import { ref } from 'vue';
 import RedLinkButton from '@/Components/Button/RedLinkButton.vue';
 import { LogOut } from 'lucide-vue-next';
 import { useForm } from '@inertiajs/vue3';
-import Modal from '@/Components/Modal.vue';
-import DangerButton from '@/Components/DangerButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
+import Modal from '@/Components/Breeze/Modal.vue';
+import DangerButton from '@/Components/Breeze/DangerButton.vue';
+import SecondaryButton from '@/Components/Breeze/SecondaryButton.vue';
 
 const showConfirmModal = ref(false)
 const form = useForm({})

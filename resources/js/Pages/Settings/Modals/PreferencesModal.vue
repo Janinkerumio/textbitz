@@ -1,9 +1,9 @@
 <script setup>
 import { ref, watch } from 'vue';
 import BottomModal from '@/Components/Modal/BottomModal.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import SlidingSwitch from '@/Components/SlidingSwitch.vue';
-import TextInput from '@/Components/TextInput.vue';
+import InputLabel from '@/Components/Breeze/InputLabel.vue';
+import SlidingSwitch from '@/Components/Button/SlidingSwitch.vue';
+import TextInput from '@/Components/Breeze/TextInput.vue';
 import settings from '@/data/settings';
 import { ChevronsDownUp } from 'lucide-vue-next';
 import { darkMode } from '@/Composables/useDarkMode';
