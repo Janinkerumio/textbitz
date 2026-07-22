@@ -16,6 +16,11 @@ class HistorySeeder extends Seeder
     public function run(): void
     {
         $userId = User::query()->value('id');
+
+        if (! $userId) {
+            $this->call(UserSeeder::class);
+            $userId = User::query()->value('id');
+        }
  
         $templates = Template::query()->get(['id', 'message']);
  

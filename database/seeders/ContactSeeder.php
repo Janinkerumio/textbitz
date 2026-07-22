@@ -15,6 +15,11 @@ class ContactSeeder extends Seeder
     {
         $user = User::query()->value('id');
 
+        if (! $user) {
+            $this->call(UserSeeder::class);
+            $user = User::query()->value('id');
+        }
+
         $contacts = [
             [
                 'user_id' => $user,
