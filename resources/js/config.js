@@ -1,0 +1,1 @@
+export const onDemo = import.meta.env.VITE_APP_DEMO_MODE === 'true'

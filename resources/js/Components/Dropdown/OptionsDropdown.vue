@@ -4,10 +4,14 @@ defineProps({
         type: Boolean,
         required: true,
     },
-    width: {
+    widthClass: {
         type: String,
         default: 'w-auto',
     },
+    positionClass: {
+        type: String,
+        default: 'bottom-full'
+    }
 });
 </script>
 
@@ -22,8 +26,8 @@ defineProps({
     >
         <div
             v-if="isOpen"
-            :class="width"
-            class="absolute right-0 bottom-full mt-2 z-60 rounded-lg border border-gray-200 dark:border-gray-500 dark:text-gray-200 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-lg overflow-hidden"
+            :class="[ widthClass, positionClass ]"
+            class="absolute right-0 mt-2 z-60 rounded-lg border border-gray-200 dark:border-gray-500 dark:text-gray-200 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-lg overflow-hidden"
         >
             <slot />
         </div>

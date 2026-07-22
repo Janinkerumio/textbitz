@@ -127,5 +127,6 @@ return [
         array_map('trim', explode(',', env('APP_INITIATE_DB_SEED', '')))
     ),
 
+    'demo_mode' => env('APP_DEMO_MODE', false)
 
 ];

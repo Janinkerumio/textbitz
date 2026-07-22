@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contacts', function (Blueprint $table) {
+        Schema::create('templates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                  ->constrained()
-                  ->cascadeOnDelete();
-            $table->string('phone_num')->unique();
-            $table->string('contact_name');
+            $table->string('category');
+            $table->string('title');
+            $table->text('message');
+            $table->json('variables')->nullable();
             $table->json('tags')->nullable();
+            $table->string('icon')->nullable();
+            $table->string('color')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contacts');
+        Schema::dropIfExists('templates');
     }
 };

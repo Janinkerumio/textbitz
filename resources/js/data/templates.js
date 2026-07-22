@@ -131,4 +131,9 @@ const templatesDefault = [
     }
 ]
 
+//future development:
+// relocate these data to backend
+// default templates are stored on the templates model
+// preload 15 most used templates 
+// create a composable to preload data and bootstrap the composable
 export default templatesDefault

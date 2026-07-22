@@ -2,6 +2,7 @@
 import { MessageSquareShare, Mail, Lock, EyeOff, Eye } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { useForm, Link } from '@inertiajs/vue3';
+import { onDemo } from '@/config';
 
 defineProps({
     status: {
@@ -101,6 +102,12 @@ const submit = () => {
                 <span class="text-sm text-[#6B7280]">Remember me</span>
             </label>
 
+            <div v-if="onDemo" class="w-full flex flex-col justify-start rounded-lg p-2 bg-gray-400/30">
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">For demo purposes</p>
+                <small class="text-xs text-gray-600 dark:text-gray-400">Email: demo@textbitz.com</small>
+                <small class="text-xs text-gray-600 dark:text-gray-400">Password: password</small>
+            </div>
+
             <button
                 type="submit"
                 :disabled="form.processing"
@@ -110,7 +117,7 @@ const submit = () => {
             </button>
             <p class="mt-8 text-center text-sm text-gray-500">
                 New to TextBitz?
-                <span @click="emit('switchScreen')" class="font-semibold text-gray-800 dark:text-gray-300">Create an account</span>
+                <span @click="emit('switchScreen')" class="font-semibold text-gray-800 dark:text-gray-300 cursor-pointer">Create an account</span>
             </p>
         </form>
     </div>

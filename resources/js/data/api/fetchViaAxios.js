@@ -16,3 +16,25 @@ export const fetchOneContact = async (id) => {
 
     return response.data
 }
+
+export const fetchTemplates = async (params) => { //might need query to exclude preloaded data
+    const response = await api.get('/api/templates', {
+        params: params
+    })
+
+    return response.data
+}
+
+export const fetchHistory = async (params) => {
+    const response = await api.get('/api/history', {
+        params: params
+    })
+
+    return response.data
+}
+
+export const preLoadTemplates = async () => {
+    const response = await api.get('/api/templates/preload')
+
+    return response.data
+}

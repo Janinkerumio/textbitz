@@ -30,7 +30,10 @@ class AppServiceProvider extends ServiceProvider
             return Route::get($uri, fn () => Inertia::render("{$page}/Main", $props));
         });
 
-        $this->dataSeed();
+        if(config('app.demo_mode'))
+        {
+            $this->dataSeed();
+        }
     }
 
     public function dataSeed()

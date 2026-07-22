@@ -6,7 +6,7 @@ import SignUp from './Partials/SignUp.vue';
 import Signature from './Partials/Signature.vue';
 import Sessioned from './Partials/Sessioned.vue';
 
-defineProps({
+const props = defineProps({
     status: {
         type: String,
         default: null
@@ -14,10 +14,14 @@ defineProps({
     canResetPassword: {
         type: Boolean,
         default: true
+    },
+    showSignUp: {
+        type: Boolean,
+        default: false
     }
 })
 
-const toggleAuth = ref(false)
+const toggleAuth = ref(props.showSignUp)
 const direction = ref('forward')
 const transitionName = computed(() => direction.value === 'forward' ? 'slide-left' : 'slide-right')
 
@@ -29,9 +33,9 @@ const switchScreen = () => {
 
 <template>
     <Head title="Welcome" />
-    <div class="w-full flex bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-300 min-h-screen">
+    <div class="w-full flex bg-gray-50 dark:bg-black text-gray-800 dark:text-gray-300 overflow-hidden min-h-screen">
         <Signature />
-        <div class="flex-1 flex items-center justify-center px-4">
+        <div class="flex-1 flex items-center justify-center px-6">
             <Sessioned v-if="$page.props.auth.user"/>
             <Transition v-else :name="transitionName" mode="out-in">
                 <LogIn 
