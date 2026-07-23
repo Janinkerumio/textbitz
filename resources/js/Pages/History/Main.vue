@@ -1,18 +1,32 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import EmptyHistory from '@/Components/Placeholders/EmptyHistory.vue';
-import historyMockData from '@/data/history';
 import List from './Partials/List.vue';
 import Filters from './Partials/Filters.vue';
+import { dialog } from '#nativephp'
 
-const stats = computed(() => Object.entries(
-    historyMockData.reduce((acc, item) => {
-        acc[item.status] = (acc[item.status] || 0) + 1
-        return acc
-    }, {})
-).map(([status, count]) => ({ status, count })))
+const props = defineProps({
+    stats: {
+        type: Object,
+        default: {}
+    },
+    hasData: {
+        type: Boolean,
+        default: false
+    }
+})
+
+const appliedSortFilter = ref({})
+
+const handleSorting = (payload) => {
+    appliedSortFilter.value = payload
+}
+
+const handleEmitsFromList = async (id) => {
+    await dialog.toast('This feature is under development')
+}
 </script>
 
 <template>
@@ -20,15 +34,25 @@ const stats = computed(() => Object.entries(
 
     <AppLayout page-title="History">
         <template #content>
-            <Filters 
-                :stats-for-sort="stats"
-            />
-            <List v-if="historyMockData.length !== 0"
-                :history-data="historyMockData"
-            />
-            <div v-else class="flex min-h-screen items-center justify-center">
+            <div v-if="hasData">
+                <Filters 
+                    :stats-for-sort="stats"
+                    @applied-sort="(value) => handleSorting(value)"
+                />
+                <List
+                    :sort-by="appliedSortFilter"
+                    @view-recipients="(id) => handleEmitsFromList(id)"
+                    @resend="(id) => handleEmitsFromList(id)"
+                    @duplicate="(id) => handleEmitsFromList(id)"
+                    @delete="(id) => handleEmitsFromList(id)"
+                />
+            </div>
+            <div v-else class="flex min-h-[100dvh] items-center justify-center">
                 <EmptyHistory/>
             </div>
+        </template>
+        <template #modal>
+
         </template>
     </AppLayout>
 </template>

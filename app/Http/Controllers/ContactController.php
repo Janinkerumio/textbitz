@@ -15,13 +15,13 @@ class ContactController extends Controller
     {
         return Inertia::render('Contacts/Main', [
             'tags' => Contact::allTags(),
-            'hasData' => Contact::all()->count(),
+            'hasData' => Contact::userHasSavedContacts(),
         ]);
     }
 
     public function load(Request $request)
     {
-        $query = Contact::query();
+        $query = Contact::initiateQuery();
 
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {

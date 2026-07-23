@@ -16,18 +16,17 @@ class ContactRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // if (!Auth::check()) {
-        //     return false;
-        // }
+        if (!Auth::check()) {
+            return false;
+        }
 
-        // if ($this->isMethod('post')) {
-        //     return true;
-        // }
+        if ($this->isMethod('post')) {
+            return true;
+        }
 
-        // $contact = Contact::query()->find($this->route('id'));
+        $contact = Contact::query()->find($this->route('id'));
 
-        // return $contact && $contact->user_id === Auth::id();
-        return true;
+        return $contact && $contact->user_id === Auth::id();
     }
 
     /**

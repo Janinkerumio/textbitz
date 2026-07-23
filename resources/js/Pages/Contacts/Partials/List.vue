@@ -32,8 +32,7 @@ const container = useTemplateRef('container')
 
 const { items: contacts, loading, onScroll } = createInfiniteScroll(
     fetchContact,
-    computed(() => props.filters),
-    { distance: 20 }
+    computed(() => props.filters)
 )
 
 const toggleSelection = (id) => {
@@ -93,7 +92,7 @@ defineExpose({
     <div 
         ref="container" 
         @scroll="onScroll(container)" 
-        class="mt-5 overflow-y-auto max-h-full"
+        class="mt-5 overflow-y-auto flex-1 max-h-[80dvh]"
     >
         <div class="grid grid-cols-1 gap-2 h-full">
             <div v-for="contact in contacts" 

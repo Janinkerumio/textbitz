@@ -55,7 +55,7 @@ class HistorySeeder extends Seeder
                 'user_id' => $userId,
                 'template_id' => $template->id,
                 'blast' => $blast,
-                'status' => fake()->randomElement(['sent', 'sent', 'sent', 'failed']),
+                'status' => fake()->randomElement(['sent', 'queued', 'sent', 'failed']),
                 'recipients' => json_encode($recepients),
                 'last_sent_at' => fake()->dateTimeBetween('-2 months', 'now'),
                 'created_at' => now(),

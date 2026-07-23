@@ -1,5 +1,5 @@
 export const blastStatus = {
     sent :"text-green-500",
-    queue :"text-orange-500",
+    queued :"text-blue-500",
     failed : "text-red-500",
 }

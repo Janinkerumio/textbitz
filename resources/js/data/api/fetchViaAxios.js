@@ -26,7 +26,7 @@ export const fetchTemplates = async (params) => { //might need query to exclude 
 }
 
 export const fetchHistory = async (params) => {
-    const response = await api.get('/api/history', {
+    const response = await api.get(route('api.history'), {
         params: params
     })
 
