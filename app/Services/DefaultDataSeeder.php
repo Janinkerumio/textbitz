@@ -4,11 +4,12 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use App\Enums\DefaultSeeder;
 
 class DefaultDataSeeder
 {
 
-    private static function isDatabaseMigrated()
+    public static function ensureDatabaseMigrated(): bool
     {
         if(!cache()->has('database_seeded'))
         {
@@ -24,14 +25,34 @@ class DefaultDataSeeder
         return false;
     }
 
-    public static function initiateSeeder(string $table, string $class)
+    /**
+     * @param string $table - Table name
+     * @param class-string<\Illuminate\Database\Seeder> $class
+     */
+    public static function initiateSeeder($table, $class): void
     {
-        if(self::isDatabaseMigrated() && !DB::table($table)->exists())
+        if(! DB::table($table)->exists())
         {
             Artisan::call('db:seed', [
                 '--class' => $class,
                 '--force' => true
             ]);
+        }
+    }
+
+    public static function dataSeed(): void
+    {
+        if(self::ensureDatabaseMigrated())
+        {
+            $configured = config('app.initiate_db_seed', []);
+
+            foreach (DefaultSeeder::cases() as $defaultSeeder)
+            {
+                if(in_array($defaultSeeder->value, $configured, true))
+                {
+                    self::initiateSeeder($defaultSeeder->value, $defaultSeeder->seeder());
+                }
+            }
         }
     }
 }

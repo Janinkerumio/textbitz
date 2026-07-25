@@ -16,10 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')
                   ->constrained()
                   ->cascadeOnDelete();
-            $table->string('phone_num')->unique();
+            $table->string('phone_num');
             $table->string('contact_name');
             $table->json('tags')->nullable();
             $table->timestamps();
+
+            $table->unique(['user_id', 'phone_num']);
         });
     }
 

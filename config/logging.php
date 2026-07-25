@@ -127,6 +127,12 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'seeder' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/history-seeder.log'),
+            'level' => 'debug',
+        ],
+
     ],
 
 ];

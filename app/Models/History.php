@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 #[Fillable('user_id', 'template_id', 'blast', 'status', 'recipients', 'last_sent_at')]
@@ -28,7 +30,7 @@ class History extends Model
         return $this->belongsTo(Template::class);
     }
 
-    public static function initiateQuery()
+    public static function initiateQuery(): Builder
     {
         return static::query()->where('user_id', Auth::id());
     }
@@ -39,7 +41,7 @@ class History extends Model
             ->exists();
     }
 
-    public static function stats()
+    public static function stats(): Collection
     {
         return static::initiateQuery()
             ->select('status')

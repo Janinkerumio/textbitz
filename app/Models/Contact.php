@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,12 +23,12 @@ class Contact extends Model
         return $this->belongsTo(User::class);
     }
 
-    public static function initiateQuery()
+    public static function initiateQuery(): Builder
     {
         return static::query()->where('user_id', Auth::id());
     }
 
-    public static function allTags()
+    public static function allTags(): Collection
     {
         return static::initiateQuery()
             ->pluck('tags')
@@ -37,7 +39,7 @@ class Contact extends Model
             ->values();
     }
 
-    public static function userHasSavedContacts()
+    public static function userHasSavedContacts(): int
     {
         return static::initiateQuery()
             ->get()
