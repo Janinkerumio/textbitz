@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Support\Collection;
 
 #[Fillable('category', 'title', 'message', 'variables', 'tags', 'icon', 'color')]
 class Template extends Model
@@ -26,8 +27,19 @@ class Template extends Model
         return $this->hasMany(History::class);
     }
 
-    public function mostUsed()
+    public static function totalTemplatesCount(): int
     {
-        //query the most used template
+        return static::query()
+            ->get()
+            ->count();
+    }
+
+    public static function mostUsed(): Collection
+    {
+        return static::query()
+            ->withCount('histories')
+            ->orderByDesc('histories_count')
+            ->limit(15)
+            ->get();
     }
 }

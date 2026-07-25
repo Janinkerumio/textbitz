@@ -1,5 +1,5 @@
 <script setup>
-import { watch, computed, ref, useTemplateRef } from 'vue';
+import { computed, ref, useTemplateRef } from 'vue';
 import { fetchHistory } from '@/data/api/fetchViaAxios';
 import { createInfiniteScroll } from '@/Composables/createInfiniteScroll';
 import { capitalize } from 'vue';
@@ -22,7 +22,8 @@ const isExpanded = (id) => expandedHistoryId.value.has(id)
 const container = useTemplateRef('container')
 const { items: histories, loading, onScroll } = createInfiniteScroll(
     fetchHistory,
-    computed(() => props.sortBy)
+    computed(() => props.sortBy),
+    { distance: 10 }
 )
 
 const expand = (id) => {

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\TemplatesController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,8 @@ Route::prefix('api')->group(function () {
         Route::put('/contacts/{id}', [ContactController::class, 'update'])->name('contacts.update');
 
         Route::get('/history', [HistoryController::class, 'load'])->name('history');
+
+        Route::get('/templates', [TemplatesController::class, 'load'])->name('templates');
     });
 });
 

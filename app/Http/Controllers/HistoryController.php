@@ -31,7 +31,7 @@ class HistoryController extends Controller
         $data = $query
                 ->with('template:id,title')
                 ->orderBy('last_sent_at', 'desc')
-                ->paginate(10);
+                ->paginate(20);
 
         return response()->json($data);
     }

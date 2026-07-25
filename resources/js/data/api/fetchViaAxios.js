@@ -17,8 +17,8 @@ export const fetchOneContact = async (id) => {
     return response.data
 }
 
-export const fetchTemplates = async (params) => { //might need query to exclude preloaded data
-    const response = await api.get('/api/templates', {
+export const fetchTemplates = async (params) => {
+    const response = await api.get(route('api.templates'), {
         params: params
     })
 
