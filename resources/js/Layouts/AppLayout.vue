@@ -1,6 +1,7 @@
 <script setup>
 import FooterNav from '@/Components/Footer/FooterNav.vue';
 import AppHead from '@/Components/Header/AppHead.vue';
+import Toast from '@/Components/Toast.vue';
 defineProps({
     pageTitle: {
         type: String,
@@ -40,6 +41,7 @@ defineProps({
                 <div class="py-12"></div>
                 <slot name="content" />
                 <div class="py-12"></div>
+                <Toast />
             </section>
 
             <slot name="modal" />

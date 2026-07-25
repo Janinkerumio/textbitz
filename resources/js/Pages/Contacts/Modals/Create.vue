@@ -1,5 +1,5 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import InputLabel from '@/Components/Breeze/InputLabel.vue';
 import BottomModal from '@/Components/Modal/BottomModal.vue';
@@ -9,10 +9,14 @@ import SubmitButton from '@/Components/Button/SubmitButton.vue';
 import { BookPlus, UserPlus } from 'lucide-vue-next';
 import { usePhoneFormatter, normalizePhone, stripSpaces } from '@/Composables/usePHPhoneFormatter';
 import { dialog } from '#nativephp'
+import { useToast } from '@/Composables/useToast';
 
 defineProps({
     modelValue: Boolean
 })
+
+const toast = useToast()
+const page = usePage()
 
 const addedTag = ref('')
 
@@ -44,7 +48,13 @@ const removeTag = (index) => {
 const submit = async () => {
     form.phone_num = normalizePhone(stripSpaces(form.phone_num))
     console.log('Added contact: ' + JSON.stringify(form))
-    await dialog.toast('This function is under development')
+    form.reset()
+    if(page.props.platform.isAndroid || page.props.platform.isIos) {
+        await dialog.toast('This function is under development')
+    } else {
+        toast.show('This function is under development')
+    }
+    emit('update:modelValue', false)
 }
 </script>
 

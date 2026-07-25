@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Services\PlatformService;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -34,12 +35,13 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'corporate' => fn () => $request->user()?->corporateInfo,
+            'corporate' => fn () => $request->user()?->corporateInfo(),
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'newContact' => fn () => $request->session()->get('newContact'),
                 'contactUpdated' => fn () => $request->session()->get('contactUpdated'),
-            ]
+            ],
+            'platform' => fn () => PlatformService::detect(),
         ];
     }
 }

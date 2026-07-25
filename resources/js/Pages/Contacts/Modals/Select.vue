@@ -1,6 +1,6 @@
 <script setup>
 import { watch, ref, Transition } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import BottomModal from '@/Components/Modal/BottomModal.vue';
 import { fetchOneContact } from '@/data/api/fetchViaAxios';
 import TextInput from '@/Components/Breeze/TextInput.vue';
@@ -12,6 +12,7 @@ import InputError from '@/Components/Breeze/InputError.vue';
 import SubmitButton from '@/Components/Button/SubmitButton.vue';
 import IconButton from '@/Components/Button/IconButton.vue';
 import { dialog } from '#nativephp'
+import { useToast } from '@/Composables/useToast';
 
 const props = defineProps({
     modelValue: Boolean,
@@ -20,6 +21,9 @@ const props = defineProps({
         default: null
     }
 })
+
+const toast = useToast()
+const page = usePage()
 
 const contact = ref({})
 const loading = ref(false)
@@ -41,14 +45,23 @@ const submit = () => {
         onSuccess: async () => {
             form.reset()
             emit('update:modelValue', false)
-            await dialog.toast('Contact updated successfully!')
+            if(page.props.platform.isAndroid || page.props.platform.isIos) {
+                await dialog.toast('Contact updated successfully!')
+            } else {
+                toast.success('Contact updated successfully!')
+            }
         },
         onError: async (errors) => {
             console.error(errors)
-            await dialog.alert(
-                'Update Failed',
-                errors.contact_name ?? 'Something went wrong. Please try again.'
-            )
+            if(page.props.platform.isAndroid || page.props.platform.isIos) {
+                await dialog.alert(
+                    'Update Failed',
+                    errors.contact_name ?? 'Something went wrong. Please try again.'
+                )
+            } else {
+                toast.error(errors.contact_name ?? 'Something went wrong. Please try again.')
+            }
+            
         }
     })
 }

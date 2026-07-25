@@ -26,9 +26,6 @@ class AppServiceProvider extends ServiceProvider
 
         RouteMacroService::register();
 
-        if(config('app.demo_mode'))
-        {
-            DefaultDataSeeder::dataSeed();
-        }
+        DefaultDataSeeder::dataSeed(seedDemoData: config('app.demo_mode', false));
     }
 }
