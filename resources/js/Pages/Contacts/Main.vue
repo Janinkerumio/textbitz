@@ -9,13 +9,18 @@ import SearchAndFilter from './Partials/SearchAndFilter.vue';
 import LongPressActions from './Modals/LongPressActions.vue';
 import Select from './Modals/Select.vue';
 import Create from './Modals/Create.vue';
+import crossPlatformToast from '@/helpers/crossPlatformToast.js';
 
 const props = defineProps({
-    tags: Array,
+    tags: {
+        type: Array,
+        default: []
+    },
     hasData: String|Number
 })
 
 const page = usePage()
+const toast = crossPlatformToast()
 
 const useFilters = ref({})
 const showLongPressActions = ref(false)
@@ -49,14 +54,14 @@ const resetId = () => {
 const handleAddToBlast = () => {
     const ids = listRef.value?.selectedIds
 
-    console.log('Add to Blast IDS: ' + ids)
+    toast.show('This function is under development')
     //Actions later
 }
 
 const handleDeleteContacts = () => {
     const ids = listRef.value?.selectedIds
 
-    console.log('Delete contacts IDS: ' + ids)
+    toast.show('This function is under development')
     //Actions later
 }
 

@@ -1,13 +1,13 @@
 <script setup>
 import { reactive, watch } from 'vue'
 import { debounce } from 'lodash-es'
-import { Search } from 'lucide-vue-next'
 import { colorForTag } from '@/Composables/useTagColors'
+import SearchBar from '@/Components/Input/SearchBar.vue'
 
 const props = defineProps({
     tags: {
         type: Array,
-        default: null
+        default: []
     },
     filters: {
         type: Object,
@@ -38,15 +38,11 @@ watch(form, emitChanges, { deep: true })
 
 <template>
     <div class="sticky flex flex-col gap-2 w-full">
-        <div class="flex flex-wrap items-center rounded-xl border bg-white/40 border-gray-400 py-1 px-4 focus-within:border-blue-500 transition-all duration-300">
-            <Search class="text-gray-600 dark:text-gray-300"/>
-            <input
-                name="search-contact"
-                v-model="form.search"
-                placeholder="Search contacts"  
-                class="flex-1 dark:placeholder-gray-300 border-0 bg-transparent outline-none focus:outline-none focus:ring-0 focus:border-0 shadow-none placeholder-gray-400"
-            />
-        </div>
+        <SearchBar 
+            name="search_contact"
+            v-model="form.search"
+            placeholder="Search contact"
+        />
         <div class="overflow-x-auto snap-x snap-mandatory py-2">
             <div class="flex flex-row items-center gap-2 w-max">
                 <div 

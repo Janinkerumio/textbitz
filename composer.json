@@ -16,7 +16,8 @@
         "laravel/tinker": "^3.0",
         "nativephp/mobile": "*",
         "nativephp/mobile-dialog": "^1.0",
-        "tightenco/ziggy": "^2.0"
+        "tightenco/ziggy": "^2.0",
+        "vinkla/hashids": "^14.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

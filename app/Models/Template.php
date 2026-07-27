@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Support\Collection;
+use Vinkla\Hashids\Facades\Hashids;
 
 #[Fillable('category', 'title', 'message', 'variables', 'tags', 'icon', 'color')]
 class Template extends Model
@@ -17,6 +18,11 @@ class Template extends Model
         ];
     }
 
+    public function getHashIdAttribute(): string
+    {
+        return Hashids::encode($this->id);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -25,6 +31,15 @@ class Template extends Model
     public function histories()
     {
         return $this->hasMany(History::class);
+    }
+
+    public static function findByHashId(string $hash): self
+    {
+        $id = Hashids::decode($hash);
+
+        abort_if(empty($id), 404);
+
+        return static::findOrFail($id[0]);
     }
 
     public static function totalTemplatesCount(): int
@@ -41,5 +56,13 @@ class Template extends Model
             ->orderByDesc('histories_count')
             ->limit(15)
             ->get();
+    }
+
+    public static function allCategories(): Collection
+    {
+        return static::query()
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
     }
 }

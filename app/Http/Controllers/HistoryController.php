@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\History;
+use App\Http\Resources\HistoryResource;
 
 class HistoryController extends Controller
 {
@@ -33,6 +34,6 @@ class HistoryController extends Controller
                 ->orderBy('last_sent_at', 'desc')
                 ->paginate(20);
 
-        return response()->json($data);
+        return HistoryResource::collection($data);
     }
 }

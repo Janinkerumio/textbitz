@@ -104,15 +104,15 @@ watch(() => props.statsForSort, (payload) => {
 
 <template>
     <div class="flex justify-start items-center mt-6 relative group transition-all duration-100">
-        <div class="p-2 flex flex-row items-center gap-2 bg-white shadow-lg dark:bg-gray-600 rounded-xl">
-            <Funnel :size="22" :stroke-width="2.5" class="text-gray-500"/>
+        <div class="p-2 flex flex-row items-center gap-2 bg-white shadow dark:bg-gray-600/60 rounded-xl">
+            <Funnel :size="22" :stroke-width="2.5" class="text-gray-500 dark:text-gray-400"/>
             <div class="flex flex-row rounded-lg bg-gray-200">
                 <label v-for="(filter, i) in allOptions" :key="i"
                     @click.prevent="selectOption(filter)"
                     class="relative rounded-lg flex-1 cursor-pointer px-2 py-1"
                     :class="filterForm.sort === filter.status
-                                ? 'text-blue-100 dark:text-blue-300 bg-blue-500'
-                                : 'text-gray-800 dark:text-gray-400'"
+                                ? 'text-blue-100 dark:text-blue-200 bg-blue-500'
+                                : 'text-gray-800 dark:text-gray-600'"
                 >
                     <div 
                         class="flex px-1 items-center text-sm rounded-lg">
@@ -120,8 +120,8 @@ watch(() => props.statsForSort, (payload) => {
                         <span 
                             class="absolute top-[-10px] right-[-5px] rounded-full px-[5px] text-xs"
                             :class="filterForm.sort === filter.status
-                                ? 'text-blue-600 dark:text-blue-300 bg-blue-200'
-                                : 'text-gray-800 dark:text-gray-400 bg-gray-400'"
+                                ? 'text-blue-600 bg-blue-200'
+                                : 'text-gray-800 bg-gray-400'"
                         >{{ filter.count }}</span>
                     </div>
                 </label>

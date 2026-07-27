@@ -9,13 +9,13 @@ import SubmitButton from '@/Components/Button/SubmitButton.vue';
 import { BookPlus, UserPlus } from 'lucide-vue-next';
 import { usePhoneFormatter, normalizePhone, stripSpaces } from '@/Composables/usePHPhoneFormatter';
 import { dialog } from '#nativephp'
-import { useToast } from '@/Composables/useToast';
+import crossPlatformToast from '@/helpers/crossPlatformToast';
 
 defineProps({
     modelValue: Boolean
 })
 
-const toast = useToast()
+const toast = crossPlatformToast()
 const page = usePage()
 
 const addedTag = ref('')
@@ -45,16 +45,19 @@ const removeTag = (index) => {
     form.tags.splice(index, 1)
 }
 
-const submit = async () => {
+const submit = () => {
     form.phone_num = normalizePhone(stripSpaces(form.phone_num))
-    console.log('Added contact: ' + JSON.stringify(form))
-    form.reset()
-    if(page.props.platform.isAndroid || page.props.platform.isIos) {
-        await dialog.toast('This function is under development')
-    } else {
-        toast.show('This function is under development')
-    }
-    emit('update:modelValue', false)
+    form.post(route('api.contacts.store'), {
+        preserveScroll: true,
+        onSuccess: async () => {
+            emit('update:modelValue', false)
+            form.reset()
+            toast.success(page.props.flash.success)
+        },
+        onError: async (error) => {
+            toast.success(error ?? 'Something went wrong')
+        },
+    })
 }
 </script>
 
@@ -63,12 +66,12 @@ const submit = async () => {
         :model-value="modelValue"
         @update:model-value="emit('update:modelValue', $event)"
     >
-    <div class="flex justify-between items-end">
-        <h1 class="font-semibold text-lg mb-4 dark:text-gray-200">Create new contact</h1>
-        <i class="text-gray-600 rounded-full bg-gray-300 p-3">
-            <UserPlus :size="24" />
-        </i>
-    </div>
+        <div class="flex justify-between items-end">
+            <h1 class="font-semibold text-lg mb-4 dark:text-gray-200">Create new contact</h1>
+            <i class="text-gray-600 rounded-full bg-gray-300 p-3">
+                <UserPlus :size="24" />
+            </i>
+        </div>
         <form @submit.prevent="submit" class="flex flex-col gap-4 px-2">
             <div class="flex flex-col gap-1 w-full">
                 <InputLabel value="Name" />

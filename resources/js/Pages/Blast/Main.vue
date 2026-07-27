@@ -6,7 +6,18 @@ import Compose from './Partials/Compose.vue';
 import Selections from './Partials/Selections.vue';
 import SelectContacts from './Modals/SelectContacts.vue';
 
-const preMadeMessage = ref('')
+const props = defineProps({
+    messageTemplate: {
+        type: String,
+        default: ''
+    },
+    templates: {
+        type: Object,
+        default: {}
+    }
+})
+
+const preMadeMessage = ref(props.messageTemplate ?? '')
 const isContactsModalOpen = ref(false)
 const selectedContacts = ref({})
 const selectedContactsLength = ref(0)
@@ -30,6 +41,7 @@ const handleSelectedContacts = (payload) => {
                 @emitTemplate="(value) => fillPreMadeMessage(value)"
                 @openContactsModal="isContactsModalOpen = true"
                 :selected-count="selectedContactsLength"
+                :templates="templates"
             />
 
             <Compose 

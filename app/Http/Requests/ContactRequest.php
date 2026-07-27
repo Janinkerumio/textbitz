@@ -7,7 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\Models\Contact;
-use Illuminate\Support\Facades\Log;
 
 class ContactRequest extends FormRequest
 {
@@ -24,7 +23,7 @@ class ContactRequest extends FormRequest
             return true;
         }
 
-        $contact = Contact::query()->find($this->route('id'));
+        $contact = Contact::findByHashId($this->route('id'));
 
         return $contact && $contact->user_id === Auth::id();
     }
@@ -36,13 +35,17 @@ class ContactRequest extends FormRequest
      */
     public function rules(): array
     {
+        $contact = $this->route('id')
+                ? Contact::findByHashId($this->route('id'))
+                : null;
+
         return [
             'contact_name' => ['required', 'string', 'max:255'],
             'phone_num' => [
                 'required', 'string', 'max:20',
                 Rule::unique('contacts', 'phone_num')
                     ->where('user_id', Auth::id())
-                    ->ignore($this->route('id')),
+                    ->ignore($contact?->id),
             ],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['string', 'max:50'],

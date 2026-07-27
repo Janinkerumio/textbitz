@@ -57,17 +57,17 @@ const expand = (id) => {
                     </p>
                 </header>
                 <article class="px-2">
-                    <p class="text-gray-800 font-bold">{{ history.template.title }}</p>
+                    <p class="text-gray-800 dark:text-gray-200 font-bold">{{ history.template.title }}</p>
                 </article>
                 <section class="flex flex-row justify-between gap-5 p-2">
-                    <p class="flex-1 text-gray-800 text-sm">
+                    <p class="flex-1 text-gray-800 dark:text-gray-300 text-sm">
                         {{ isExpanded(history.id) ? history.blast : history.blast.slice(0, 100) + '...' }}
                     </p>
-                    <Ellipsis :size="24" class="text-gray-600"/>
+                    <Ellipsis :size="24" class="text-gray-600 dark:text-gray-300"/>
                 </section>
-                <section class="flex flex-wrap gap-4 px-4 py-2 border-t-[0.25px] border-gray-200 w-full">
-                    <p class="text-sm text-gray-600">{{ friendlyDate('shortDate', history.last_sent_at) }}</p>
-                    <p class="text-sm text-gray-600">{{ history.recipients.length }} recipients</p>
+                <section class="flex flex-wrap gap-4 px-4 py-2 border-t-[0.25px] border-gray-200 dark:border-gray-500 text-gray-600 dark:text-gray-400 w-full">
+                    <p class="text-sm">{{ friendlyDate('shortDate', history.last_sent_at) }}</p>
+                    <p class="text-sm">{{ history.recipients.length }} recipients</p>
                 </section>
                 <Transition
                     enter-active-class="transition-all duration-300 ease-out"

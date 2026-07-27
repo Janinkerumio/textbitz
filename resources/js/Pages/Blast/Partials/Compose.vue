@@ -32,7 +32,7 @@ const params = reactive({
 })
 
 const form = useForm({
-    message: '',
+    message: props.preMadeMessage ?? '',
     recipients: [],
     excludedRecipients: []
 })
@@ -85,7 +85,7 @@ watch(() => props.selectedRecipients, (payload) => {
                 v-model="form.message"
                 rows="6"
                 placeholder="Type your message..."
-                class="w-full resize-none bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none placeholder:text-gray-400" 
+                class="text-gray-800 dark:text-gray-200 w-full resize-none bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none placeholder:text-gray-400" 
             />
         </div>
         <div class="flex flex-wrap gap-2 max-w-full justify-between border-t-[0.5px] border-gray-300 pt-2">

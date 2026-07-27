@@ -48,22 +48,22 @@ export function useInfinitePagination(dataFetcherFn) {
         loading.value = true
 
         try {
-            const data = await dataFetcherFn({
+            const response = await dataFetcherFn({
                 ...params,
                 page: page.value,
             })
 
             if (reset) {
-                items.value = data.data
+                items.value = response.data
             } else {
-                items.value.push(...data.data)
+                items.value.push(...response.data)
             }
 
-            page.value = data.current_page + 1
+            page.value = response.meta.current_page + 1
             hasMore.value =
-                data.current_page < data.last_page
+                response.meta.current_page < response.meta.last_page
 
-            return data
+            return response
         } catch (error) {
             console.error('Error fetching data: '+error)
         } finally {

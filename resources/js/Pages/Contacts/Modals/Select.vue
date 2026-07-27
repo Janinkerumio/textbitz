@@ -12,7 +12,7 @@ import InputError from '@/Components/Breeze/InputError.vue';
 import SubmitButton from '@/Components/Button/SubmitButton.vue';
 import IconButton from '@/Components/Button/IconButton.vue';
 import { dialog } from '#nativephp'
-import { useToast } from '@/Composables/useToast';
+import crossPlatformToast from '@/helpers/crossPlatformToast';
 
 const props = defineProps({
     modelValue: Boolean,
@@ -22,7 +22,7 @@ const props = defineProps({
     }
 })
 
-const toast = useToast()
+const toast = crossPlatformToast()
 const page = usePage()
 
 const contact = ref({})
@@ -45,23 +45,11 @@ const submit = () => {
         onSuccess: async () => {
             form.reset()
             emit('update:modelValue', false)
-            if(page.props.platform.isAndroid || page.props.platform.isIos) {
-                await dialog.toast('Contact updated successfully!')
-            } else {
-                toast.success('Contact updated successfully!')
-            }
+            toast.success(page.props.flash.success)
         },
         onError: async (errors) => {
             console.error(errors)
-            if(page.props.platform.isAndroid || page.props.platform.isIos) {
-                await dialog.alert(
-                    'Update Failed',
-                    errors.contact_name ?? 'Something went wrong. Please try again.'
-                )
-            } else {
-                toast.error(errors.contact_name ?? 'Something went wrong. Please try again.')
-            }
-            
+            toast.error(errors.contact_name ?? 'Something went wrong. Please try again.')
         }
     })
 }

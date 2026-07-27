@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\ContactRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ContactsResource;
 
 class ContactController extends Controller
 {
@@ -38,7 +39,9 @@ class ContactController extends Controller
             });
         };
 
-        return response()->json($query->latest()->paginate(20));
+        $data = $query->orderBy('contact_name')->paginate(20);
+        
+        return ContactsResource::collection($data);
     }
 
     public function store(ContactRequest $request)
@@ -51,7 +54,7 @@ class ContactController extends Controller
 
             return back()
                     ->with('success', 'Contact saved successfully')
-                    ->with('newContact', $contact);
+                    ->with('newContact', new ContactsResource($contact));
 
         } catch (\Exception $e) {
             report($e);
@@ -63,7 +66,7 @@ class ContactController extends Controller
     public function show(string $id)
     {
         try {
-            $contact = Contact::findOrFail($id);
+            $contact = Contact::findByHashId($id);
 
             return response()->json([
                 'success' => true,
@@ -89,12 +92,12 @@ class ContactController extends Controller
     public function update(ContactRequest $request, string $id)
     {
         try {
-            $contact = Contact::findOrFail($id);
+            $contact = Contact::findByHashId($id);
             $contact->update($request->validated());
 
             return back()
                 ->with('success', 'Contact updated successfully')
-                ->with('contactUpdated', $contact);
+                ->with('contactUpdated', new ContactsResource($contact));
 
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['contact_name' => 'Contact not found.']);

@@ -5,7 +5,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import EmptyHistory from '@/Components/Placeholders/EmptyHistory.vue';
 import List from './Partials/List.vue';
 import Filters from './Partials/Filters.vue';
-import { dialog } from '#nativephp'
+import crossPlatformToast from '@/helpers/crossPlatformToast.js';
 
 const props = defineProps({
     stats: {
@@ -18,14 +18,16 @@ const props = defineProps({
     }
 })
 
+const toast = crossPlatformToast()
+
 const appliedSortFilter = ref({})
 
 const handleSorting = (payload) => {
     appliedSortFilter.value = payload
 }
 
-const handleEmitsFromList = async (id) => {
-    await dialog.toast('This feature is under development')
+const handleEmitsFromList = (id) => {
+    toast.show('This function is under development')
 }
 </script>
 

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Vinkla\Hashids\Facades\Hashids;
 
 #[Fillable('user_id', 'template_id', 'blast', 'status', 'recipients', 'last_sent_at')]
 class History extends Model
@@ -18,6 +19,11 @@ class History extends Model
         return [
             'recipients' => 'array',
         ];
+    }
+
+    public function getHashIdAttribute(): string
+    {
+        return Hashids::encode($this->id);
     }
 
     public function user()

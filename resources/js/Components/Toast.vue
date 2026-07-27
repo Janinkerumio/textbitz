@@ -13,7 +13,7 @@ const typeClasses = {
 <template>
     <Teleport to="body">
         <div
-            class="fixed bottom-4 left-1/2 z-50 flex w-full max-w-sm -translate-x-1/2 flex-col gap-2 px-4"
+            class="fixed bottom-20 left-1/2 z-100 flex w-full max-w-sm -translate-x-1/2 flex-col gap-2 px-4"
             aria-live="polite"
             aria-atomic="true"
         >

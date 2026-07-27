@@ -7,6 +7,10 @@ const props = defineProps({
     selectedCount: {
         type: Number,
         default: 0
+    },
+    templates: {
+        type: Object,
+        default: {}
     }
 })
 
@@ -31,11 +35,11 @@ const emit = defineEmits([
             </button>
         </div>
         <div class="flex flex-col rounded-b-2xl bg-gray-300/20 border-t border-gray-300 p-4">
-            <p class="text-gray-500 dark:text-gray-300 text-xs">Quick Template</p>
+            <p v-if="templates" class="text-gray-500 dark:text-gray-300 text-xs">Quick Template</p>
             <div class="overflow-x-auto snap-x snap-mandatory py-2">
                 <div class="flex flex-row items-center gap-2 w-max">
                     <button 
-                        v-for="template in templatesDefault"
+                        v-for="template in templates"
                         :key="template.id"
                         @click="emit('emitTemplate', template.message)"
                         class="text-sm text-gray-800 border-[0.25px] border-gray-300 bg-white rounded-xl py-1 px-3"
