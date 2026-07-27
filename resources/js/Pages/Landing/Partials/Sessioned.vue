@@ -13,7 +13,7 @@ const props = defineProps({
 onMounted(() => {
     setTimeout(() => {
         router.visit(props.redirectTo, { replace: true })
-    }, 3000)
+    }, 1500)
 })
 </script>
 
