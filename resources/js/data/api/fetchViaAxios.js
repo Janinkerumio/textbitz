@@ -25,6 +25,12 @@ export const fetchTemplates = async (params) => {
     return response.data
 }
 
+export const fetchOneTemplate = async (id) => {
+    const response = await api.get(route('api.templates.show', id))
+
+    return response.data
+}
+
 export const fetchHistory = async (params) => {
     const response = await api.get(route('api.history'), {
         params: params

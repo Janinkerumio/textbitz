@@ -37,6 +37,27 @@ const expand = (id) => {
 
     expandedTemplateId.value = new Set(expandedTemplateId.value)
 }
+
+const prependTemplate = (template, updateOnly = false) => {
+    if(updateOnly) {
+        const index = templates.value.findIndex(data => data.id === template.id)
+        if(index !== -1) {
+            templates.value[index] = template
+        }
+    } else {
+        templates.value.unshift(template)
+    }
+}
+
+const removeTemplate = (id) => {
+    const index = templates.value.findIndex((data) => data.id === id)
+    if (index !== -1) templates.value.splice(index, 1)
+}
+
+defineExpose({
+    prependTemplate,
+    removeTemplate
+})
 </script>
 
 <template>

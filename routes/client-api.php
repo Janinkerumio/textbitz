@@ -13,7 +13,7 @@ Route::get('api/', function () {
     ]);
 });
 
-Route::prefix('crud-api')->group(function () {
+Route::prefix('api')->group(function () {
     Route::middleware('auth')->name('api.')->group(function () {
         Route::get('/contacts', [ContactController::class, 'load'])->name('contacts');
         Route::get('/contacts/{id}', [ContactController::class, 'show'])->name('contacts.show');

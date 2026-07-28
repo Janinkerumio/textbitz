@@ -2,10 +2,25 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Services\PlatformService;
+use Illuminate\Support\Facades\File;
+use Native\Mobile\Facades\System;
+use Native\Mobile\Facades\Device;
 
 if(config('app.debug'))
 {
-    Route::get('/debug-extensions', fn () => response()->json(get_loaded_extensions()));
+    Route::get('/debug-extensions', function () {
+        return response()->json([
+            'loadedExtensions' => get_loaded_extensions(),
+            'nativeIsLoaded' => PlatformService::isRunningNatively(),
+            'platformServiceResponse' => PlatformService::detect(),
+            'nativeResponse' => [
+                'android' => System::isAndroid(),
+                'ios' => System::isIos()
+            ],
+            'deviceInfo' => Device::getInfo(),
+        ]);
+    });
+
     Route::get('/debug-native-extensions', function () {
         return response()->json([
             'nativeIsLoaded' => PlatformService::isRunningNatively(),
@@ -26,5 +41,21 @@ if(config('app.debug'))
             ->values();
 
         return response()->json(['lines' => $lines]);
+    });
+
+    Route::get('/debug/logs', function () {
+        $path = storage_path('logs/laravel.log');
+
+        if (!File::exists($path)) {
+            return response('No logs found.', 404);
+        }
+
+        $lines = collect(explode("\n", File::get($path)))
+            ->reverse()
+            ->take(200)
+            ->reverse()
+            ->implode("\n");
+
+        return response()->json($lines);
     });
 }

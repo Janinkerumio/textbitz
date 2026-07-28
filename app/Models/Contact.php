@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 #[Fillable(['phone_num', 'contact_name', 'tags', 'user_id'])]
 class Contact extends Model
@@ -34,11 +35,14 @@ class Contact extends Model
         return static::query()->where('user_id', Auth::id());
     }
 
-    public static function findByHashId(string $hash): ?self
+    public static function findByHashId(string $hash): self
     {
         $id = Hashids::decode($hash);
 
-        abort_if(empty($id), 404);
+        if (!$id) 
+        {
+            throw (new ModelNotFoundException)->setModel(static::class);
+        }
 
         return static::initiateQuery()->findOrFail($id[0]);
     }

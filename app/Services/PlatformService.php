@@ -10,9 +10,7 @@ class PlatformService
 
     public static function isRunningNatively(): bool
     {
-        return function_exists('native_dispatch')
-            || extension_loaded('nativephp')
-            || extension_loaded('native_php');
+        return extension_loaded('nativephp');
     }
 
     public static function detect(): array
@@ -26,13 +24,9 @@ class PlatformService
             return self::$platform = ['isAndroid' => false, 'isIos' => false];
         }
 
-        try {
-            return self::$platform = [
-                'isAndroid' => System::isAndroid(),
-                'isIos' => System::isIos(),
-            ];
-        } catch (\Throwable $e) {
-            return self::$platform = ['isAndroid' => false, 'isIos' => false];
-        }
+        return self::$platform = [
+            'isAndroid' => System::isAndroid(),
+            'isIos' => System::isIos(),
+        ];
     }
 }

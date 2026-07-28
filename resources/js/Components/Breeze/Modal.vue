@@ -84,10 +84,10 @@ const maxWidthClass = computed(() => {
             scroll-region
         >
             <Transition
-                enter-active-class="ease-out duration-300"
+                enter-active-class="ease-out duration-100"
                 enter-from-class="opacity-0"
                 enter-to-class="opacity-100"
-                leave-active-class="ease-in duration-200"
+                leave-active-class="ease-in duration-100"
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
@@ -103,10 +103,10 @@ const maxWidthClass = computed(() => {
             </Transition>
 
             <Transition
-                enter-active-class="ease-out duration-300"
+                enter-active-class="ease-out duration-100"
                 enter-from-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 enter-to-class="opacity-100 translate-y-0 sm:scale-100"
-                leave-active-class="ease-in duration-200"
+                leave-active-class="ease-in duration-100"
                 leave-from-class="opacity-100 translate-y-0 sm:scale-100"
                 leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >

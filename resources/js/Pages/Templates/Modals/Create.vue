@@ -1,7 +1,7 @@
 <script setup>
 import BottomModal from '@/Components/Modal/BottomModal.vue';
 import { FilePlus } from 'lucide-vue-next';
-import { useForm, usePage } from '@inertiajs/vue3';
+import { useForm, usePage, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import crossPlatformToast from '@/helpers/crossPlatformToast';
 import InputLabel from '@/Components/Breeze/InputLabel.vue';
@@ -45,7 +45,9 @@ const submit = () => {
         onSuccess: () => {
             form.reset()
             form.category = 'General'
-            toast.show(usePage().props.flash.success)
+            router.reload({ only: ['templates'] })
+            emit('update:modelValue', false)
+            toast.success(usePage().props.flash.success)
         },
         onError: (error) => {
             toast.error(error ?? 'Something went wrong')

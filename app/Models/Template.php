@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Support\Collection;
 use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 #[Fillable('category', 'title', 'message', 'variables', 'tags', 'icon', 'color')]
 class Template extends Model
@@ -37,7 +38,10 @@ class Template extends Model
     {
         $id = Hashids::decode($hash);
 
-        abort_if(empty($id), 404);
+        if (!$id) 
+        {
+            throw (new ModelNotFoundException)->setModel(static::class);
+        }
 
         return static::findOrFail($id[0]);
     }

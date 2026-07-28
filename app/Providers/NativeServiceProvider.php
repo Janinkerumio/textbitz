@@ -35,6 +35,8 @@ class NativeServiceProvider extends ServiceProvider
     {
         return [
             \Native\Mobile\Providers\DialogServiceProvider::class,
+            \Native\Mobile\Providers\DeviceServiceProvider::class,
+        
         
         ];
     }

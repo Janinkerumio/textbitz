@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4b607bec97517e4fddc5504dce1d85bd",
+    "content-hash": "c5d6161c0df5ef016887b82fd7c529bc",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2713,6 +2713,55 @@
                 "source": "https://github.com/NativePHP/mobile-air/tree/3.3.6"
             },
             "time": "2026-06-05T17:27:23+00:00"
+        },
+        {
+            "name": "nativephp/mobile-device",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/NativePHP/mobile-device.git",
+                "reference": "f3fcc1a1dc38ac8ecf66e906d4cdf98b19383bbd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/NativePHP/mobile-device/zipball/f3fcc1a1dc38ac8ecf66e906d4cdf98b19383bbd",
+                "reference": "f3fcc1a1dc38ac8ecf66e906d4cdf98b19383bbd",
+                "shasum": ""
+            },
+            "require": {
+                "nativephp/mobile": "^3.0 || ^4.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^2.7|^3.0|^4.0"
+            },
+            "type": "nativephp-plugin",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Native\\Mobile\\Providers\\DeviceServiceProvider"
+                    ]
+                },
+                "nativephp": {
+                    "manifest": "nativephp.json"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Native\\Mobile\\Providers\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Device hardware operations for NativePHP Mobile",
+            "support": {
+                "issues": "https://github.com/NativePHP/mobile-device/issues",
+                "source": "https://github.com/NativePHP/mobile-device/tree/1.0.3"
+            },
+            "time": "2026-07-15T18:46:26+00:00"
         },
         {
             "name": "nativephp/mobile-dialog",

@@ -11,13 +11,12 @@ import randomAvatarColor from '@/utils/avatarColors';
 import InputError from '@/Components/Breeze/InputError.vue';
 import SubmitButton from '@/Components/Button/SubmitButton.vue';
 import IconButton from '@/Components/Button/IconButton.vue';
-import { dialog } from '#nativephp'
 import crossPlatformToast from '@/helpers/crossPlatformToast';
 
 const props = defineProps({
     modelValue: Boolean,
     ID: {
-        type: Number,
+        type: [Number, String],
         default: null
     }
 })

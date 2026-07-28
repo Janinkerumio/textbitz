@@ -6,10 +6,11 @@ import Logout from './Partials/Logout.vue';
 import PersonalInfo from './Partials/PersonalInfo.vue';
 import BusinessInfo from './Partials/BusinessInfo.vue';
 import SettingsCard from '@/Components/Card/SettingsCard.vue';
-import { ShieldUser } from 'lucide-vue-next';
+import { ShieldUser, Bug } from 'lucide-vue-next';
 import Preferences from './Partials/Preferences.vue';
 import PreferencesModal from './Modals/PreferencesModal.vue';
 import settings from '@/data/settings';
+import LabeledName from '@/Components/Details/LabeledName.vue';
 
 const securityAction = () => {
     router.get('profile')
@@ -33,7 +34,7 @@ const hasPreferencesChanged = (data) => {
 
     <AppLayout pageTitle="Settings">
         <template #content>
-            <div class="flex min-h-screen items-center justify-center">
+            <div class="flex min-h-screen items-center justify-center mt-5">
                 <div class="flex flex-col gap-5 w-full">
                     <PersonalInfo />
 
@@ -47,6 +48,14 @@ const hasPreferencesChanged = (data) => {
                     />
 
                     <Logout />
+
+                    <SettingsCard label="Debug Logs" :icon="Bug" :action="() => { router.get('/debug/logs') }"/>
+
+                    <SettingsCard label="Debug Extensions" :icon="Bug" :action="() => { router.get('/debug-extensions') }"/>
+
+                    <LabeledName label="Android platform" :context="$page.props.platform.isAndroid ? 'Yes' : 'No'"/>
+                    <LabeledName label="IOS platform" :context="$page.props.platform.isIos ? 'Yes' : 'No'"/>
+
                 </div>
             </div>
         </template>

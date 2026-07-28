@@ -7,6 +7,7 @@ use App\Http\Requests\TemplatesRequest;
 use Inertia\Inertia;
 use App\Models\Template;
 use App\Http\Resources\TemplateResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TemplatesController extends Controller
 {
@@ -39,16 +40,82 @@ class TemplatesController extends Controller
     public function store(TemplatesRequest $request)
     {
         try {
-            Template::create([
+            $template = Template::create([
                 ...$request->validated(),
             ]);
 
-            return back()->with('success', 'Template added successfully!');
+            return back()->with([
+                'success' => 'Template added successfully!',
+                'newTemplate' => new TemplateResource($template)
+            ]);
                     
         } catch (\Exception $e) {
             report($e);
 
             return back()->withErrors(['message' => 'Something went wrong while saving']);
+        }
+    }
+
+    public function show (string $id)
+    {
+        try {
+            $template = Template::findByHashId($id);
+
+            return response()->json([
+                'success' => true,
+                'data' => $template
+            ]);
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Template not found or does not exist'
+            ], 404);
+            
+        } catch (\Exception $e) {
+            report($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong getting data'
+            ], 500);
+        }
+    }
+
+    public function update(TemplatesRequest $request, string $id)
+    {
+        try {
+            $template = Template::findByHashId($id);
+            $template->update($request->validated());
+
+            return back()
+                ->with('success', 'Template updated successfully')
+                ->with('templateUpdated', new TemplateResource($template));
+
+        } catch (ModelNotFoundException $e) {
+            return back()->withErrors(['title' => 'Template not found.']);
+
+        } catch (\Exception $e) {
+            report($e);
+
+            return back()->withErrors(['title' => 'Something went wrong while saving. Please try again.']);
+        }
+    }
+
+    public function delete(string $id)
+    {
+        try {
+            Template::findByHashId($id)->delete();
+
+            return back()->with('success', 'Template removed');
+            
+        } catch (ModelNotFoundException $e) {
+            return back()->with('error', 'Template not found.');
+
+        } catch (\Exception $e) {
+            report($e);
+
+            return back()->with('error', 'Something went wrong processing. Please try again.');
         }
     }
 

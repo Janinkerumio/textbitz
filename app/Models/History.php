@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 #[Fillable('user_id', 'template_id', 'blast', 'status', 'recipients', 'last_sent_at')]
 class History extends Model
@@ -39,6 +40,18 @@ class History extends Model
     public static function initiateQuery(): Builder
     {
         return static::query()->where('user_id', Auth::id());
+    }
+
+    public static function findByHashId(string $hash): self
+    {
+        $id = Hashids::decode($hash);
+
+        if (!$id) 
+        {
+            throw (new ModelNotFoundException)->setModel(static::class);
+        }
+
+        return static::initiateQuery()->findOrFail($id[0]);
     }
 
     public static function isUserHasSavedHistory(): bool
