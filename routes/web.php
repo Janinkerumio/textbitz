@@ -14,6 +14,10 @@ Route::get('/', function () {
     ]);
 })->name('auth-screen');
 
+Route::get('/laravel', function () {
+    return Inertia::render('Welcome');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

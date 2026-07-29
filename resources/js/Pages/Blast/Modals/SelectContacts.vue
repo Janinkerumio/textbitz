@@ -56,13 +56,13 @@ const loadContacts = async (reset = false) => {
 
         if (reset || page.value === 1) {
             contacts.value = data.data
-            totalContacts.value = data.total
+            totalContacts.value = data.meta.total
         } else {
             contacts.value.push(...data.data)
         }
 
-        page.value = data.current_page + 1
-        hasMore.value = data.current_page < data.last_page
+        page.value = data.meta.current_page + 1
+        hasMore.value = data.meta.current_page < data.meta.last_page
     } catch (error) {
         console.error(error)
         dialog.alert('Loading failed. Something went wrong')

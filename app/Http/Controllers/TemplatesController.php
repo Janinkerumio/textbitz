@@ -115,7 +115,7 @@ class TemplatesController extends Controller
         } catch (\Exception $e) {
             report($e);
 
-            return back()->with('error', 'Something went wrong processing. Please try again.');
+            return back()->with('error', 'Something went wrong while processing. Please try again.');
         }
     }
 

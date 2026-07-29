@@ -5,9 +5,10 @@ import onlyInitials from '@/utils/onlyInitials';
 import randomAvatarColor from '@/utils/avatarColors';
 import { fetchContact } from '@/data/api/fetchViaAxios';
 import AvatarCardColList from '@/Components/Skeleton/AvatarCardColList.vue';
-import { createInfiniteScroll } from '@/Composables/createInfiniteScroll';
+import { createInfiniteScroll } from '@/helpers/createInfiniteScroll';
 import { Ellipsis  } from 'lucide-vue-next'
 import { formatPhoneDisplay } from '@/Composables/usePHPhoneFormatter';
+import { useDataList } from '@/Composables/useDataList';
 
 const props = defineProps({
     filters: {
@@ -34,6 +35,8 @@ const { items: contacts, loading, onScroll } = createInfiniteScroll(
     fetchContact,
     computed(() => props.filters)
 )
+
+const { prependData, removeData } = useDataList(contacts)
 
 const toggleSelection = (id) => {
     const selectedIds = new Set(selectedContacts.value)
@@ -62,18 +65,7 @@ const exitSelectMode = () => {
     selectedContacts.value = new Set()
 }
 
-const prependContact = (contact, updateOnly = false) => {
-    if(updateOnly) {
-        const index = contacts.value.findIndex(data => data.id === contact.id)
-        if(index !== -1) {
-            contacts.value[index] = contact
-        }
-    } else {
-        contacts.value.unshift(contact)
-    }   
-}
-
-watch(selectedContacts, 
+watch(() => selectedContacts.value, 
     () => {
         if(Array.from(selectedContacts.value).length === 0 && isSelectMode.value) {
             exitSelectMode()
@@ -84,7 +76,8 @@ watch(selectedContacts,
 defineExpose({
     exitSelectMode,
     selectedIds,
-    prependContact
+    prependData,
+    removeData
 })
 </script>
 

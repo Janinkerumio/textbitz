@@ -1,6 +1,6 @@
 <script setup>
 import { watch, ref, Transition } from 'vue';
-import { useForm, usePage } from '@inertiajs/vue3';
+import { useForm, usePage, router } from '@inertiajs/vue3';
 import BottomModal from '@/Components/Modal/BottomModal.vue';
 import { fetchOneContact } from '@/data/api/fetchViaAxios';
 import TextInput from '@/Components/Breeze/TextInput.vue';
@@ -11,6 +11,9 @@ import randomAvatarColor from '@/utils/avatarColors';
 import InputError from '@/Components/Breeze/InputError.vue';
 import SubmitButton from '@/Components/Button/SubmitButton.vue';
 import IconButton from '@/Components/Button/IconButton.vue';
+import Modal from '@/Components/Breeze/Modal.vue';
+import DangerButton from '@/Components/Breeze/DangerButton.vue';
+import SecondaryButton from '@/Components/Breeze/SecondaryButton.vue';
 import crossPlatformToast from '@/helpers/crossPlatformToast';
 
 const props = defineProps({
@@ -29,8 +32,9 @@ const loading = ref(false)
 const error = ref(null)
 const newTag = ref('')
 const showTagsField = ref(false)
+const showConfirmDeleteModal = ref(false)
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'deletedContact'])
 
 const form = useForm({
     contact_name: '',
@@ -73,7 +77,26 @@ const addToBlast = (id) => {
 }
 
 const deleteContact = (id) => {
-    console.log('Delete contact with ID: '+id)
+    router.delete(route('api.contacts.delete', id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            closeDeleteModal()
+            emit('update:modelValue', false)
+            toast.success(page.props.flash.success)
+            emit('deletedContact', id)
+        },
+        onError: (error) => {
+            toast.error(error ?? 'Something went wrong')
+        }
+    })
+}
+
+const openDeleteModal = () => {
+    showConfirmDeleteModal.value = true
+}
+
+const closeDeleteModal = () => {
+    showConfirmDeleteModal.value = false
 }
 
 const initiateDataFetching = async (id) => {
@@ -127,7 +150,7 @@ watch(() => props.ID, (id) => {
                     </div>
                     <div class="flex flex-wrap gap-5 px-4">
                         <IconButton @click="addToBlast(ID)" color-class="text-gray-500" :icon="Send"/>
-                        <IconButton @click="deleteContact(ID)" color-class="text-red-500" :icon="Trash"/>
+                        <IconButton @click="openDeleteModal" color-class="text-red-500" :icon="Trash"/>
                     </div>
                 </div>
                 <form @submit.prevent="submit" class="px-2 flex flex-col gap-4">
@@ -198,6 +221,27 @@ watch(() => props.ID, (id) => {
             </div>
         </Transition>
     </BottomModal>
+    <Modal :show="showConfirmDeleteModal" @close="closeDeleteModal">
+        <div class="p-6">
+            <h2
+                class="text-lg font-medium text-gray-900 dark:text-gray-100"
+            >
+                Are you sure you want to delete this contact?
+            </h2>
+            <div class="mt-6 flex gap-2">
+                <DangerButton
+                    @click="deleteContact(ID)"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
+                >
+                    Delete
+                </DangerButton>
+                <SecondaryButton @click="closeDeleteModal">
+                    Cancel
+                </SecondaryButton>
+            </div>
+        </div>
+    </Modal>
 </template>
 
 <style scoped>

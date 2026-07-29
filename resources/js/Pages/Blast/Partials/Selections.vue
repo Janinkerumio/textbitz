@@ -42,7 +42,7 @@ const emit = defineEmits([
                         v-for="template in templates"
                         :key="template.id"
                         @click="emit('emitTemplate', template.message)"
-                        class="text-sm text-gray-800 border-[0.25px] border-gray-300 bg-white rounded-xl py-1 px-3"
+                        class="text-sm text-gray-800 border-[0.25px] border-gray-300 bg-white dark:bg-gray-300 rounded-xl py-1 px-3"
                     >
                         {{ template.title }}
                     </button>

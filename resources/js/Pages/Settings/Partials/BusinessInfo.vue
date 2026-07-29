@@ -1,18 +1,29 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import SettingsCard from '@/Components/Card/SettingsCard.vue';
 import BoxIcon from '@/Components/Icon/BoxIcon.vue';
 import LabeledName from '@/Components/Details/LabeledName.vue';
 import { Building2, Signature } from 'lucide-vue-next';
 
+const props = defineProps({
+    businessSettingsChanges: {
+        type: Object,
+        default: {}
+    }
+})
+
 const page = usePage()
 
 const corporate = computed(() => page.props.corporate) 
+
+watch(() => props.businessSettingsChanges, (payload) => {
+    corporate.value = payload
+})
 </script>
 
 <template>
-    <SettingsCard label="Business" :icon="Building2">
+    <SettingsCard label="Business" :icon="Building2" :action="() => $emit('open')">
         <div class="flex flex-row items-center gap-4 px-4 border-b border-gray-200 dark:border-gray-500 pb-4">
             <BoxIcon :icon="Building2"/>
             <LabeledName 

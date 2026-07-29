@@ -26,7 +26,7 @@ const count = computed(() => props.selectedIds.length)
         @update:model-value="emit('update:modelValue', $event)"
     >
         <div class="flex flex-row item-center gap-4">
-            <p class="text-center text-sm mt-2 text-gray-600">{{ count }} selected</p>
+            <p class="text-center text-sm mt-2 text-gray-600 dark:text-gray-300">{{ count }} selected</p>
             <button 
                 @click="emit('addToBlastHandler')"
                 class="flex flex-col gap-1 items-center text-blue-500"
@@ -34,7 +34,7 @@ const count = computed(() => props.selectedIds.length)
                 <SendHorizontal :size="22" />
                 <small class="text-[10px]">Add to blast</small>
             </button>
-            <button 
+            <button v-if="false"
                 @click="emit('deleteContactsHandler')"
                 class="flex flex-col gap-1 items-center text-red-500"
             >

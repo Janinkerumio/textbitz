@@ -40,7 +40,7 @@ class ContactRequest extends FormRequest
                 : null;
 
         return [
-            'contact_name' => ['required', 'string', 'max:255'],
+            'contact_name' => ['required', 'string', 'max:100'],
             'phone_num' => [
                 'required', 'string', 'max:20',
                 Rule::unique('contacts', 'phone_num')

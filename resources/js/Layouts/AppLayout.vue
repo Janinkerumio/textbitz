@@ -29,7 +29,7 @@ defineProps({
 </script>
 
 <template>
-    <main class="bg-gray-100 dark:bg-gray-900/90 grid grid-cols-1 md:grid-cols-4 min-h-screen">
+    <main class="bg-gray-100 dark:bg-gray-900 grid grid-cols-1 md:grid-cols-4 min-h-screen">
         <Sidebar />
         <div class="col-span-3 flex flex-col h-screen overflow-hidden">
             <AppHead 

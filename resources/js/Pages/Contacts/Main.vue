@@ -65,15 +65,27 @@ const handleDeleteContacts = () => {
     //Actions later
 }
 
+const handleOneContactRemoval = (id) => {
+    if(id) {
+        listRef.value?.removeData?.(id)
+    }
+}
+
+watch(() => selectedIds.value.length, (value) => {
+    if(value === 0 && showLongPressActions.value) {
+        showLongPressActions.value = false
+    }
+})
+
 watch(() => page.props.flash.newContact, (contact) => {
     if (contact) {
-        listRef.value?.prependContact?.(contact)
+        listRef.value?.prependData?.(contact)
     }
 })
 
 watch(() => page.props.flash.contactUpdated, (contact) => {
     if(contact) {
-        listRef.value?.prependContact?.(contact, true)
+        listRef.value?.prependData?.(contact, true)
     }
 })
 </script>
@@ -117,6 +129,7 @@ watch(() => page.props.flash.contactUpdated, (contact) => {
                 v-model="isSelectModalShown"
                 :ID="passedId"
                 @update:modelValue="resetId"
+                @deleted-contact="(id) => handleOneContactRemoval(id)"
             />
             <Create
                 v-model="isCreateModalShown"

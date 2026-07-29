@@ -108,4 +108,21 @@ class ContactController extends Controller
             return back()->withErrors(['contact_name' => 'Something went wrong while saving. Please try again.']);
         }
     }
+
+    public function delete(string $id)
+    {
+        try {
+            Contact::findByHashId($id)->delete();
+
+            return back()->with('success', 'Contact removed');
+
+        } catch (ModelNotFoundException $e) {
+            return back()->with('error', 'Contact not found.');
+
+        } catch (\Exception $e) {
+            report($e);
+
+            return back()->with('error', 'Something went while wrong processing. Please try again.');
+        }
+    }
 }

@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, useTemplateRef } from 'vue';
 import { fetchHistory } from '@/data/api/fetchViaAxios';
-import { createInfiniteScroll } from '@/Composables/createInfiniteScroll';
+import { createInfiniteScroll } from '@/helpers/createInfiniteScroll';
 import { capitalize } from 'vue';
 import { blastStatus } from '@/utils/statusIndicator';
 import { Ellipsis } from 'lucide-vue-next';

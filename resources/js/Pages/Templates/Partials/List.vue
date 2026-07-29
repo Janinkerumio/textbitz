@@ -1,12 +1,13 @@
 <script setup>
 import { fetchTemplates } from '@/data/api/fetchViaAxios';
 import { computed, ref, useTemplateRef } from 'vue';
-import { createInfiniteScroll } from '@/Composables/createInfiniteScroll';
+import { createInfiniteScroll } from '@/helpers/createInfiniteScroll';
 import { EllipsisVertical, Copy } from 'lucide-vue-next';
 import ActionButton from '@/Components/Button/ActionButton.vue';
 import IconButton from '@/Components/Button/IconButton.vue';
 import CardColList from '@/Components/Skeleton/CardColList.vue';
 import { useClipboard } from '@/Composables/useClipboard';
+import { useDataList } from '@/Composables/useDataList';
 
 const props = defineProps({
     searchQuery: {
@@ -25,6 +26,8 @@ const { items: templates, loading, onScroll } = createInfiniteScroll(
     { distance: 10 }
 )
 
+const { prependData, removeData } = useDataList(templates)
+
 const { copy } = useClipboard()
 
 const expand = (id) => {
@@ -38,25 +41,9 @@ const expand = (id) => {
     expandedTemplateId.value = new Set(expandedTemplateId.value)
 }
 
-const prependTemplate = (template, updateOnly = false) => {
-    if(updateOnly) {
-        const index = templates.value.findIndex(data => data.id === template.id)
-        if(index !== -1) {
-            templates.value[index] = template
-        }
-    } else {
-        templates.value.unshift(template)
-    }
-}
-
-const removeTemplate = (id) => {
-    const index = templates.value.findIndex((data) => data.id === id)
-    if (index !== -1) templates.value.splice(index, 1)
-}
-
 defineExpose({
-    prependTemplate,
-    removeTemplate
+    prependData,
+    removeData
 })
 </script>
 

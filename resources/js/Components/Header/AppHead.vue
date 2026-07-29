@@ -25,7 +25,7 @@ defineProps({
 </script>
 
 <template>
-    <header class="fixed w-full flex items-center justify-between backdrop-blur-sm bg-gradient-to-tr from-blue-600/90 from-0% via-blue-600/90 via-50% to-amber-600/20 to-100% p-4 pt-12 z-50 sm:mt-0 overflow-hidden">
+    <header class="fixed w-full flex items-center justify-between backdrop-blur-lg bg-gradient-to-tr from-blue-600/90 dark:from-gray-800/90 from-0% via-blue-600/90 dark:via-gray-800/90 via-50% to-amber-600/20 dark:to-blue-500/20 to-100% p-4 pt-12 z-50 sm:mt-0 overflow-hidden">
         <div 
             class="absolute inset-0 bg-no-repeat bg-[position:right_30px_top_0px] pointer-events-none"
             style="

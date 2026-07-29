@@ -57,7 +57,7 @@ const handleDelete = (id) => {
 
 const handleRemoval = (id) => {
     if(id) {
-        listRef.value?.removeTemplate?.(id)
+        listRef.value?.removeData?.(id)
     }
 }
 
@@ -67,13 +67,13 @@ const handleUseTemplate = (id) => {
 
 watch(() => page.props.flash.newTemplate, (data) => {
     if (data) {
-        listRef.value?.prependTemplate?.(data)
+        listRef.value?.prependData?.(data)
     }
 })
 
 watch(() => page.props.flash.templateUpdated, (data) => {
     if(data) {
-        listRef.value?.prependTemplate?.(data, true)
+        listRef.value?.prependData?.(data, true)
     }
 })
 </script>

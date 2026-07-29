@@ -30,6 +30,9 @@ watch(
     (value) => {
         if(value) {
             open()
+        } else {
+            isShown.value = false
+            document.body.style.overflow = ''
         }
     },
     { immediate: true }
@@ -43,12 +46,12 @@ onUnmounted(() => {
 <template>
     <Teleport to="body">
         <Transition name="slide-up">
-            <div v-if="isShown" class="fixed z-50 bottom-0 w-full bg-white border-t border-gray-200 px-4 pt-2 pb-6">
+            <div v-if="isShown" class="fixed z-50 bottom-0 w-full bg-white dark:bg-black/80 backdrop-blur-lg border-t border-gray-200 dark:border-gray-600 px-4 pt-2 pb-6">
                 <div class="flex flex-wrap justify-end">
                     <div class="flex-2 max-w-full">
                         <slot />
                     </div>
-                    <button @click="close" class="text-gray-600 active:opacity-75 flex flex-col items-center pl-6"><X :size="26"/><small class="text-[10px]">Cancel</small></button>
+                    <button @click="close" class="text-gray-600 dark:text-gray-300 active:opacity-75 flex flex-col items-center pl-6"><X :size="26"/><small class="text-[10px]">Cancel</small></button>
                 </div>
             </div>
         </Transition>

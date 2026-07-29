@@ -38,7 +38,7 @@ const showPassword = ref(false)
             v-model="model"
             :autocomplete="autocomplete"
             :placeholder="placeholder"
-            class="w-full pl-14 pr-4 py-2.5 rounded-xl border border-[#E5E7EB] bg-white text-lg text-gray-600 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all"
+            class="w-full pl-14 pr-4 py-2.5 rounded-xl border border-[#E5E7EB] bg-white dark:bg-gray-800 text-lg text-gray-600 dark:text-gray-300 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all"
         />
         <button
             type="button"

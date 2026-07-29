@@ -23,7 +23,7 @@ export function useClipboard() {
                 copied.value = false;
             }, 2000);
         } catch (err) {
-            // Fallback for older browsers / non-secure contexts
+            
             fallbackCopy(text);
         }
     }

@@ -11,12 +11,17 @@ import Preferences from './Partials/Preferences.vue';
 import PreferencesModal from './Modals/PreferencesModal.vue';
 import settings from '@/data/settings';
 import LabeledName from '@/Components/Details/LabeledName.vue';
+import { onDebug } from '@/config.js';
+import BusinessModal from './Modals/BusinessModal.vue';
 
 const securityAction = () => {
     router.get('profile')
 }
 
 const showPreferencesModal = ref(false)
+const showBusinessModal = ref(false)
+
+const businessSettings = ref({})
 
 const preferencesSettings = ref({
     defaultCategory: settings.preferences.defaultCategory,
@@ -26,6 +31,10 @@ const preferencesSettings = ref({
 
 const hasPreferencesChanged = (data) => {
     preferencesSettings.value = data
+}
+
+const hasBusinessChnaged = (data) => {
+    businessSettings.value = data
 }
 </script>
 
@@ -40,7 +49,10 @@ const hasPreferencesChanged = (data) => {
 
                     <SettingsCard label="Security" :icon="ShieldUser" :action="() => securityAction()"/>
 
-                    <BusinessInfo />
+                    <BusinessInfo 
+                        @open="showBusinessModal = true"
+                        :businessSettingsChanges="businessSettings"
+                    />
 
                     <Preferences 
                         @open="showPreferencesModal = true"
@@ -49,12 +61,12 @@ const hasPreferencesChanged = (data) => {
 
                     <Logout />
 
-                    <SettingsCard label="Debug Logs" :icon="Bug" :action="() => { router.get('/debug/logs') }"/>
+                    <SettingsCard v-if="onDebug" label="Debug Logs" :icon="Bug" :action="() => { router.get('/debug/logs') }"/>
 
-                    <SettingsCard label="Debug Extensions" :icon="Bug" :action="() => { router.get('/debug-extensions') }"/>
+                    <SettingsCard v-if="onDebug" label="Debug Extensions" :icon="Bug" :action="() => { router.get('/debug-extensions') }"/>
 
-                    <LabeledName label="Android platform" :context="$page.props.platform.isAndroid ? 'Yes' : 'No'"/>
-                    <LabeledName label="IOS platform" :context="$page.props.platform.isIos ? 'Yes' : 'No'"/>
+                    <LabeledName v-if="onDebug" label="Android platform" :context="$page.props.platform.isAndroid ? 'Yes' : 'No'"/>
+                    <LabeledName v-if="onDebug" label="IOS platform" :context="$page.props.platform.isIos ? 'Yes' : 'No'"/>
 
                 </div>
             </div>
@@ -63,6 +75,10 @@ const hasPreferencesChanged = (data) => {
             <PreferencesModal 
                 v-model="showPreferencesModal"
                 @changed="hasPreferencesChanged"
+            />
+            <BusinessModal 
+                v-model="showBusinessModal"
+                @changed="hasBusinessChnaged"
             />
         </template>
     </AppLayout>
