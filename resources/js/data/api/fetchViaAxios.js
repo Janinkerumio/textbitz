@@ -39,6 +39,14 @@ export const fetchHistory = async (params) => {
     return response.data
 }
 
+export const fetchRecipientsByHistory = async (id, params = null) => {
+    const response = await api.get(route('api.recipients.by-history', id), {
+        params: params
+    })
+
+    return response.data
+}
+
 export const preLoadTemplates = async () => {
     const response = await api.get('/api/templates/preload')
 

@@ -1,5 +1,5 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import EmptyHistory from '@/Components/Placeholders/EmptyHistory.vue';
@@ -29,6 +29,10 @@ const handleSorting = (payload) => {
 const handleEmitsFromList = (id) => {
     toast.show('This function is under development')
 }
+
+const handleViewRecipients = async (id) => {
+    router.visit(route('app.recipients', id))
+}
 </script>
 
 <template>
@@ -43,7 +47,7 @@ const handleEmitsFromList = (id) => {
                 />
                 <List
                     :sort-by="appliedSortFilter"
-                    @view-recipients="(id) => handleEmitsFromList(id)"
+                    @view-recipients="(id) => handleViewRecipients(id)"
                     @resend="(id) => handleEmitsFromList(id)"
                     @duplicate="(id) => handleEmitsFromList(id)"
                     @delete="(id) => handleEmitsFromList(id)"

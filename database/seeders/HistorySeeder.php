@@ -7,6 +7,9 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Template;
 use App\Models\History;
+use App\Models\Contact;
+use App\Models\Recipients;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 class HistorySeeder extends Seeder
@@ -41,7 +44,14 @@ class HistorySeeder extends Seeder
             Log::warning('HistorySeeder aborted: no templates found.');
             return;
         }
- 
+
+        $contacts = Contact::query()->where('user_id', $userId)->get();
+
+        if ($contacts->isEmpty()) {
+            $this->call(ContactSeeder::class);
+            $contacts = Contact::query()->where('user_id', $userId)->get();
+        }
+
         $sampleValues = [
             'name' => fn () => $this->randomFirstName(),
             'business_name' => fn () => $this->randomFrom($this->companyNames),
@@ -66,19 +76,52 @@ class HistorySeeder extends Seeder
                     return isset($sampleValues[$key]) ? $sampleValues[$key]() : $matches[0];
                 }, $template->message);
  
-                $recipients = $this->randomRecipients();
- 
-                History::create([
+                $recipientContacts = $this->pickRecipientContacts($contacts)->values();
+                $recipientStatuses = $this->generateRecipientStatuses($recipientContacts->count());
+
+                $history = History::create([
                     'user_id' => $userId,
                     'template_id' => $template->id,
                     'blast' => $blast,
-                    'status' => $this->randomStatus(),
-                    'recipients' => $recipients,
+                    'status' => $this->resolveHistoryStatus($recipientStatuses),
+                    'recipients' => $recipientContacts->count(),
                     'last_sent_at' => $this->randomDateTimeBetween('-2 months', 'now'),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
- 
+
+                $sentCount = 0;
+                $failedCount = 0;
+
+                foreach ($recipientContacts as $index => $contact) {
+                    $status = $recipientStatuses[$index];
+
+                    if ($status === Recipients::STATUS_SENT) {
+                        $sentCount++;
+                    } elseif ($status === Recipients::STATUS_FAILED) {
+                        $failedCount++;
+                    }
+
+                    Recipients::create([
+                        'history_id' => $history->id,
+                        'contact_id' => $contact->id,
+                        'name' => $contact->contact_name,
+                        'mobile_num' => $contact->phone_num,
+                        'status' => $status,
+                        'error_message' => $status === Recipients::STATUS_FAILED
+                            ? 'Simulated delivery failure'
+                            : null,
+                        'sent_at' => $status === Recipients::STATUS_SENT
+                            ? $this->randomDateTimeBetween('-2 months', 'now')
+                            : null,
+                    ]);
+                }
+
+                $history->update([
+                    'sent_count' => $sentCount,
+                    'failed_count' => $failedCount,
+                ]);
+
                 $successCount++;
             } catch (\Throwable $e) {
                 $failCount++;
@@ -130,15 +173,78 @@ class HistorySeeder extends Seeder
     }
  
     /**
-     * Random recipients: 1 to 4 unique names from the pool.
+     * Pick a large batch of contacts (10 up to all available) to act as
+     * recipients for a history record.
      */
-    protected function randomRecipients(): array
+    protected function pickRecipientContacts(Collection $contacts): Collection
     {
-        $count = random_int(1, 4);
-        $keys = array_rand($this->firstNames, min($count, count($this->firstNames)));
-        $keys = is_array($keys) ? $keys : [$keys];
- 
-        return array_values(array_map(fn ($k) => $this->firstNames[$k], $keys));
+        if ($contacts->isEmpty()) {
+            return collect();
+        }
+
+        $min = min(10, $contacts->count());
+        $count = random_int($min, $contacts->count());
+
+        return $contacts->random($count);
+    }
+
+    /**
+     * Generate a batch of recipient statuses biased towards a single outcome
+     * scenario, so a good share of histories end up fully 'sent' or fully
+     * 'failed' rather than almost always picking up a stray 'queued' one.
+     */
+    protected function generateRecipientStatuses(int $count): Collection
+    {
+        $scenario = $this->randomFrom([
+            'all_sent', 'all_sent', 'all_sent',
+            'all_failed',
+            'in_progress', 'in_progress',
+        ]);
+
+        return match ($scenario) {
+            'all_sent' => collect(array_fill(0, $count, Recipients::STATUS_SENT)),
+            'all_failed' => collect(array_fill(0, $count, Recipients::STATUS_FAILED)),
+            'in_progress' => $this->randomStatusesWithQueued($count),
+        };
+    }
+
+    /**
+     * Random sent/queued/failed statuses, guaranteed to contain at least one
+     * 'queued' entry so the batch resolves to an in-progress history.
+     */
+    protected function randomStatusesWithQueued(int $count): Collection
+    {
+        $statuses = collect(range(0, $count - 1))->map(fn () => $this->randomFrom([
+            Recipients::STATUS_SENT,
+            Recipients::STATUS_QUEUED,
+            Recipients::STATUS_QUEUED,
+            Recipients::STATUS_FAILED,
+        ]));
+
+        if (! $statuses->contains(Recipients::STATUS_QUEUED)) {
+            $statuses[0] = Recipients::STATUS_QUEUED;
+        }
+
+        return $statuses;
+    }
+
+    /**
+     * Derive the history status from its recipients: 'queued' if any recipient
+     * is still queued, 'sent' if every recipient sent, 'failed' if every
+     * recipient failed. generateRecipientStatuses() only ever produces one of
+     * these three shapes, so no other combination reaches this method.
+     */
+    protected function resolveHistoryStatus(Collection $statuses): string
+    {
+        if ($statuses->contains(Recipients::STATUS_QUEUED)) {
+            return History::STATUS_QUEUED;
+        }
+
+        if ($statuses->every(fn ($status) => $status === Recipients::STATUS_SENT)) {
+            return History::STATUS_SENT;
+        }
+
+        return History::STATUS_FAILED;
     }
  
     /**

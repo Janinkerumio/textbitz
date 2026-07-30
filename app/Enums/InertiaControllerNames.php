@@ -10,6 +10,7 @@ enum InertiaControllerNames: string
     case History = 'History';
     case Templates = 'Templates';
     case Settings = 'Settings';
+    case Recipients = 'Recipients';
 
     /**
      * @return class-string<\App\Http\Controllers\Controller>
@@ -23,6 +24,7 @@ enum InertiaControllerNames: string
             self::History => \App\Http\Controllers\HistoryController::class,
             self::Templates => \App\Http\Controllers\TemplatesController::class,
             self::Settings => \App\Http\Controllers\SettingsController::class,
+            self::Recipients => \App\Http\Controllers\RecipientsController::class,
         };
     }
 }

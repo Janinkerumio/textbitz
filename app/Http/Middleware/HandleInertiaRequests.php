@@ -35,7 +35,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'corporate' => fn () => $request->user()?->corporateInfo(),
+            'corporate' => fn () => $request->user()?->corporateInfo()->getResults()?->getAttributes(),
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'newContact' => fn () => $request->session()->get('newContact'),

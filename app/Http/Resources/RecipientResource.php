@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class HistoryResource extends JsonResource
+class RecipientResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,13 +16,11 @@ class HistoryResource extends JsonResource
     {
         return [
             'id' => $this->hash_id,
-            'template' => TemplateMiniResource::make($this->whenLoaded('template')),
-            'blast' => $this->blast,
+            'name' => $this->name,
+            'mobile_num' => $this->mobile_num,
             'status' => $this->status,
-            'recipients' => $this->recipients,
-            'sent_count' => $this->sent_count,
-            'failed_count' => $this->failed_count,
-            'last_sent_at' => $this->last_sent_at,
+            'error_message' => $this->error_message,
+            'sent_at' => $this->sent_at
         ];
     }
 }

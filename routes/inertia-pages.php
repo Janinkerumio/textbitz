@@ -12,6 +12,8 @@ Route::middleware('auth')->name('app.')->group( function () {
     Route::action('/templates', 'Templates')->name('blast-templates');
     Route::page('/settings', 'Settings')->name('settings');
 
+    Route::action('/history/recipients/{id}', 'Recipients')->name('recipients');
+
     //shortcuts-------------------
     Route::get('/template/use/{id}', [TemplatesController::class, 'getAndUseTemplate'])->name('templates.use');
 

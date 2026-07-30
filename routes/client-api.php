@@ -4,6 +4,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\TemplatesController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\RecipientsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,8 @@ Route::prefix('api')->group(function () {
         Route::post('/templates', [TemplatesController::class, 'store'])->name('templates.store');
         Route::put('/templates/{id}', [TemplatesController::class, 'update'])->name('templates.update');
         Route::delete('/templates/{id}', [TemplatesController::class, 'delete'])->name('templates.delete');
+
+        Route::get('/recipients/{history_id}', [RecipientsController::class, 'loadByHistory'])->name('recipients.by-history');
 
         Route::post('/settings/business', [SettingsController::class, 'changeBusinessSettings'])->name('settings.change.business');
     });

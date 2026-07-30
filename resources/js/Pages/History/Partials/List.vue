@@ -67,7 +67,7 @@ const expand = (id) => {
                 </section>
                 <section class="flex flex-wrap gap-4 px-4 py-2 border-t-[0.25px] border-gray-200 dark:border-gray-500 text-gray-600 dark:text-gray-400 w-full">
                     <p class="text-sm">{{ friendlyDate('shortDate', history.last_sent_at) }}</p>
-                    <p class="text-sm">{{ history.recipients.length }} recipients</p>
+                    <p class="text-sm">{{ history.recipients }} recipients</p>
                 </section>
                 <Transition
                     enter-active-class="transition-all duration-300 ease-out"

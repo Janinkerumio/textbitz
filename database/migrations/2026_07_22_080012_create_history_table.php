@@ -16,10 +16,20 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('template_id')->nullable()->constrained()->nullOnDelete();
             $table->text('blast');
-            $table->enum('status', ['sent', 'failed', 'queued'])->default('queued');
-            $table->json('recipients')->nullable();
+            $table->enum('status', ['sent', 'failed', 'queued', 'draft', 'scheduled', 'cancelled'])->default('queued');
+            $table->integer('recipients')->default(0);
+            $table->integer('sent_count')->default(0);
+            $table->integer('failed_count')->default(0);
+            $table->enum('type', ['automation', 'campaign'])->default('campaign');
+            $table->enum('send_mode', ['now', 'scheduled', 'alltimes'])->default('now');
+            $table->string('slug')->nullable();
+            $table->timestamp('scheduled_at')->nullable();
             $table->timestamp('last_sent_at')->nullable();
             $table->timestamps();
+            $table->index(['status', 'scheduled_at']);
+            $table->index('send_mode');
+            $table->index('type');
+            $table->softDeletes();
         });
     }
 
