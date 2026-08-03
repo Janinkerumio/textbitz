@@ -2,13 +2,22 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, Link } from '@inertiajs/vue3'
 import { ref, onMounted } from 'vue';
-import { ArrowLeft, SlidersHorizontal } from 'lucide-vue-next';
+import { ArrowLeft, SlidersHorizontal, Dot } from 'lucide-vue-next';
 import Details from './Partials/Details.vue';
 import PrimaryButton from '@/Components/Breeze/PrimaryButton.vue';
+import List from './Partials/List.vue';
+import FilterOptions from './Modals/FilterOptions.vue';
 
 const props = defineProps({
     history: Object
 })
+
+const showFiltersModal = ref(false)
+const sortFilters = ref({})
+
+const handleAppliedSorts = (payload) => {
+    sortFilters.value = payload
+}
 </script>
 
 <template>
@@ -28,15 +37,39 @@ const props = defineProps({
                 Recipients
             </h2>
         </template>
-        <div class="py-2 pb-10">
+        <div class="max-w-7xl py-2 pb-10">
             <div class="flex items-center justify-between px-6 pt-2">
-                <PrimaryButton>
+                <PrimaryButton @click="showFiltersModal = true">
                     <SlidersHorizontal :size="18" :stroke-width="2.5"/><p class="ml-2">Filters</p>
                 </PrimaryButton>
             </div>
-            <div class="max-w-7xl space-y-6 sm:px-6 lg:px-8">
+            <div class="sm:px-6 lg:px-8">
                 <Details 
                     :history="history.data"
+                />
+                <p class="pl-8 flex gap-4">
+                    <span class="text-emerald-500 text-xs">
+                        <i class="fa-solid fa-circle text-[8px]"></i>
+                        Sent
+                    </span>
+                    <span class="text-blue-500 text-xs">
+                        <i class="fa-solid fa-circle text-[8px]"></i>
+                        Queued
+                    </span>
+                    <span class="text-red-500 text-xs">
+                        <i class="fa-solid fa-circle text-[8px]"></i>
+                        Failed
+                    </span>
+                </p>
+                <List
+                    :history-id="history.data.id"
+                    :sort-by="sortFilters"
+                />
+
+
+                <FilterOptions
+                    v-model="showFiltersModal"
+                    @applied-sort="(payload) => handleAppliedSorts(payload)"
                 />
             </div>
         </div>

@@ -5,7 +5,7 @@ use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\TemplatesController;
 
 Route::middleware('auth')->name('app.')->group( function () {
-    Route::page('/dashboard', 'Home')->name('dashboard');
+    Route::action('/dashboard', 'Dashboard')->name('dashboard');
     Route::action('/contacts', 'Contact')->name('contacts');
     Route::action('/create', 'Blast')->name('blast.create');
     Route::action('/history', 'History')->name('blast.history');

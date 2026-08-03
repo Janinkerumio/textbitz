@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue';
 import { UsersRound } from 'lucide-vue-next';
-import templatesDefault from '@/data/templates';
 
 const props = defineProps({
     selectedCount: {
@@ -9,8 +8,8 @@ const props = defineProps({
         default: 0
     },
     templates: {
-        type: Object,
-        default: {}
+        type: Array,
+        default: []
     }
 })
 
@@ -39,9 +38,9 @@ const emit = defineEmits([
             <div class="overflow-x-auto snap-x snap-mandatory py-2">
                 <div class="flex flex-row items-center gap-2 w-max">
                     <button 
-                        v-for="template in templates"
-                        :key="template.id"
-                        @click="emit('emitTemplate', template.message)"
+                        v-for="(template, index) in templates.data"
+                        :key="index"
+                        @click="emit('emitTemplate', template)"
                         class="text-sm text-gray-800 border-[0.25px] border-gray-300 bg-white dark:bg-gray-300 rounded-xl py-1 px-3"
                     >
                         {{ template.title }}

@@ -1,7 +1,13 @@
 import '../../bootstrap.js'
 
 const api = window.axios
-const serverApiUrl = import.meta.env.SERVER_URL || ''
+const serverApiUrl = import.meta.env.VITE_SERVER_URL || ''
+
+export const fetchHistoryDashboard = async () => {
+    const response = await api.get(route('api.dashboard.history'))
+
+    return response.data
+}
 
 export const fetchContact = async (params) => {
     const response = await api.get(route('api.contacts'), {

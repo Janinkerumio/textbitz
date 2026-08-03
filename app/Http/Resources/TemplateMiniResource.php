@@ -17,6 +17,7 @@ class TemplateMiniResource extends JsonResource
         return [
             'id' => $this->hash_id,
             'title' => $this->title,
+            'message' => $this->message,
         ];
     }
 }

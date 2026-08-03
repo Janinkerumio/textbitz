@@ -16,7 +16,10 @@ const props = defineProps({
         type: Array,
         default: []
     },
-    hasData: String|Number
+    hasData: {
+        type: Number,
+        default: null
+    }
 })
 
 const page = usePage()
@@ -52,14 +55,14 @@ const resetId = () => {
 }
 
 const handleAddToBlast = () => {
-    const ids = listRef.value?.selectedIds
+    //const ids = listRef.value?.selectedIds
 
     toast.show('This function is under development')
     //Actions later
 }
 
 const handleDeleteContacts = () => {
-    const ids = listRef.value?.selectedIds
+    //const ids = listRef.value?.selectedIds
 
     toast.show('This function is under development')
     //Actions later

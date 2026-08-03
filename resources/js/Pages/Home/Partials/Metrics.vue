@@ -1,7 +1,25 @@
 <script setup>
 import BoxIcon from '@/Components/Icon/BoxIcon.vue';
 import { Send, UsersRound, MessageSquare, FileText } from 'lucide-vue-next';
-import metricsData from '@/data/metrics';
+
+defineProps({
+    recipients: {
+        type: Number,
+        default: 0
+    },
+    history: {
+        type: Number,
+        default: 0
+    },
+    contacts: {
+        type: Number,
+        default: 0
+    },
+    templates: {
+        type: Number,
+        default: 0
+    },
+})
 </script>
 
 <template>
@@ -11,14 +29,14 @@ import metricsData from '@/data/metrics';
                 <Send :size="50" class="text-amber-500"/>
                 <div class="flex flex-col">
                     <h1 class="font-bold text-blue-600 dark:text-blue-300">Reached Messages</h1>
-                    <p class="mr-5 text-amber-500 font-extrabold text-3xl">{{ metricsData.reachedMessages }}</p>
+                    <p class="mr-5 text-amber-500 font-extrabold text-3xl">{{ recipients }}</p>
                 </div>
             </div>
             <div class="mt-5 flex flex-row gap-2">
                 <MessageSquare :size="50" class="text-blue-600 dark:text-blue-300"/>
                 <div class="flex flex-col">
                     <h1 class="font-bold text-amber-500">Sent Blasts</h1>
-                    <p class="mr-5 text-blue-600 dark:text-blue-300 font-extrabold text-3xl">{{ metricsData.sentBlasts }}</p>
+                    <p class="mr-5 text-blue-600 dark:text-blue-300 font-extrabold text-3xl">{{ history }}</p>
                 </div>
             </div>
             <div class="col-span-2 flex flex-row justify-between max-w-full gap-2">
@@ -26,14 +44,14 @@ import metricsData from '@/data/metrics';
                     <BoxIcon :icon="UsersRound" boxColor="bg-blue-300/50" iconColor="text-blue-600 dark:text-blue-300" class="flex-1"/>
                     <div class="flex-2 flex items-center justify-between w-full rounded-xl py-1 px-2 bg-gray-500/20 dark:bg-gray-500">
                         <small class="text-gray-600 dark:text-gray-300">Contacts</small>
-                        <p class="text-end font-semibold text-gray-600 dark:text-gray-300 mr-2">{{ metricsData.contacts }}</p>
+                        <p class="text-end font-semibold text-gray-600 dark:text-gray-300 mr-2">{{ contacts }}</p>
                     </div>
                 </div>
                 <div class="flex-1 flex flex-row max-w-full gap-1">
                     <BoxIcon :icon="FileText" boxColor="bg-blue-300/50" iconColor="text-blue-600 dark:text-blue-300" class="flex-1"/>
                     <div class="flex-2 flex items-center justify-between w-full rounded-xl py-1 px-2 bg-gray-500/20 dark:bg-gray-500">
                         <small class="text-gray-600 dark:text-gray-300">Templates</small>
-                        <p class="text-end font-semibold text-gray-600 dark:text-gray-300 mr-2">{{ metricsData.templates }}</p>
+                        <p class="text-end font-semibold text-gray-600 dark:text-gray-300 mr-2">{{ templates }}</p>
                     </div>
                 </div>
             </div>

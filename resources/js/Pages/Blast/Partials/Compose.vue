@@ -1,10 +1,11 @@
 <script setup>
 import { computed, watch, reactive } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import SubmitButton from '@/Components/Button/SubmitButton.vue';
+import InputError from '@/Components/Breeze/InputError.vue';
 import { Send } from 'lucide-vue-next';
 import settings from '@/data/settings';
-import { dialog } from '#nativephp';
+import crossPlatformToast from '@/helpers/crossPlatformToast';
 
 const props = defineProps({
     messageVariables: {
@@ -12,14 +13,17 @@ const props = defineProps({
         default: []
     },
     preMadeMessage: {
-        type: String,
-        default: ''
+        type: Object,
+        default: {}
     },
     selectedRecipients: {
         type: Object,
         default: {}
     }
 })
+
+const toast = crossPlatformToast()
+const page = usePage()
 
 const chars = computed(() => form.message.length)
 const messageVariables = computed(() => props.messageVariables.length !== 0
@@ -32,16 +36,25 @@ const params = reactive({
 })
 
 const form = useForm({
-    message: props.preMadeMessage ?? '',
+    template_id: props.preMadeMessage?.id,
+    message: props.preMadeMessage?.message ?? '',
     recipients: [],
     excludedRecipients: []
 })
 
-const submit = async () => {
-    console.log('Composed Message: '+JSON.stringify(form.message))
-    console.log('Whole payload: '+JSON.stringify(form))
-    console.log('With param: '+JSON.stringify(params))
-    await dialog.toast('This function is under development')
+const submit = () => {
+    toast.show('This feature is under development')
+    // form.post(
+    //     route('api.blast.create', [{select_all: props.selectedRecipients.selectAll}]), {
+    //         preserveScroll: true,
+    //         onSuccess: () => {
+    //             form.reset()
+    //             toast.success(page.props.flash.success)
+    //         },
+    //         onError: (error) => {
+    //             toast.error(error ?? 'Something went wrong')
+    //         }
+    //     })
 }
 
 const parsePayload = (payload) => {
@@ -57,7 +70,8 @@ const parsePayload = (payload) => {
 
 watch(() => props.preMadeMessage, (value) => {
     if(value) {
-        form.message = value
+        form.message = value.message
+        form.template_id = value.id
     }
 })
 
@@ -87,6 +101,7 @@ watch(() => props.selectedRecipients, (payload) => {
                 placeholder="Type your message..."
                 class="text-gray-800 dark:text-gray-200 w-full resize-none bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none placeholder:text-gray-400" 
             />
+            <InputError :message="form.errors.message" />
         </div>
         <div class="flex flex-wrap gap-2 max-w-full justify-between border-t-[0.5px] border-gray-300 pt-2">
             <div class="flex-1 flex flex-wrap gap-1">

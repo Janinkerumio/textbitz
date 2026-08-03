@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\BlastController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\TemplatesController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\RecipientsController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +19,10 @@ Route::get('api/', function () {
 
 Route::prefix('api')->group(function () {
     Route::middleware('auth')->name('api.')->group(function () {
+        Route::post('/blast', [BlastController::class, 'store'])->name('blast.create');
+
+        Route::get('/dashboard/history', [DashboardController::class, 'historyDashboard'])->name('dashboard.history');
+
         Route::get('/contacts', [ContactController::class, 'load'])->name('contacts');
         Route::get('/contacts/{id}', [ContactController::class, 'show'])->name('contacts.show');
         Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');

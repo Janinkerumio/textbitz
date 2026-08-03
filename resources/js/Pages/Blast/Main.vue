@@ -8,12 +8,12 @@ import SelectContacts from './Modals/SelectContacts.vue';
 
 const props = defineProps({
     messageTemplate: {
-        type: String,
-        default: ''
-    },
-    templates: {
         type: Object,
         default: {}
+    },
+    templates: {
+        type: Array,
+        default: () => []
     }
 })
 
@@ -22,8 +22,8 @@ const isContactsModalOpen = ref(false)
 const selectedContacts = ref({})
 const selectedContactsLength = ref(0)
 
-const fillPreMadeMessage = (message) => {
-    preMadeMessage.value = message
+const fillPreMadeMessage = (payload) => {
+    preMadeMessage.value = payload
 }
 
 const handleSelectedContacts = (payload) => {

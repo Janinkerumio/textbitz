@@ -36,7 +36,7 @@ defineProps({
             "
         ></div>
         <div class="relative z-10 flex items-center flex-wrap gap-2">
-            <div class="rounded-xl text-gray-100 bg-white/20 flex item-center justify-center p-[10px]">
+            <div class="rounded-xl text-gray-100 bg-white/20 dark:bg-blue-500/80 flex item-center justify-center p-[10px]">
                 <MessageSquareShare :size="18" :stroke-width="3"/>
             </div>
             <div class="flex flex-col">

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -49,6 +50,11 @@ class Recipients extends Model
     public function scopeFailed(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_FAILED);
+    }
+
+    public function scopeForUser(Builder $query, ?int $userId = null): Builder
+    {
+        return $query->whereHas('history', fn ($qu) => $qu->where('user_id', $userId ?? Auth::id()));
     }
 
     public static function findByhashId(string $hash): self

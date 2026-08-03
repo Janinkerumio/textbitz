@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\TemplatesRequest;
+use App\Http\Resources\TemplateMiniResource;
 use Inertia\Inertia;
 use App\Models\Template;
 use App\Http\Resources\TemplateResource;
@@ -124,7 +125,7 @@ class TemplatesController extends Controller
         $template = Template::findByHashId($id);
 
         return Inertia::render('Blast/Main', [
-            'messageTemplate' => $template->message
+            'messageTemplate' => $template
         ]);
     }
 }
