@@ -21,11 +21,17 @@ class RecipientsController extends Controller
         ]);
     }
 
-    public function loadByHistory(string $history_id)
+    public function loadByHistory(Request $request, string $history_id)
     {
         $history = History::findByHashId($history_id);
 
-        $recipients = Recipients::where('history_id', $history->id)
+        $query = Recipients::query();
+
+        $query->when($request->query('sort'), function ($q) use ($request) {
+            $q->where('status', $request->query('sort'));
+        });
+
+        $recipients = $query->where('history_id', $history->id)
                         ->latest()
                         ->paginate(20);
 

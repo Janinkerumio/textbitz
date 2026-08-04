@@ -1,7 +1,7 @@
 <script setup>
 import { fetchRecipientsByHistory } from '@/data/api/fetchViaAxios';
 import { useInfiniteScroll } from '@vueuse/core';
-import { useTemplateRef, ref, computed, onMounted } from 'vue';
+import { useTemplateRef, ref, computed, onMounted, watch } from 'vue';
 import { formatPhoneDisplay } from '@/Composables/usePHPhoneFormatter';
 import { Dot } from 'lucide-vue-next';
 import { blastStatus } from '@/utils/statusIndicator';
@@ -40,7 +40,7 @@ const loadRecipients = async (reset = false) => {
         params.append('page', page.value)
 
         if(props.sortBy.sort) {
-            params.append('search', props.sortBy.sort)
+            params.append('sort', props.sortBy.sort)
         }
 
         const data = await fetchRecipientsByHistory(props.historyId, params)
@@ -85,6 +85,18 @@ const expand = (id) => {
     
     expandedRecipientId.value = new Set(expandedRecipientId.value)
 }
+
+const sort = () => {
+    page.value = 1
+    hasMore.value = true
+    loadRecipients(true)
+}
+
+watch(() => props.sortBy, (value) => {
+    if(value) {
+        sort()
+    }
+})
 
 onMounted(() => {
     loadRecipients()
