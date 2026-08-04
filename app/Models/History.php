@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -56,6 +57,11 @@ class History extends Model
     public function recipients(): HasMany
     {
         return $this->hasMany(Recipients::class);
+    }
+
+    public function contacts(): HasManyThrough
+    {
+        return $this->hasManyThrough(Contact::class, Recipients::class);
     }
 
     public function scopeScheduled(Builder $query): Builder

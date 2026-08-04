@@ -125,7 +125,7 @@ class TemplatesController extends Controller
         $template = Template::findByHashId($id);
 
         return Inertia::render('Blast/Main', [
-            'messageTemplate' => $template
+            'messageTemplate' => TemplateMiniResource::make($template)
         ]);
     }
 }

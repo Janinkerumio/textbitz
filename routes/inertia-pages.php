@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\BlastController;
 use App\Http\Controllers\TemplatesController;
 
 Route::middleware('auth')->name('app.')->group( function () {
@@ -16,5 +16,6 @@ Route::middleware('auth')->name('app.')->group( function () {
 
     //shortcuts-------------------
     Route::get('/template/use/{id}', [TemplatesController::class, 'getAndUseTemplate'])->name('templates.use');
+    Route::get('/blast/duplicate/{id}', [BlastController::class, 'duplicateBlast'])->name('blast.duplicate');
 
 });

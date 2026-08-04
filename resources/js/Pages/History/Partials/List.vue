@@ -8,6 +8,7 @@ import { Ellipsis } from 'lucide-vue-next';
 import { friendlyDate } from '@/helpers/date';
 import DetailsCardColList from '@/Components/Skeleton/DetailsCardColList.vue';
 import ActionButton from '@/Components/Button/ActionButton.vue';
+import { useDataList } from '@/Composables/useDataList';
 
 const props = defineProps({
     sortBy: {
@@ -26,6 +27,8 @@ const { items: histories, loading, onScroll } = createInfiniteScroll(
     { distance: 10 }
 )
 
+const { removeData } = useDataList(histories)
+
 const expand = (id) => {
     if (expandedHistoryId.value.has(id)) {
         expandedHistoryId.value.delete(id)
@@ -36,6 +39,10 @@ const expand = (id) => {
     
     expandedHistoryId.value = new Set(expandedHistoryId.value)
 }
+
+defineExpose({
+    removeData
+})
 </script>
 
 <template>

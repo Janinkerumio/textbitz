@@ -14,6 +14,10 @@ const props = defineProps({
     modelValue: {
         type: Boolean,
         default: false
+    },
+    preSelectedRecipients: {
+        type: Array,
+        default: () => []
     }
 })
 
@@ -24,7 +28,7 @@ const page = ref(1)
 const hasMore = ref(true)
 const loading = ref(false)
 
-const selectedContacts = ref(new Set())
+const selectedContacts = ref(new Set(props.preSelectedRecipients))
 const excludedContacts = ref(new Set())
 const selectAllMode = ref(false)
 const selectedContactsLength = computed(() => {

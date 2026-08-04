@@ -36,4 +36,30 @@ class HistoryController extends Controller
 
         return HistoryResource::collection($data);
     }
+
+    public function delete(Request $request, string $id)
+    {
+        $isRedirect = $request->query('redirect', false);
+
+        try {
+            $history = History::findByHashId($id);
+
+            if (!$history) {
+                return back()->with('error', 'Blast history not found.');
+            }
+
+            $history->delete();
+
+            if($isRedirect)
+            {
+                return redirect()->route('app.blast.history')->with('success', 'Blast history removed');
+            }
+
+            return back()->with('success', 'Blast history removed');
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('error', 'Something went wrong while processing. Please try again.');
+        }
+    }
 }

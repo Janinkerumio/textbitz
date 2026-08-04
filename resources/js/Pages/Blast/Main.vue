@@ -1,6 +1,6 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Compose from './Partials/Compose.vue';
 import Selections from './Partials/Selections.vue';
@@ -14,13 +14,22 @@ const props = defineProps({
     templates: {
         type: Array,
         default: () => []
+    },
+    preSelectedRecipients: {
+        type: Array,
+        default: () => []
     }
 })
 
-const preMadeMessage = ref(props.messageTemplate ?? '')
+const preMadeMessage = ref(props.messageTemplate?.data ?? '')
 const isContactsModalOpen = ref(false)
-const selectedContacts = ref({})
-const selectedContactsLength = ref(0)
+const selectedContacts = ref({
+    selectAll: null,
+    contactIds: props.preSelectedRecipients,
+    exludedIds: null,
+    selectedCount: props.preSelectedRecipients.length
+})
+const selectedContactsLength = ref(props.preSelectedRecipients.length)
 
 const fillPreMadeMessage = (payload) => {
     preMadeMessage.value = payload
@@ -52,6 +61,7 @@ const handleSelectedContacts = (payload) => {
         <template #modal>
             <SelectContacts 
                 v-model="isContactsModalOpen"
+                :pre-selected-recipients="preSelectedRecipients"
                 @selectedContacts="(payload) => handleSelectedContacts(payload)"
             />
         </template>
