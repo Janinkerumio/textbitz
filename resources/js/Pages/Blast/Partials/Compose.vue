@@ -6,6 +6,7 @@ import InputError from '@/Components/Breeze/InputError.vue';
 import { Send } from 'lucide-vue-next';
 import settings from '@/data/settings';
 import crossPlatformToast from '@/helpers/crossPlatformToast';
+import TextInput from '@/Components/Breeze/TextInput.vue';
 
 const props = defineProps({
     messageVariables: {
@@ -36,7 +37,8 @@ const params = reactive({
 })
 
 const form = useForm({
-    template_id: props.preMadeMessage?.id,
+    template_id: props.preMadeMessage?.id ?? null,
+    title: props.preMadeMessage?.title ?? '',
     message: props.preMadeMessage?.message ?? '',
     recipients: [],
     excludedRecipients: []
@@ -72,6 +74,7 @@ watch(() => props.preMadeMessage, (value) => {
     if(value) {
         form.message = value.message
         form.template_id = value.id
+        form.title = value.title
     }
 })
 
@@ -82,6 +85,17 @@ watch(() => props.selectedRecipients, (payload) => {
 
 <template>
     <form @submit.prevent="submit" class="mt-4 p-4 flex flex-col bg-white/20 dark:bg-gray-600/50 backdrop-blur-xl rounded-2xl border border-gray-200 dark:border-gray-600 shadow">
+        <div class="py-2 w-full">
+            <p class="text-gray-500 dark:text-gray-300 text-sm mb-2">Blast Title</p>
+            <TextInput 
+                class="w-full"
+                name="title"
+                v-model="form.title"
+                :readonly="preMadeMessage?.title === form.title"
+                required
+            />
+            <InputError :message="form.title.errors" />
+        </div>
         <p class="text-gray-500 dark:text-gray-300 text-sm mb-2">Message</p>
         <div class="flex flex-wrap items-center gap-1 py-1 border-t-[0.25px] border-gray-300">
             <p class="text-xs text-gray-500 dark:text-gray-400">Available variables:</p>
