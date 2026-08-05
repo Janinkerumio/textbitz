@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlastController;
 use App\Http\Controllers\TemplatesController;
+use App\Http\Controllers\ContactController;
 
 Route::middleware('auth')->name('app.')->group( function () {
     Route::action('/dashboard', 'Dashboard')->name('dashboard');
@@ -17,5 +18,6 @@ Route::middleware('auth')->name('app.')->group( function () {
     //shortcuts-------------------
     Route::get('/template/use/{id}', [TemplatesController::class, 'getAndUseTemplate'])->name('templates.use');
     Route::get('/blast/duplicate/{id}', [BlastController::class, 'duplicateBlast'])->name('blast.duplicate');
+    Route::post('/contacts/add-to-blast', [ContactController::class, 'addManyToBlast'])->name('blast.add-to-many');
 
 });

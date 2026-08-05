@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { Head, usePage } from '@inertiajs/vue3';
+import { Head, usePage, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { UserPlus } from 'lucide-vue-next';
 import EmptyContacts from '@/Components/Placeholders/EmptyContacts.vue';
@@ -33,6 +33,10 @@ const listRef = ref(null)
 const passedId = ref(null)
 const selectedIds = computed(() => listRef.value?.selectedIds ?? [])
 
+const aBRForm = useForm({
+    recipients: []
+})
+
 const showCreateModal = () => {
     isCreateModalShown.value = true
 }
@@ -55,14 +59,13 @@ const resetId = () => {
 }
 
 const handleAddToBlast = () => {
-    //const ids = listRef.value?.selectedIds
+    aBRForm.recipients = selectedIds.value
 
-    toast.show('This function is under development')
-    //Actions later
+    aBRForm.post(route('app.blast.add-to-many'))
 }
 
 const handleDeleteContacts = () => {
-    //const ids = listRef.value?.selectedIds
+    const ids = listRef.value?.selectedIds
 
     toast.show('This function is under development')
     //Actions later

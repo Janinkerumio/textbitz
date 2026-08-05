@@ -9,6 +9,7 @@ import { formatPhoneDisplay } from '@/Composables/usePHPhoneFormatter';
 import { Users } from 'lucide-vue-next'
 import { dialog } from '#nativephp'
 import MediumSpinner from '@/Components/Spinners/MediumSpinner.vue';
+import SearchBar from '@/Components/Input/SearchBar.vue';
 
 const props = defineProps({
     modelValue: {
@@ -159,15 +160,11 @@ onMounted(() => {
             <h1 class="font-semibold text-lg dark:text-gray-300">Select Recipients</h1>
         </header>
         <section class="flex flex-col gap-2 w-full h-screen">
-            <div class="flex flex-wrap items-center rounded-xl border bg-white/40 border-gray-400 py-1 px-4 focus-within:border-blue-500 transition-all duration-300">
-                <Search class="text-gray-600 dark:text-gray-300"/>
-                <input
-                    name="search-contact"
-                    v-model="searchField.search"
-                    placeholder="Search contacts"  
-                    class="flex-1 dark:placeholder-gray-300 border-0 bg-transparent outline-none focus:outline-none focus:ring-0 focus:border-0 shadow-none placeholder-gray-400"
-                />
-            </div>
+            <SearchBar 
+                name="search-contact"
+                v-model="searchField.search"
+                placeholder="Search contacts"  
+            />
             <div class="flex justify-between">
                 <p v-if="selectedContactsLength >= 1" @click="exitSelection" class="text-sm dark:text-gray-300">Clear all <span class="text-blue-500 font-semibold text-base">({{ selectedContactsLength }})</span></p>
                 <div v-else></div>

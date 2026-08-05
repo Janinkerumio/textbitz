@@ -125,4 +125,16 @@ class ContactController extends Controller
             return back()->with('error', 'Something went while wrong processing. Please try again.');
         }
     }
+
+    public function addManyToBlast(Request $request)
+    {
+        $data = $request->validate([
+            'recipients' => 'array',
+            'recipients.*' => 'string|max:12'
+        ]);
+
+        return Inertia::render('Blast/Main', [
+            'preSelectedRecipients' => $data['recipients']
+        ]);
+    }
 }

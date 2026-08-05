@@ -30,7 +30,7 @@ defineProps({
 
     <AppLayout page-title="Textbitz" additional-text="Manage bulk SMS campaigns">
         <template #content>
-            <div class="flex flex-col min-h-screen gap-4">
+            <div class="flex flex-col min-h-[80dvh] gap-4">
                 <Banner />
 
                 <Metrics 

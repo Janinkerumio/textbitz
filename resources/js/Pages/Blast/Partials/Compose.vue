@@ -7,6 +7,7 @@ import { Send } from 'lucide-vue-next';
 import settings from '@/data/settings';
 import crossPlatformToast from '@/helpers/crossPlatformToast';
 import TextInput from '@/Components/Breeze/TextInput.vue';
+import NonBoxedTextInput from '@/Components/Input/NonBoxedTextInput.vue';
 
 const props = defineProps({
     messageVariables: {
@@ -85,19 +86,21 @@ watch(() => props.selectedRecipients, (payload) => {
 
 <template>
     <form @submit.prevent="submit" class="mt-4 p-4 flex flex-col bg-white/20 dark:bg-gray-600/50 backdrop-blur-xl rounded-2xl border border-gray-200 dark:border-gray-600 shadow">
-        <div class="py-2 w-full">
+        <div class="py-2 w-full relative">
             <p class="text-gray-500 dark:text-gray-300 text-sm mb-2">Blast Title</p>
-            <TextInput 
+            <NonBoxedTextInput 
                 class="w-full"
                 name="title"
+                placeholder="Type the blast title here..."
                 v-model="form.title"
                 :readonly="preMadeMessage?.title === form.title"
                 required
             />
             <InputError :message="form.title.errors" />
+            <div class="border-b border-gray-300 peer-focus:border-b-2 peer-focus:border-blue-500 transition-all duration-100"></div>
         </div>
         <p class="text-gray-500 dark:text-gray-300 text-sm mb-2">Message</p>
-        <div class="flex flex-wrap items-center gap-1 py-1 border-t-[0.25px] border-gray-300">
+        <div class="flex flex-wrap items-center gap-1 py-1">
             <p class="text-xs text-gray-500 dark:text-gray-400">Available variables:</p>
             <span 
                 v-for="(variable, index) in messageVariables"
@@ -107,17 +110,18 @@ watch(() => props.selectedRecipients, (payload) => {
                 {{ '{' + variable.key + '}' }}
             </span>
         </div>
-        <div class="overflow-x-auto snap-x snap-mandatory py-2">
+        <div class="overflow-x-auto snap-x snap-mandatory py-2 relative">
             <textarea
                 name="message"
                 v-model="form.message"
                 rows="6"
                 placeholder="Type your message..."
-                class="text-gray-800 dark:text-gray-200 w-full resize-none bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none placeholder:text-gray-400" 
+                class="text-gray-800 dark:text-gray-200 w-full peer resize-none bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none placeholder:text-gray-400" 
             />
             <InputError :message="form.errors.message" />
+            <div class="border-b border-gray-300 peer-focus:border-b-2 peer-focus:border-blue-500 transition-all duration-100"></div>
         </div>
-        <div class="flex flex-wrap gap-2 max-w-full justify-between border-t-[0.5px] border-gray-300 pt-2">
+        <div class="flex flex-wrap gap-2 max-w-full justify-between pt-2">
             <div class="flex-1 flex flex-wrap gap-1">
                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ chars }} characters</p>
             </div>
