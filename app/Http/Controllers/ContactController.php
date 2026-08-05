@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\ContactRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ContactsResource;
+use App\Http\Resources\TemplateMiniResource;
 
 class ContactController extends Controller
 {
@@ -133,8 +135,11 @@ class ContactController extends Controller
             'recipients.*' => 'string|max:12'
         ]);
 
+        $templates = Template::mostUsed();
+
         return Inertia::render('Blast/Main', [
-            'preSelectedRecipients' => $data['recipients']
+            'templates' => TemplateMiniResource::collection($templates),
+            'preSelectedRecipients' => $data['recipients'],
         ]);
     }
 }
