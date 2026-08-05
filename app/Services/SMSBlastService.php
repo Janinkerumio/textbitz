@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\History;
 use App\Models\Template;
 use App\Models\Contact;
+use App\Models\CorporateInfo;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class SMSBlastService
 {
@@ -22,21 +24,50 @@ class SMSBlastService
             'status' => History::STATUS_DRAFT,
             'slug' => $slug,
             'total_recipients' => count($recipients),
-            'type' => $data['type'] ?? null,
-            'send_mode' => $data['send_mode'] ?? null,
+            'type' => $data['type'] ?? config('services.sms_blast.default.type'),
+            'send_mode' => $data['send_mode'] ?? config('services.sms_blast.default.send_mode'),
         ];
 
-        return $castRequests;
+        $blast = History::where('slug', $data['slug'])->first();
 
-        // $blast = History::where('slug', $data['slug'])->first();
+        if($blast)
+        {
+            $blast->update($castRequests);
+        } else
+        {
+            $blast = History::create($castRequests);
+        }
 
-        // if($blast)
-        // {
-        //     $blast->update($castRequests);
-        // } else
-        // {
-        //     $blast = History::create($castRequests);
-        // }
+        return $blast;
+    }
+
+    public static function sendBlast(mixed $blast, array $recipients): array
+    {
+        return [
+
+        ];
+    }
+
+
+    public static function scheduleBlast(mixed $blast, array $recipients, string $date): array
+    {
+        return [
+
+        ];
+    }
+
+    public static function prepareMessage(string $message, mixed $recipient)
+    {
+        $contact = Contact::findOrFail($recipient->id);
+        $business = CorporateInfo::where('user_id', Auth::id());
+
+        $replacements = [
+            '{name}' => $contact->contact_name,
+            '{phone_number}' => $contact->phone_num,
+            '{business_name}' => $business->business_name,
+        ];
+
+        return str_replace(array_keys($replacements), array_values($replacements), $message);
     }
 
     protected static function makeSlug(array $data)

@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'sms_blast' => [
+        'default' => [
+            'type' => env('SMS_BLAST_DEFAULT_TYPE', 'campaign'),
+            'send_mode' => env('SMS_BLAST_DEFAULT_SEND_MODE', 'now')
+        ]
+    ]
+
 ];
