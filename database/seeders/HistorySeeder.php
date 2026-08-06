@@ -82,6 +82,7 @@ class HistorySeeder extends Seeder
                 $history = History::create([
                     'user_id' => $userId,
                     'template_id' => $template->id,
+                    'title' => null,//add title,
                     'blast' => $blast,
                     'status' => $this->resolveHistoryStatus($recipientStatuses),
                     'recipients' => $recipientContacts->count(),

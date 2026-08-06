@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('template_id')->nullable()->constrained()->nullOnDelete();
+            $table->text('title')->nullable();
             $table->text('blast');
             $table->enum('status', ['sent', 'failed', 'queued', 'draft', 'scheduled', 'cancelled'])->default('queued');
             $table->integer('recipients')->default(0);

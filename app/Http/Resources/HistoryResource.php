@@ -17,6 +17,7 @@ class HistoryResource extends JsonResource
         return [
             'id' => $this->hash_id,
             'template' => TemplateMiniResource::make($this->whenLoaded('template')),
+            'title' => $this->title,
             'blast' => $this->blast,
             'status' => $this->status,
             'recipients' => $this->recipients,

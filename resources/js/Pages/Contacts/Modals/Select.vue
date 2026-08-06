@@ -42,6 +42,10 @@ const form = useForm({
     tags: []
 })
 
+const aBRForm = useForm({
+    recipients: []
+})
+
 const submit = () => {
     form.put(route('api.contacts.update', props.ID), {
         preserveScroll: true,
@@ -73,7 +77,9 @@ const removeTag = (index) => {
 }
 
 const addToBlast = (id) => {
-    console.log('Add to blast with ID: '+id)
+    aBRForm.recipients = [id]
+    
+    aBRForm.post(route('app.blast.add-to-many'))
 }
 
 const deleteContact = (id) => {

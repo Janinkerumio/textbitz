@@ -64,7 +64,7 @@ defineExpose({
                     </p>
                 </header>
                 <article class="px-2">
-                    <p class="text-gray-800 dark:text-gray-200 font-bold">{{ history.template.title }}</p>
+                    <p class="text-gray-800 dark:text-gray-200 font-bold">{{ (history.template?.title ?? history?.title) ?? 'No title' }}</p>
                 </article>
                 <section class="flex flex-row justify-between gap-5 p-2">
                     <p class="flex-1 text-gray-800 dark:text-gray-300 text-sm">
@@ -95,12 +95,12 @@ defineExpose({
                         >
                             Resend
                         </ActionButton>
-                        <ActionButton v-if="history.status !== 'queued'"
+                        <ActionButton v-if="history.status !== 'queued' && history.template"
                             @click.stop="$emit('duplicate', history.id)"
                         >
                             Duplicate
                         </ActionButton>
-                        <ActionButton v-if="history.status !== 'queued'" color-class="red"
+                        <ActionButton color-class="red"
                             @click.stop="$emit('delete', history.id)"
                         >
                             Delete

@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, Link, router } from '@inertiajs/vue3'
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { ArrowLeft, SlidersHorizontal, Dot } from 'lucide-vue-next';
 import Details from './Partials/Details.vue';
 import PrimaryButton from '@/Components/Breeze/PrimaryButton.vue';

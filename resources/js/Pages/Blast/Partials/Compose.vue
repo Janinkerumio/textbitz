@@ -46,18 +46,18 @@ const form = useForm({
 })
 
 const submit = () => {
-    toast.show('This feature is under development')
-    // form.post(
-    //     route('api.blast.create', [{select_all: props.selectedRecipients.selectAll}]), {
-    //         preserveScroll: true,
-    //         onSuccess: () => {
-    //             form.reset()
-    //             toast.success(page.props.flash.success)
-    //         },
-    //         onError: (error) => {
-    //             toast.error(error ?? 'Something went wrong')
-    //         }
-    //     })
+    //toast.show('This feature is under development')
+    form.post(
+        route('api.blast.create', [{select_all: props.selectedRecipients.selectAll}]), {
+            preserveScroll: true,
+            onSuccess: () => {
+                form.reset()
+                toast.success(page.props.flash.success)
+            },
+            onError: (error) => {
+                toast.error(error ?? 'Something went wrong')
+            }
+        })
 }
 
 const parsePayload = (payload) => {

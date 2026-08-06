@@ -16,6 +16,7 @@ class Recipients extends Model
 {
     use SoftDeletes;
 
+    const STATUS_DRAFT = 'draft';
     const STATUS_QUEUED = 'queued';
     const STATUS_SENT = 'sent';
     const STATUS_FAILED = 'failed';

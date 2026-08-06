@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-#[Fillable('user_id', 'template_id', 'blast', 'status', 'recipients', 'sent_count', 'failed_count' , 'type', 'send_mode', 'slug', 'scheduled_at',  'last_sent_at')]
+#[Fillable('user_id', 'template_id', 'title', 'blast', 'status', 'recipients', 'sent_count', 'failed_count' , 'type', 'send_mode', 'slug', 'scheduled_at',  'last_sent_at')]
 class History extends Model
 {
     use SoftDeletes;

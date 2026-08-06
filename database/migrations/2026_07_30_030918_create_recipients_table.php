@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('contact_id')->nullable()->constrained('contacts')->nullOnDelete();
             $table->string('name');
             $table->string('mobile_num');
-            $table->enum('status', ['queued', 'sent', 'failed'])->default('queued');
+            $table->enum('status', ['draft', 'queued', 'sent', 'failed'])->default('queued');
             $table->text('error_message')->nullable();
             $table->timestamp('sent_at')->nullable();
             $table->timestamps();

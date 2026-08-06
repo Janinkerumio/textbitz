@@ -29,15 +29,19 @@ class BlastController extends Controller
 
         DB::beginTransaction();
 
-        try {
-            $dateTimeEx = $data['scheduled_date'] . ' ' . $data['scheduled_time'];
+        try 
+        {
+            $response = SMSBlastService::processBlastRequest($data, $request); 
+            if(!$response['status']['success'])
+            {
+                $result = $response['status'];
+            }
 
-            $blast = SMSBlastService::processBlastRequest($data, $request);
-            $result = $this->resolveSendMode($blast, $data['recipients'], $dateTimeEx);
+            $result = SMSBlastService::resolveSendMode($response['blast'], $response['recipients'], $data);
 
             if ($result['success']) {
                 DB::commit();
-                return redirect()->route('app.blast-history')
+                return redirect()->route('app.blast.history')
                     ->with('success', 'SMS blast is being processed');
             } else {
                 DB::rollBack();
@@ -71,28 +75,5 @@ class BlastController extends Controller
     public function resend(string $id)
     {
         
-    }
-
-    private function resolveSendMode(mixed $blast, array $recipients, string $dateTimeEx): array
-    {
-        $result = [
-            'success' => false,
-            'message' => 'Unkown error'
-        ];
-
-        switch($blast->send_mode)
-        {
-            case 'scheduled':
-                $result = SMSBlastService::scheduleBlast($blast, $recipients, $dateTimeEx);
-                break;
-            case 'now':
-                $result = SMSBlastService::sendBlast($blast, $recipients);
-                break;
-            case 'alltimes':
-                $result = ['success' => true];
-                break;
-        }
-
-        return $result;
     }
 }

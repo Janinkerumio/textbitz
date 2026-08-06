@@ -1,7 +1,7 @@
 <script setup>
 import { fetchRecipientsByHistory } from '@/data/api/fetchViaAxios';
 import { useInfiniteScroll } from '@vueuse/core';
-import { useTemplateRef, ref, computed, onMounted, watch } from 'vue';
+import { useTemplateRef, ref, onMounted, watch } from 'vue';
 import { formatPhoneDisplay } from '@/Composables/usePHPhoneFormatter';
 import { Dot } from 'lucide-vue-next';
 import { blastStatus } from '@/utils/statusIndicator';
