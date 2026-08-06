@@ -32,11 +32,6 @@ class BlastController extends Controller
         try 
         {
             $response = SMSBlastService::processBlastRequest($data, $request); 
-            if(!$response['status']['success'])
-            {
-                $result = $response['status'];
-            }
-
             $result = SMSBlastService::resolveSendMode($response['blast'], $response['recipients'], $data);
 
             if ($result['success']) {

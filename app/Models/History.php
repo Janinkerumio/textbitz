@@ -13,8 +13,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Str;
 
-#[Fillable('user_id', 'template_id', 'title', 'blast', 'status', 'recipients', 'sent_count', 'failed_count' , 'type', 'send_mode', 'slug', 'scheduled_at',  'last_sent_at')]
+#[Fillable('user_id', 'template_id', 'title', 'blast', 'status', 'recipients', 'sent_count', 'failed_count' , 'type', 'send_mode', 'slug', 'scheduled_at',  'last_sent_at', 'remote_id', 'sync_status')]
 class History extends Model
 {
     use SoftDeletes;
@@ -28,6 +29,11 @@ class History extends Model
     const STATUS_FAILED = 'failed';
     const STATUS_CANCELLED = 'cancelled';
 
+    const SYNC_STATUS_PENDING = 'pending';
+    const SYNC_STATUS_BLAST_SYNCED = 'blast_synced';
+    const SYNC_STATUS_SYNCED = 'synced';
+    const SYNC_STATUS_FAILED = 'failed';
+
     protected function casts(): array
     {
         return [
@@ -37,6 +43,15 @@ class History extends Model
             'sent_count' => 'integer',
             'failed_count' => 'integer'
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (History $history) {
+            if (!$history->uuid) {
+                $history->uuid = (string) Str::uuid();
+            }
+        });
     }
 
     public function getHashIdAttribute(): string

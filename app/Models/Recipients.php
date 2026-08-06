@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-#[Fillable('history_id', 'contact_id', 'name', 'mobile_num', 'status', 'error_message', 'sent_at')]
+#[Fillable('history_id', 'contact_id', 'remote_id', 'name', 'mobile_num', 'status', 'sync_status', 'error_message', 'sent_at')]
 class Recipients extends Model
 {
     use SoftDeletes;
@@ -20,6 +20,10 @@ class Recipients extends Model
     const STATUS_QUEUED = 'queued';
     const STATUS_SENT = 'sent';
     const STATUS_FAILED = 'failed';
+
+    const SYNC_STATUS_SYNCED = 'synced';
+    const SYNC_STATUS_PENDING = 'pending';
+    const SYNC_STATUS_FAILED = 'failed';
 
     protected function casts(): array
     {

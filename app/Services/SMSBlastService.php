@@ -14,23 +14,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Bus;
+use App\Jobs\PushBlastRecipientsJob;
+use App\Jobs\PushBlastToServerJob;
 
 class SMSBlastService
 {
-    public static function dispatchBlast(Model $blast): array
-    {
-        return [
-            'success' => false,
-        ];
-    }
-
-    public static function dispatchRecipient(Model $blast, Model $recipient): array
-    {
-        return [
-            'success' => false,
-        ];
-    }
 
     public static function processBlastRequest(array $data, Request $request): array
     {
@@ -60,10 +49,7 @@ class SMSBlastService
             $blast = History::create($castRequests);
         }
 
-        $result = self::dispatchBlast($blast);
-
         return [
-            'status' => $result,
             'blast' => $blast,
             'recipients' => $recipients
         ];
@@ -122,35 +108,32 @@ class SMSBlastService
             }
 
             $createdRecipients = self::createRecipients($blast, $recipients);
-            $processedRecipients = 0;
 
-            foreach ($recipients as $recipient) {
-                RateLimiter::attempt(
-                    key: "sms-blast:{$blast->id}",
-                    maxAttempts: 100,
-                    callback: function () use ($blast, $recipient, &$processedRecipients) {
+            $chunks = $recipients
+                ->map(fn ($contact) => [
+                    'local_contact_id' => $contact->id,
+                    'phone_num' => $contact->phone_num,
+                    'contact_name' => $contact->contact_name,
+                ])
+                ->chunk(200)
+                ->values();
 
-                        $result = self::dispatchRecipient($blast, $recipient);
-
-                        if ($result['success']) {
-                            $processedRecipients++;
-                        } else {
-                            Log::warning('Recipient dispatch failed', [
-                                'blast_id' => $blast?->id,
-                                'recipient' => $recipient->id ?? $recipient,
-                                'reason' => $result['error'] ?? 'unknown',
-                            ]);
-                        }
-                    },
-                    decaySeconds: 0.5
-                );
-            }
-
-            $blast->update(['status' => $createdRecipients === $processedRecipients ? History::STATUS_QUEUED : History::STATUS_DRAFT]);
+            Bus::chain([
+                new PushBlastToServerJob($blast),
+                ...$chunks->map(
+                    fn ($chunk) => new PushBlastRecipientsJob($blast, $chunk->values()->all())
+                ),
+            ])->catch(function (\Throwable $e) use ($blast) {
+                $blast->update(['status' => History::STATUS_FAILED]);
+                Log::error('Blast sync chain failed', [
+                    'blast_id' => $blast->id,
+                    'error' => $e->getMessage(),
+                ]);
+            })->dispatch();
 
             return [
                 'success' => true,
-                'proccessedRecipients' => $processedRecipients,
+                'queuedRecipients' => $createdRecipients,
                 'blast' => $blast
             ];
 
@@ -213,7 +196,8 @@ class SMSBlastService
                 'contact_id' => $recipient->id,
                 'name' => $recipient->contact_name,
                 'mobile_num' => $recipient->phone_num,
-                'status' => Recipients::STATUS_DRAFT,
+                'status' => Recipients::STATUS_QUEUED,
+                'sync_status' => Recipients::SYNC_STATUS_PENDING
             ];
 
             $count++;

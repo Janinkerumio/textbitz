@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('recipients', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('remote_id')->nullable()->index();
             $table->foreignId('history_id')->constrained('history')->cascadeOnDelete();
             $table->foreignId('contact_id')->nullable()->constrained('contacts')->nullOnDelete();
             $table->string('name');
             $table->string('mobile_num');
             $table->enum('status', ['draft', 'queued', 'sent', 'failed'])->default('queued');
+            $table->enum('sync_status', ['pending', 'synced', 'failed'])->default('pending');
             $table->text('error_message')->nullable();
             $table->timestamp('sent_at')->nullable();
             $table->timestamps();

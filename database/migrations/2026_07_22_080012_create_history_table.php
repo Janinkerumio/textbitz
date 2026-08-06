@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('history', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->nullable()->unique();
+            $table->unsignedBigInteger('remote_id')->nullable()->index();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('template_id')->nullable()->constrained()->nullOnDelete();
             $table->text('title')->nullable();
             $table->text('blast');
             $table->enum('status', ['sent', 'failed', 'queued', 'draft', 'scheduled', 'cancelled'])->default('queued');
+            $table->enum('sync_status', ['pending', 'blast_synced', 'synced', 'failed'])->default('pending');
             $table->integer('recipients')->default(0);
             $table->integer('sent_count')->default(0);
             $table->integer('failed_count')->default(0);
