@@ -42,8 +42,9 @@ class PushBlastToServerJob implements ShouldQueue
         $token = $this->blast->user->remote_token;
 
         if (!$token) {
+            $exception = new \RuntimeException("No remote token for blast owner (blast_id: {$this->blast->id})");
             Log::error('No remote token for blast owner', ['blast_id' => $this->blast->id]);
-            $this->fail();
+            $this->fail($exception);
             return;
         }
 

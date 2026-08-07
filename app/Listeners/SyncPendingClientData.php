@@ -5,9 +5,8 @@ namespace App\Listeners;
 use App\Events\ServerConnectionRestored;
 use App\Services\DataSyncToJob;
 use App\Services\RemoteAuthService;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SyncPendingClientData implements ShouldQueue
+class SyncPendingClientData
 {
     public function handle(ServerConnectionRestored $event): void
     {

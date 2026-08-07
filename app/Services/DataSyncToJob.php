@@ -84,11 +84,11 @@ class DataSyncToJob
                     Bus::chain([
                         new PushBlastToServerJob($blast),
                         ...$recipientJobs,
-                    ])->catch(function (\Throwable $e) use ($blast) {
+                    ])->catch(function (?\Throwable $e) use ($blast) {
                         $blast->update(['sync_status' => History::SYNC_STATUS_FAILED]);
                         Log::error('Blast resync chain failed', [
                             'blast_id' => $blast->id,
-                            'error' => $e->getMessage(),
+                            'error' => $e->getMessage() ?? 'Job failed manually (no exception provided)',
                         ]);
                     })->dispatch();
 

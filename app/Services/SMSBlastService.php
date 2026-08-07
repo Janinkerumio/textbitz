@@ -72,11 +72,11 @@ class SMSBlastService
             ...$chunks->map(
                 fn ($chunk) => new PushBlastRecipientsJob($blast, $chunk->values()->all())
             ),
-        ])->catch(function (\Throwable $e) use ($blast) {
+        ])->catch(function (?\Throwable $e) use ($blast) {
             $blast->update(['status' => History::STATUS_FAILED]);
             Log::error('Blast sync chain failed', [
                 'blast_id' => $blast->id,
-                'error' => $e->getMessage(),
+                'error' => $e->getMessage() ?? 'Job failed manually (no exception provided)',
             ]);
         })->dispatch();
     }
