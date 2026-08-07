@@ -31,6 +31,10 @@ defineProps({
     iconClass: {
         type: String,
         default: ''
+    },
+    inputmode: {
+        type: String,
+        default: ''
     }
 })
 
@@ -51,6 +55,7 @@ const model = defineModel({
             :autofocus="autofocus"
             :autocomplete="autocomplete"
             :placeholder="placeholder"
+            :inputmode="inputmode"
             class="w-full pl-14 pr-4 py-2.5 rounded-xl border border-[#E5E7EB] bg-white dark:bg-gray-800 text-lg text-gray-600 dark:text-gray-300 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all"
         />
     </div>

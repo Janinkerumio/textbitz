@@ -40,6 +40,10 @@ return [
             'type' => env('SMS_BLAST_DEFAULT_TYPE', 'campaign'),
             'send_mode' => env('SMS_BLAST_DEFAULT_SEND_MODE', 'now')
         ]
-    ]
+    ],
+
+    'textbitz' => [
+        'server_url' => env('TEXTBITZ_SERVER_URL'),
+    ],
 
 ];

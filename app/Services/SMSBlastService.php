@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\PushBlastRecipientsJob;
 use App\Jobs\PushBlastToServerJob;
+use App\Services\ServerConnectivityService;
 
 class SMSBlastService
 {
@@ -53,6 +54,31 @@ class SMSBlastService
             'blast' => $blast,
             'recipients' => $recipients
         ];
+    }
+
+    protected static function syncBlastJob(Model $blast, Collection $recipients): void
+    {
+        $chunks = $recipients
+                ->map(fn ($contact) => [
+                    'local_contact_id' => $contact->id,
+                    'phone_num' => $contact->phone_num,
+                    'contact_name' => $contact->contact_name,
+                ])
+                ->chunk(200)
+                ->values();
+
+        Bus::chain([
+            new PushBlastToServerJob($blast),
+            ...$chunks->map(
+                fn ($chunk) => new PushBlastRecipientsJob($blast, $chunk->values()->all())
+            ),
+        ])->catch(function (\Throwable $e) use ($blast) {
+            $blast->update(['status' => History::STATUS_FAILED]);
+            Log::error('Blast sync chain failed', [
+                'blast_id' => $blast->id,
+                'error' => $e->getMessage(),
+            ]);
+        })->dispatch();
     }
 
     public static function resolveSendMode(Model $blast, Collection $recipients, array $data): array
@@ -109,27 +135,10 @@ class SMSBlastService
 
             $createdRecipients = self::createRecipients($blast, $recipients);
 
-            $chunks = $recipients
-                ->map(fn ($contact) => [
-                    'local_contact_id' => $contact->id,
-                    'phone_num' => $contact->phone_num,
-                    'contact_name' => $contact->contact_name,
-                ])
-                ->chunk(200)
-                ->values();
-
-            Bus::chain([
-                new PushBlastToServerJob($blast),
-                ...$chunks->map(
-                    fn ($chunk) => new PushBlastRecipientsJob($blast, $chunk->values()->all())
-                ),
-            ])->catch(function (\Throwable $e) use ($blast) {
-                $blast->update(['status' => History::STATUS_FAILED]);
-                Log::error('Blast sync chain failed', [
-                    'blast_id' => $blast->id,
-                    'error' => $e->getMessage(),
-                ]);
-            })->dispatch();
+            if(ServerConnectivityService::isOnline())
+            {
+                self::syncBlastJob($blast, $recipients);
+            }
 
             return [
                 'success' => true,

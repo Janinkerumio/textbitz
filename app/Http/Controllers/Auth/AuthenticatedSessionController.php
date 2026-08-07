@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Services\RemoteAuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,13 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!$user->remote_token) {
+            RemoteAuthService::authenticateOrDefer($user, $request->string('password')->toString());
+        }
 
         return redirect()->intended(route('app.dashboard', absolute: false));
     }

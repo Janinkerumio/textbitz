@@ -1,5 +1,5 @@
 <script setup>
-import { Mail } from 'lucide-vue-next';
+import { Phone } from 'lucide-vue-next';
 import { useForm, Link } from '@inertiajs/vue3';
 import { onDemo } from '@/config';
 import TextbitzBrandmark from '@/Components/TextbitzBrandmark.vue';
@@ -10,6 +10,7 @@ import AuthPasswordInput from '@/Components/Input/AuthPasswordInput.vue';
 import Checkbox from '@/Components/Breeze/Checkbox.vue';
 import LargeSubmitButton from '@/Components/Button/LargeSubmitButton.vue';
 import AuthSwitchPrompt from '@/Components/Button/AuthSwitchPrompt.vue';
+import { usePhoneFormatter, normalizePhone, stripSpaces } from '@/Composables/usePHPhoneFormatter';
 
 defineProps({
     status: {
@@ -23,14 +24,18 @@ defineProps({
 })
 
 const form = useForm({
-    email: '',
+    phone_number: '',
     password: '',
     remember: false
 })
 
+const { error: phoneFormatError, handlePhoneInput } = usePhoneFormatter(form, 'phone_number')
+
 const emit = defineEmits(['switchScreen'])
 
 const submit = () => {
+    form.phone_number = normalizePhone(stripSpaces(form.phone_number))
+
     form.post(route('login'), {
         onFinish: () => form.reset('password')
     })
@@ -48,17 +53,19 @@ const submit = () => {
         </section>
         <form @submit.prevent="submit" class="flex flex-col gap-2 w-full">
             <div>
-                <AuthInputLabel label-for="Email"/>
+                <AuthInputLabel label-for="Phone Number"/>
                 <AuthTextInput 
-                    id="email"
-                    type="email"
-                    v-model="form.email"
+                    id="phone_number"
+                    type="tel"
+                    inputmode="number"
+                    v-model="form.phone_number"
                     autofocus
-                    autocomplete="username"
-                    placeholder="you@email.com"
-                    :icon="Mail"
+                    autocomplete="tel"
+                    placeholder="09xxxxxxxxx"
+                    :icon="Phone"
+                    @input="handlePhoneInput"
                 />
-                <InputError :message="form.errors.email"/>
+                <InputError :message="form.errors.phone_number"/>
             </div>
             <div>
                 <div class="flex items-center justify-between mb-1.5">
@@ -82,7 +89,7 @@ const submit = () => {
 
             <div v-if="onDemo" class="w-full flex flex-col justify-start rounded-lg p-2 bg-gray-400/30">
                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">For demo purposes</p>
-                <small class="text-xs text-gray-600 dark:text-gray-400">Email: demo@textbitz.com</small>
+                <small class="text-xs text-gray-600 dark:text-gray-400">Phone Number: 09171234567</small>
                 <small class="text-xs text-gray-600 dark:text-gray-400">Password: password</small>
             </div>
 

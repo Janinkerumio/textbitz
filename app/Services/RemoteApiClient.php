@@ -12,6 +12,7 @@ class RemoteApiClient
     public const RESULT_SUCCESS = 'success';
     public const RESULT_RETRY = 'retry';
     public const RESULT_FAILED = 'failed';
+    public const RESULT_UNAUTHORIZED = 'unauthorized';
 
     public static function post(User $user, string $endpoint, array $payload): array
     {
@@ -19,7 +20,7 @@ class RemoteApiClient
 
         if (!$token) {
             return [
-                'result' => self::RESULT_FAILED,
+                'result' => self::RESULT_UNAUTHORIZED,
                 'message' => 'No remote token for user',
             ];
         }
@@ -45,6 +46,14 @@ class RemoteApiClient
             return [
                 'result' => self::RESULT_SUCCESS,
                 'data' => $response->json(),
+            ];
+        }
+
+        if ($response->status() === 401) {
+            return [
+                'result' => self::RESULT_UNAUTHORIZED,
+                'message' => 'Remote token invalid or expired',
+                'status' => 401,
             ];
         }
 

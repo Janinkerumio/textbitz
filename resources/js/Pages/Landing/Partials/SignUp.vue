@@ -1,5 +1,5 @@
 <script setup>
-import { Mail, User } from 'lucide-vue-next';
+import { Mail, Phone, User } from 'lucide-vue-next';
 import { useForm } from '@inertiajs/vue3';
 import TextbitzBrandmark from '@/Components/TextbitzBrandmark.vue';
 import AuthInputLabel from '@/Components/Input/AuthInputLabel.vue';
@@ -8,17 +8,23 @@ import AuthTextInput from '@/Components/Input/AuthTextInput.vue';
 import AuthPasswordInput from '@/Components/Input/AuthPasswordInput.vue';
 import LargeSubmitButton from '@/Components/Button/LargeSubmitButton.vue';
 import AuthSwitchPrompt from '@/Components/Button/AuthSwitchPrompt.vue';
+import { usePhoneFormatter, normalizePhone, stripSpaces } from '@/Composables/usePHPhoneFormatter';
 
 const form = useForm({
     name: '',
     email: '',
+    phone_number: '',
     password: '',
     password_confirmation: ''
 })
 
+const { error: phoneFormatError, handlePhoneInput } = usePhoneFormatter(form, 'phone_number')
+
 const emit = defineEmits(['switchScreen'])
 
 const submit = () => {
+    form.phone_number = normalizePhone(stripSpaces(form.phone_number))
+
     form.post(route('register'), {
         onFinish: () => form.reset('password', 'password_confirmation')
     })
@@ -59,6 +65,21 @@ const submit = () => {
                     :icon="Mail"
                 />
                 <InputError :message="form.errors.email"/>
+            </div>
+
+            <div>
+                <AuthInputLabel label-for="Phone Number"/>
+                <AuthTextInput
+                    id="phone_number"
+                    type="tel"
+                    inputmode="numeric"
+                    :model-value="form.phone_number"
+                    @input="handlePhoneInput"
+                    autocomplete="tel"
+                    placeholder="+63 9** *** ****"
+                    :icon="Phone"
+                />
+                <InputError :message="phoneFormatError || form.errors.phone_number"/>
             </div>
 
             <div>

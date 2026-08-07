@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Demo User',
             'email' => 'demo@textbitz.com',
+            'phone_number' => '+639171234567',
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);
