@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Resolvers;
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;

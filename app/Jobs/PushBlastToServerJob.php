@@ -10,8 +10,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use App\Services\RemoteApiClient;
-use App\Services\ServerConnectivityService;
+use App\Services\Remote\RemoteApiClient;
+use App\Services\Remote\ServerConnectivityService;
 
 class PushBlastToServerJob implements ShouldQueue
 {

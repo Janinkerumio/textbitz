@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
-use App\Services\RouteMacroService;
-use App\Services\DefaultDataSeeder;
+use App\Services\Resolvers\RouteMacroService;
+use App\Services\Data\DefaultDataSeeder;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
 

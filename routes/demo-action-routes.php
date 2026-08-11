@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Services\DefaultDataSeeder;
+use App\Services\Data\DefaultDataSeeder;
 use App\Enums\DefaultSeeder;
 
 Route::post('/make-demo-account', function () {

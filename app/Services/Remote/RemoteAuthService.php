@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Remote;
 
 use App\Models\User;
+use App\Services\Remote\ServerConnectivityService;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;

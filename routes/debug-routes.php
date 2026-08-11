@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Services\PlatformService;
+use App\Services\Resolvers\PlatformService;
 use Illuminate\Support\Facades\File;
 use Native\Mobile\Facades\System;
 use Native\Mobile\Facades\Device;

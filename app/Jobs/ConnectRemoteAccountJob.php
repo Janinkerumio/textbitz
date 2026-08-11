@@ -3,8 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\User;
-use App\Services\RemoteAuthService;
-use App\Services\ServerConnectivityService;
+use App\Services\Remote\RemoteAuthService;
+use App\Services\Remote\ServerConnectivityService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;

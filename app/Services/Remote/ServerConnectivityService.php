@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Remote;
 
 use App\Events\ServerConnectionRestored;
 use Illuminate\Support\Facades\Cache;
