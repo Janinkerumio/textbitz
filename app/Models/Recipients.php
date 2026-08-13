@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -14,8 +13,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 #[Fillable('history_id', 'contact_id', 'remote_id', 'name', 'mobile_num', 'status', 'sync_status', 'error_message', 'sent_at')]
 class Recipients extends Model
 {
-    use SoftDeletes;
-
     const STATUS_DRAFT = 'draft';
     const STATUS_QUEUED = 'queued';
     const STATUS_SENT = 'sent';

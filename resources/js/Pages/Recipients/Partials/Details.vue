@@ -36,7 +36,7 @@ const props = defineProps({
                 <Ellipsis :size="24" class="text-gray-600 dark:text-gray-300"/>
             </section>
             <section class="flex flex-wrap gap-4 px-4 pt-2 border-t-[0.25px] border-gray-200 dark:border-gray-500 text-gray-600 dark:text-gray-400 w-full">
-                <p class="text-sm">{{ friendlyDate('shortDate', history.last_sent_at) }}</p>
+                <p class="text-sm">{{ friendlyDate('shortDate', history.last_sent_at ?? history.updated_at) }}</p>
                 <p class="text-sm">{{ history.recipients }} recipients</p>
             </section>
             <section class="flex flex-wrap gap-4 px-4 pb-2">

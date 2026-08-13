@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Vinkla\Hashids\Facades\Hashids;
@@ -18,8 +17,6 @@ use Illuminate\Support\Str;
 #[Fillable('user_id', 'template_id', 'title', 'blast', 'status', 'recipients', 'sent_count', 'failed_count' , 'type', 'send_mode', 'slug', 'scheduled_at',  'last_sent_at', 'remote_id', 'sync_status')]
 class History extends Model
 {
-    use SoftDeletes;
-
     protected $table = 'history';
 
     const STATUS_DRAFT = 'draft';
@@ -76,7 +73,14 @@ class History extends Model
 
     public function contacts(): HasManyThrough
     {
-        return $this->hasManyThrough(Contact::class, Recipients::class);
+        return $this->hasManyThrough(
+            Contact::class,
+            Recipients::class,
+            'history_id',
+            'id',
+            'id',
+            'contact_id'
+        );
     }
 
     public function scopeScheduled(Builder $query): Builder

@@ -46,7 +46,6 @@ const form = useForm({
 })
 
 const submit = () => {
-    //toast.show('This feature is under development')
     form.post(
         route('api.blast.create', [{select_all: props.selectedRecipients.selectAll}]), {
             preserveScroll: true,
@@ -80,8 +79,10 @@ watch(() => props.preMadeMessage, (value) => {
 })
 
 watch(() => props.selectedRecipients, (payload) => {
-    parsePayload(payload)
-}, { deep: true })
+    if(payload.selectedCount > 0) {
+        parsePayload(payload)
+    }
+}, { immediate: true })
 </script>
 
 <template>
@@ -125,10 +126,15 @@ watch(() => props.selectedRecipients, (payload) => {
             <div class="flex-1 flex flex-wrap gap-1">
                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ chars }} characters</p>
             </div>
-            <SubmitButton :disabled="form.processing">
-                <Send :size="20"/>
-                <p>Save</p>
-            </SubmitButton>
+            <div class="flex flex-wrap gap-2">
+                <div class="flex flex-col gap-1">
+                    <small v-if="selectedRecipients.selectedCount === 0" class="text-gray-600 dark:text-gray-400">Please select recipients to proceed</small>
+                    <SubmitButton :disabled="form.processing || selectedRecipients?.selectedCount === 0" width="w-28 self-end">
+                        <Send :size="20"/>
+                        <p>{{ form.processing ? 'Saving...' : 'Save' }}</p>
+                    </SubmitButton>
+                </div>
+            </div>
         </div>
     </form>
 </template>

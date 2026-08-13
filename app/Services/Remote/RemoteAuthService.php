@@ -58,6 +58,7 @@ class RemoteAuthService extends RemoteApiClient
     {
         $response = Http::post(self::url('/api/register'), [
             'name' => $user->name,
+            'email' => $user->email,
             'phone_number' => $user->phone_number,
             'password' => $password,
             'device_name' => php_uname('n'),
@@ -127,13 +128,25 @@ class RemoteAuthService extends RemoteApiClient
 
     public static function logout(User $user): void
     {
-        if (!$user->remote_token) {
-            return;
+        if ($user->remote_token)
+        {
+            Http::withToken($user->remote_token)->post(self::url('/api/logout'));
+
+            static::invalidateSession($user);
         }
+    }
 
-        Http::withToken($user->remote_token)->post(self::url('/api/logout'));
+    public static function invalidateSession(User $user): void
+    {
+        if(!empty($user->remote_token))
+        {
+            $user->update([
+                'remote_token' => null,
+                'remote_synced_at' => null,
+            ]);
 
-        $user->update(['remote_token' => null]);
+            Log::info('Remote session invalidated locally', ['user_id' => $user->id]);
+        }
     }
 
     public static function verifyAllTokens(): void

@@ -24,8 +24,7 @@ return new class extends Migration
             $table->timestamp('sent_at')->nullable();
             $table->timestamps();
             $table->index(['history_id', 'status']);
-            $table->index('mobile_number');
-            $table->softDeletes();
+            $table->index('mobile_num');
         });
     }
 

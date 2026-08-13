@@ -29,6 +29,8 @@ class PushBlastToServerJob implements ShouldQueue
 
     public function handle(): void
     {
+        Log::info('Blast payload to send', ['blast' => $this->blast]);
+
         if (in_array($this->blast->sync_status, [History::SYNC_STATUS_BLAST_SYNCED, History::SYNC_STATUS_SYNCED])) {
             return;
         }
@@ -49,6 +51,7 @@ class PushBlastToServerJob implements ShouldQueue
         }
 
         $response = RemoteApiClient::post($this->blast->user, '/api/blasts', [
+            'title' => $this->blast->title,
             'template_id' => $this->blast->template_id,
             'message' => $this->blast->blast,
             'slug' => $this->blast->slug,
@@ -81,6 +84,11 @@ class PushBlastToServerJob implements ShouldQueue
             Log::error('Blast rejected by server', ['blast_id' => $this->blast->id, 'response' => $response]);
             $this->fail();
             return;
+        }
+
+        if($response['result'] === RemoteApiClient::RESULT_RETRY)
+        {
+            Log::error('Blast data posting failed', ['blast_id' => $this->blast->id, 'response' => $response]);
         }
 
         $this->release($this->backoff[$this->attempts() - 1] ?? end($this->backoff));

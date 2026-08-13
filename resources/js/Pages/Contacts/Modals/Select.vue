@@ -15,6 +15,7 @@ import Modal from '@/Components/Breeze/Modal.vue';
 import DangerButton from '@/Components/Breeze/DangerButton.vue';
 import SecondaryButton from '@/Components/Breeze/SecondaryButton.vue';
 import crossPlatformToast from '@/helpers/crossPlatformToast';
+import { usePhoneFormatter, normalizePhone, stripSpaces } from '@/Composables/usePHPhoneFormatter';
 
 const props = defineProps({
     modelValue: Boolean,
@@ -42,11 +43,15 @@ const form = useForm({
     tags: []
 })
 
+const { error: phoneFormatError, handlePhoneInput } = usePhoneFormatter(form, 'phone_num')
+
 const aBRForm = useForm({
     recipients: []
 })
 
 const submit = () => {
+    form.phone_num = normalizePhone(stripSpaces(form.phone_num))
+
     form.put(route('api.contacts.update', props.ID), {
         preserveScroll: true,
         onSuccess: async () => {
@@ -177,8 +182,9 @@ watch(() => props.ID, (id) => {
                             inputmode="numeric"
                             name="phone_num"
                             v-model="form.phone_num"
+                            @input="handlePhoneInput"
                         />
-                        <InputError class="mt-2" :message="form.errors.phone_num" />
+                        <InputError class="mt-2" :message="form.errors.phone_num || phoneFormatError" />
                     </div>
                     <div class="w-full flex flex-col">
                         <InputLabel value="Tags"/>

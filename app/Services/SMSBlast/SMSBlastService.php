@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use App\Services\Remote\ServerConnectivityService;
+use Vinkla\Hashids\Facades\Hashids;
 
 class SMSBlastService
 {
@@ -125,6 +126,21 @@ class SMSBlastService
     {
         return [
 
+        ];
+    }
+
+    public static function createResendBlastPayload(string $hash_id): array
+    {
+        $blast = History::findByHashId($hash_id)->load('recipients');
+        $template = Template::findOrFail($blast->template_id);
+        $recipients = $blast->contacts()->get();
+
+        return [
+            'message' => $template->message,
+            'excludedRecipients' => [],
+            'template_id' => Hashids::encode($template->id),
+            'title' => $blast->title,
+            'recipients' => $recipients->map(fn ($recipient) => Hashids::encode($recipient->id))->toArray(),
         ];
     }
 }

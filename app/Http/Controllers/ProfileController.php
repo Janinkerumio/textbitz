@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Services\Remote\RemoteAuthService;
 
 class ProfileController extends Controller
 {
@@ -50,6 +51,8 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        RemoteAuthService::logout($user);
 
         Auth::logout();
 

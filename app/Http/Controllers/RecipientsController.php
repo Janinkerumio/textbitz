@@ -32,7 +32,7 @@ class RecipientsController extends Controller
         });
 
         $recipients = $query->where('history_id', $history->id)
-                        ->latest()
+                        ->latest('last_sent_at' ?? 'updated_at')
                         ->paginate(20);
 
         return RecipientResource::collection($recipients);

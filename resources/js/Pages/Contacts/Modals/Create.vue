@@ -8,7 +8,6 @@ import InputError from '@/Components/Breeze/InputError.vue';
 import SubmitButton from '@/Components/Button/SubmitButton.vue';
 import { BookPlus, UserPlus } from 'lucide-vue-next';
 import { usePhoneFormatter, normalizePhone, stripSpaces } from '@/Composables/usePHPhoneFormatter';
-import { dialog } from '#nativephp'
 import crossPlatformToast from '@/helpers/crossPlatformToast';
 
 defineProps({

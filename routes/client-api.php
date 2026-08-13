@@ -20,6 +20,7 @@ Route::get('api/', function () {
 Route::prefix('api')->group(function () {
     Route::middleware('auth')->name('api.')->group(function () {
         Route::post('/blast', [BlastController::class, 'store'])->name('blast.create');
+        Route::post('/blast/{blast_id}/resend', [BlastController::class, 'resend'])->name('blast.resend');
 
         Route::get('/dashboard/history', [DashboardController::class, 'historyDashboard'])->name('dashboard.history');
 

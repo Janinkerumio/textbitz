@@ -37,9 +37,7 @@ class AuthenticatedSessionController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        if (!$user->remote_token) {
-            RemoteAuthService::authenticateOrDefer($user, $request->string('password')->toString());
-        }
+        RemoteAuthService::authenticateOrDefer($user, $request->string('password')->toString());
 
         return redirect()->intended(route('app.dashboard', absolute: false));
     }
@@ -49,6 +47,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        RemoteAuthService::logout($request->user());
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

@@ -11,8 +11,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use App\Models\Recipients;
-use App\Services\RemoteApiClient;
-use App\Services\ServerConnectivityService;
+use App\Services\Remote\RemoteApiClient;
+use App\Services\Remote\ServerConnectivityService;
 
 class PushBlastRecipientsJob implements ShouldQueue
 {
@@ -37,7 +37,7 @@ class PushBlastRecipientsJob implements ShouldQueue
     }
 
     public function handle(): void
-    {
+    { 
         if (!ServerConnectivityService::isOnline()) {
             Log::info('Server offline, delaying blast push', ['blast_id' => $this->blast->id]);
             $this->release(30);
@@ -62,7 +62,7 @@ class PushBlastRecipientsJob implements ShouldQueue
         if ($response['result'] === RemoteApiClient::RESULT_SUCCESS) {
             Recipients::where('history_id', $this->blast->id)
                 ->whereIn('contact_id', $contactIds)
-                ->update(['sync_status' => 'synced']);
+                ->update(['sync_status' => Recipients::SYNC_STATUS_SYNCED]);
             return;
         }
 
@@ -80,9 +80,13 @@ class PushBlastRecipientsJob implements ShouldQueue
         if ($response['result'] === RemoteApiClient::RESULT_FAILED) {
             Recipients::where('history_id', $this->blast->id)
                 ->whereIn('contact_id', $contactIds)
-                ->update(['sync_status' => 'failed']);
+                ->update([
+                    'sync_status' => Recipients::SYNC_STATUS_FAILED, 
+                    'status' => Recipients::STATUS_FAILED,
+                    'error_message' => $response['data']['message'] ?? ($response['message'] ?? 'Unknown error from client. Check the server logs')
+                ]);
 
-            Log::error('Recipient chunk rejected', ['blast_id' => $this->blast->id, 'response' => $response]);
+            Log::error('Recipient chunk rejected', ['blast_id' => $this->blast->id, 'response' => $response, 'recipient_IDS' => $contactIds]);
             $this->fail();
             return;
         }

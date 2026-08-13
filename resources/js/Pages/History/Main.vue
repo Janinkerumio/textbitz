@@ -1,6 +1,6 @@
 <script setup>
-import { Head, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Head, router, usePage } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import EmptyHistory from '@/Components/Placeholders/EmptyHistory.vue';
 import List from './Partials/List.vue';
@@ -20,6 +20,7 @@ const props = defineProps({
 })
 
 const toast = crossPlatformToast()
+const page = usePage()
 
 const appliedSortFilter = ref({})
 const showDeletionModal = ref(false)
@@ -30,8 +31,8 @@ const handleSorting = (payload) => {
     appliedSortFilter.value = payload
 }
 
-const handleEmitsFromList = (id) => {
-    toast.show('This function is under development')
+const handleResend = (id) => {
+    router.post(route('api.blast.resend', id))
 }
 
 const handleViewRecipients = (id) => {
@@ -52,6 +53,20 @@ const handleRemoval = (id) => {
         listRef.value?.removeData?.(id)
     }
 }
+
+watch(
+    () => [ page.props.errors, page.props.flash.success ], 
+    ([errors, success]) => {
+        if (errors && Object.keys(errors).length > 0) {
+            toast.error(errors.message ?? 'Something went wrong')
+        }
+
+        if(success) {
+            toast.success(success ?? 'Processed successfully')
+        }
+    }, 
+    { deep: true }
+)
 </script>
 
 <template>
@@ -67,7 +82,7 @@ const handleRemoval = (id) => {
                 <List ref="listRef"
                     :sort-by="appliedSortFilter"
                     @view-recipients="(id) => handleViewRecipients(id)"
-                    @resend="(id) => handleEmitsFromList(id)"
+                    @resend="(id) => handleResend(id)"
                     @duplicate="(id) => handleDuplicateBlast(id)"
                     @delete="(id) => handleDelete(id)"
                 />

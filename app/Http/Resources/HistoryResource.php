@@ -24,6 +24,7 @@ class HistoryResource extends JsonResource
             'sent_count' => $this->sent_count,
             'failed_count' => $this->failed_count,
             'last_sent_at' => $this->last_sent_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }
