@@ -6,7 +6,7 @@ import InputError from '@/Components/Breeze/InputError.vue';
 import { Send } from 'lucide-vue-next';
 import settings from '@/data/settings';
 import crossPlatformToast from '@/helpers/crossPlatformToast';
-import TextInput from '@/Components/Breeze/TextInput.vue';
+import { useServerConnectivity } from '@/Composables/useServerConnectivity';
 import NonBoxedTextInput from '@/Components/Input/NonBoxedTextInput.vue';
 
 const props = defineProps({
@@ -26,6 +26,7 @@ const props = defineProps({
 
 const toast = crossPlatformToast()
 const page = usePage()
+const { isOnline } = useServerConnectivity()
 
 const chars = computed(() => form.message.length)
 const messageVariables = computed(() => props.messageVariables.length !== 0
@@ -135,6 +136,11 @@ watch(() => props.selectedRecipients, (payload) => {
                     </SubmitButton>
                 </div>
             </div>
+        </div>
+        <div v-if="!isOnline">
+            <p class="text-gray-600 dark:text-gray-400 text-xs">
+                You're offline — this blast will be queued and sent automatically once connection is restored.
+            </p>
         </div>
     </form>
 </template>

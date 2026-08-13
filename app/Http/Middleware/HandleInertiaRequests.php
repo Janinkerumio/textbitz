@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use App\Services\Resolvers\PlatformService;
+use App\Services\Remote\ServerConnectivityService;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -44,6 +45,9 @@ class HandleInertiaRequests extends Middleware
                 'templateUpdated' => fn () => $request->session()->get('templateUpdated')
             ],
             'platform' => fn () => PlatformService::detect(),
+            'server' => [
+                'connectivity' => ServerConnectivityService::isOnline(),
+            ]
         ];
     }
 }
