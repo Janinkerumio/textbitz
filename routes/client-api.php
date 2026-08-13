@@ -7,6 +7,7 @@ use App\Http\Controllers\TemplatesController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\RecipientsController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\BroadcastAuthProxyController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +44,8 @@ Route::prefix('api')->group(function () {
         Route::get('/recipients/{history_id}', [RecipientsController::class, 'loadByHistory'])->name('recipients.by-history');
 
         Route::post('/settings/business', [SettingsController::class, 'changeBusinessSettings'])->name('settings.change.business');
+
+        Route::post('/broadcasting/auth', [BroadcastAuthProxyController::class, 'authorize'])->name('broadcasting.auth');
     });
 });
 

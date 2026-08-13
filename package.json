@@ -23,7 +23,9 @@
         "@fortawesome/fontawesome-free": "^7.3.0",
         "@vueuse/core": "^14.3.0",
         "axios": "^1.18.1",
-        "lucide-vue-next": "^1.0.0"
+        "laravel-echo": "^2.4.0",
+        "lucide-vue-next": "^1.0.0",
+        "pusher-js": "^8.6.0"
     },
     "imports": {
         "#nativephp": "./vendor/nativephp/mobile/resources/jump/dist/native"

@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\ServerConnectivityService;
+use App\Services\Remote\ServerConnectivityService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;

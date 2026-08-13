@@ -11,3 +11,5 @@ import settings from "./data/settings";
 applyTheme(localStorage.getItem('darkMode') ?? settings.preferences.darkMode)
 
 //-------------------------------------------------------
+
+import './echo';

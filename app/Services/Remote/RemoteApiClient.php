@@ -14,6 +14,32 @@ class RemoteApiClient
     public const RESULT_FAILED = 'failed';
     public const RESULT_UNAUTHORIZED = 'unauthorized';
 
+    public static function get(User $user, string $endpoint, array $query = []): array
+    {
+        $token = $user->remote_token;
+        if (!$token) 
+        {
+            return [
+                'result' => self::RESULT_UNAUTHORIZED,
+                'message' => 'No remote token for user',
+            ];
+        }
+
+        try {
+            $response = Http::withToken($token)
+                ->timeout(15)
+                ->get(self::url($endpoint), $query);
+
+            return self::classify($response);
+        } catch (ConnectionException $e) {
+            return [
+                'result' => self::RESULT_RETRY,
+                'message' => $e->getMessage(),
+            ];
+        }
+    }
+
+
     public static function post(User $user, string $endpoint, array $payload): array
     {
         $token = $user->remote_token;
