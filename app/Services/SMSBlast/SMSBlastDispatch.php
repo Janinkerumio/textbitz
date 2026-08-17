@@ -15,6 +15,8 @@ use App\Rules\PhilippineMobileNumber;
 
 trait SMSBlastDispatch
 {
+    use SMSBlastTextAndString;
+
     protected static function dispatchBlastJob(Model $blast, Collection $recipients): void
     {
         $chunks = static::validateBeforeDispatch($blast, $recipients)
@@ -64,6 +66,7 @@ trait SMSBlastDispatch
                 'local_contact_id' => $contact->id,
                 'phone_num' => $contact->phone_num,
                 'contact_name' => $contact->contact_name,
+                'message' => self::prepareMessage($contact, $blast)
             ]);
         }
 
