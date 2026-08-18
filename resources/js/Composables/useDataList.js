@@ -9,11 +9,11 @@
  * }}
  */
 export function useDataList(items) {
-    const prependData = (item, updateOnly = false) => {
+    const prependData = (item, updateOnly = false, matchKey = 'id') => {
         if(updateOnly) {
-            const index = items.value.findIndex(data => data.id === item.id)
-            if(index !== -1) {
-                items.value[index] = item
+            const index = items.value.findIndex(data => data[matchKey] === item[matchKey])
+            if (index !== -1) {
+                items.value[index] = { ...items.value[index], ...item }
             }
         } else {
             items.value.unshift(item)

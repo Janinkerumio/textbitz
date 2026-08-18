@@ -31,7 +31,7 @@ class HistoryController extends Controller
 
         $data = $query
                 ->with('template:id,title')
-                ->orderBy('last_sent_at', 'desc')
+                ->latest()
                 ->paginate(20);
 
         return HistoryResource::collection($data);
@@ -61,5 +61,41 @@ class HistoryController extends Controller
 
             return back()->with('error', 'Something went wrong while processing. Please try again.');
         }
+    }
+
+    public function show(Request $request)
+    {
+
+    }
+
+    public function update(Request $request, string $uuid)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:' . implode(',', [
+                History::STATUS_FAILED,
+                History::STATUS_SENT,
+            ]),
+        ]);
+
+        $history = History::initiateQuery()->where('uuid', $uuid)->first();
+        $history->update($validated);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function pendingBlasts()
+    {
+        $blasts = History::initiateQuery()
+            ->whereNotIn('status', [
+                History::STATUS_SENT,
+                History::STATUS_FAILED,
+                History::STATUS_CANCELLED,
+            ])
+            ->select('uuid')
+            ->get();
+
+        return response()->json([
+            'blasts' => $blasts,
+        ]);
     }
 }

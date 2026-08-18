@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\Models\Contact;
+use App\Rules\PhilippineMobileNumber;
 
 class ContactRequest extends FormRequest
 {
@@ -46,6 +47,7 @@ class ContactRequest extends FormRequest
                 Rule::unique('contacts', 'phone_num')
                     ->where('user_id', Auth::id())
                     ->ignore($contact?->id),
+                new PhilippineMobileNumber
             ],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['string', 'max:50'],

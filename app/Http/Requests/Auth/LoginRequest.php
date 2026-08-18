@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Rules\PhilippineMobileNumber;
 
 class LoginRequest extends FormRequest
 {
@@ -28,7 +29,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone_number' => ['required', 'string'],
+            'phone_number' => ['required', 'string', new PhilippineMobileNumber],
             'password' => ['required', 'string'],
         ];
     }

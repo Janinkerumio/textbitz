@@ -11,6 +11,7 @@ use App\Models\Template;
 use Illuminate\Support\Facades\DB;
 use App\Services\SMSBlast\SMSBlastService;
 use App\Models\History;
+use Illuminate\Support\Facades\Log;
 
 class BlastController extends Controller
 {
@@ -58,10 +59,13 @@ class BlastController extends Controller
             $response = SMSBlastService::processBlastRequest($data, $request); 
             $result = SMSBlastService::resolveSendMode($response['blast'], $response['recipients'], $data);
 
+            Log::info('After blast is dispatched', ['result' => $result]);
+
             if ($result['success']) {
                 DB::commit();
                 return redirect()->route('app.blast.history')
-                    ->with('success', 'SMS blast is being processed');
+                    ->with('success', 'SMS blast is being processed')
+                    ->with('blast', $result['blast']);
             } else {
                 DB::rollBack();
                 return back()->withErrors([

@@ -42,7 +42,8 @@ class HandleInertiaRequests extends Middleware
                 'newContact' => fn () => $request->session()->get('newContact'),
                 'contactUpdated' => fn () => $request->session()->get('contactUpdated'),
                 'newTemplate' => fn () => $request->session()->get('newTemplate'),
-                'templateUpdated' => fn () => $request->session()->get('templateUpdated')
+                'templateUpdated' => fn () => $request->session()->get('templateUpdated'),
+                'blast' => fn () => $request->session()->get('blast'),
             ],
             'platform' => fn () => PlatformService::detect(),
             'server' => [

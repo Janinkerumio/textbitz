@@ -9,6 +9,7 @@ use App\Http\Resources\HistoryResource;
 use App\Http\Resources\RecipientResource;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Rules\PhilippineMobileNumber;
 
 class RecipientsController extends Controller
 {
@@ -36,5 +37,23 @@ class RecipientsController extends Controller
                         ->paginate(20);
 
         return RecipientResource::collection($recipients);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:' . implode(',', [
+                Recipients::STATUS_FAILED,
+                Recipients::STATUS_SENT,
+            ]),
+            'mobile_num' => ['required', 'string', new PhilippineMobileNumber],
+            'sent_at' => 'nullable|datetime',
+            'error_message' => 'nullable|string'
+        ]);
+
+        $recipient = Recipients::findOrFail($id);
+        $recipient->update($validated);
+
+        return response()->json(['success' => true]);
     }
 }

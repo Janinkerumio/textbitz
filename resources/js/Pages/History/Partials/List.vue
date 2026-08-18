@@ -1,5 +1,6 @@
 <script setup>
-import { computed, ref, useTemplateRef } from 'vue';
+import { computed, ref, useTemplateRef, watch } from 'vue';
+import { router } from '@inertiajs/vue3';
 import { fetchHistory } from '@/data/api/fetchViaAxios';
 import { createInfiniteScroll } from '@/helpers/createInfiniteScroll';
 import { capitalize } from 'vue';
@@ -9,6 +10,7 @@ import { friendlyDate } from '@/helpers/date';
 import DetailsCardColList from '@/Components/Skeleton/DetailsCardColList.vue';
 import ActionButton from '@/Components/Button/ActionButton.vue';
 import { useDataList } from '@/Composables/useDataList';
+import { getBlastState } from '@/services/useBlastChannelManager';
 
 const props = defineProps({
     sortBy: {
@@ -19,6 +21,7 @@ const props = defineProps({
 
 const expandedHistoryId = ref(new Set())
 const isExpanded = (id) => expandedHistoryId.value.has(id)
+const watchedUuids = new Set()
 
 const container = useTemplateRef('container')
 const { items: histories, loading, onScroll } = createInfiniteScroll(
@@ -27,7 +30,7 @@ const { items: histories, loading, onScroll } = createInfiniteScroll(
     { distance: 10 }
 )
 
-const { removeData } = useDataList(histories)
+const { prependData, removeData } = useDataList(histories)
 
 const expand = (id) => {
     if (expandedHistoryId.value.has(id)) {
@@ -39,6 +42,26 @@ const expand = (id) => {
     
     expandedHistoryId.value = new Set(expandedHistoryId.value)
 }
+
+watch(histories, (list) => {
+    list.forEach((history) => {
+        if (!history.uuid || watchedUuids.has(history.uuid)) return
+
+        watchedUuids.add(history.uuid)
+
+        const blastState = getBlastState(history.uuid)
+
+        watch(
+            () => blastState.status,
+            (newStatus) => {
+                if (!newStatus) return
+                console.log(newStatus)
+                prependData({ uuid: history.uuid, status: newStatus }, true, 'uuid')
+                router.reload({ only: ['stats']})
+            }
+        )
+    })
+}, { immediate: true, deep: true })
 
 defineExpose({
     removeData

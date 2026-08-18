@@ -32,8 +32,9 @@ Route::prefix('api')->group(function () {
         Route::delete('/contacts/{id}', [ContactController::class, 'delete'])->name('contacts.delete');
 
         Route::get('/history', [HistoryController::class, 'load'])->name('history');
-        Route::get('/history/{id}', [HistoryController::class, 'show'])->name('history.show');
+        Route::patch('/history/{uuid}', [HistoryController::class, 'update'])->name('history.update');
         Route::delete('/history/{id}', [HistoryController::class, 'delete'])->name('history.delete');
+        Route::get('/history/pending', [HistoryController::class, 'pendingBlasts'])->name('history.pending');
 
         Route::get('/templates', [TemplatesController::class, 'load'])->name('templates');
         Route::get('/templates/{id}', [TemplatesController::class, 'show'])->name('templates.show');
@@ -42,6 +43,7 @@ Route::prefix('api')->group(function () {
         Route::delete('/templates/{id}', [TemplatesController::class, 'delete'])->name('templates.delete');
 
         Route::get('/recipients/{history_id}', [RecipientsController::class, 'loadByHistory'])->name('recipients.by-history');
+        Route::patch('/recipients/{id}', [RecipientsController::class, 'update'])->name('recipients.update');
 
         Route::post('/settings/business', [SettingsController::class, 'changeBusinessSettings'])->name('settings.change.business');
 

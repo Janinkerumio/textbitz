@@ -7,6 +7,7 @@ import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { vLongPress } from './directives/longPress';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { subscribeToUserChannel } from "./services/useBlastChannelManager";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -18,11 +19,14 @@ createInertiaApp({
             import.meta.glob('./Pages/**/*.vue'),
         ),
     setup({ el, App, props, plugin }) {
-        return createApp({ render: () => h(App, props) })
+        const app = createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
             .directive('long-press', vLongPress)
-            .mount(el);
+
+        app.mount(el);
+
+        subscribeToUserChannel();
     },
     progress: false,
 });
