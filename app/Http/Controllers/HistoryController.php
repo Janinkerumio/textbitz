@@ -78,7 +78,10 @@ class HistoryController extends Controller
         ]);
 
         $history = History::initiateQuery()->where('uuid', $uuid)->first();
-        $history->update($validated);
+        $history->update([
+            ...$validated,
+            'sync_status' => History::SYNC_STATUS_SYNCED,
+        ]);
 
         return response()->json(['success' => true]);
     }

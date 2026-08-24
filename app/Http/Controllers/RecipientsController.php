@@ -10,6 +10,7 @@ use App\Http\Resources\RecipientResource;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Rules\PhilippineMobileNumber;
+use Illuminate\Support\Facades\Log;
 
 class RecipientsController extends Controller
 {
@@ -39,21 +40,35 @@ class RecipientsController extends Controller
         return RecipientResource::collection($recipients);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $uuid)
     {
-        $validated = $request->validate([
-            'status' => 'required|in:' . implode(',', [
-                Recipients::STATUS_FAILED,
-                Recipients::STATUS_SENT,
-            ]),
-            'mobile_num' => ['required', 'string', new PhilippineMobileNumber],
-            'sent_at' => 'nullable|datetime',
-            'error_message' => 'nullable|string'
-        ]);
+        try{
+            $validated = $request->validate([
+                'status' => 'required|in:' . implode(',', [
+                    Recipients::STATUS_FAILED,
+                    Recipients::STATUS_SENT,
+                ]),
+                'mobile_num' => ['required', 'string', new PhilippineMobileNumber],
+                'sent_at' => 'nullable|date',
+                'error_message' => 'nullable|string'
+            ]);
 
-        $recipient = Recipients::findOrFail($id);
-        $recipient->update($validated);
+            $recipient = Recipients::whereHas('history', function ($query) use ($uuid) {
+                $query->where('uuid', $uuid);
+            })
+            ->where('mobile_num', $validated['mobile_num'])
+            ->first();
 
-        return response()->json(['success' => true]);
+            $recipient->update($validated);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            Log::warning('Recipient status updating failed', [
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json(['success' => false]);
+        }
+        
     }
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Services\Resolvers\PlatformService;
+use App\Services\Data\PullDataFromServer;
 use Illuminate\Support\Facades\File;
 use Native\Mobile\Facades\System;
 use Native\Mobile\Facades\Device;
@@ -57,5 +58,9 @@ if(config('app.debug'))
             ->implode("\n");
 
         return response()->json($lines);
+    });
+
+    Route::get('/debug/blast/reconcile', function () {
+        PullDataFromServer::reconcileInFlightBlasts();
     });
 }

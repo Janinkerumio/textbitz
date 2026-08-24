@@ -45,7 +45,7 @@ export function subscribeToUserChannel() {
             }
 
             window.axios
-                .patch(route('api.recipients.update', e.recipient.id), {
+                .patch(route('api.recipients.update', e.uuid), {
                     status: e.recipient.status,
                     mobile_num: e.recipient.mobile_num,
                     sent_at: e.recipient.sent_at,
