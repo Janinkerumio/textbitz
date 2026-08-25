@@ -1,5 +1,5 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import BasicLayout from '@/Layouts/BasicLayout.vue'
 import { Head, Link, router } from '@inertiajs/vue3'
 import { ref } from 'vue';
 import { ArrowLeft, SlidersHorizontal, Dot } from 'lucide-vue-next';
@@ -38,7 +38,7 @@ const handleDelete = (id) => {
                 : 'Recipients'" 
     />
 
-    <AuthenticatedLayout>
+    <BasicLayout>
         <template #header>
             <h2
                 class="flex flex-row gap-3 items-center text-base sm:text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
@@ -91,5 +91,5 @@ const handleDelete = (id) => {
                 />
             </div>
         </div>
-    </AuthenticatedLayout>
+    </BasicLayout>
 </template>

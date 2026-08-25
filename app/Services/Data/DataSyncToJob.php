@@ -8,6 +8,7 @@ use App\Models\History;
 use App\Models\Recipients;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
+use App\Services\SMSBlast\SMSBlastService;
 
 class DataSyncToJob
 {
@@ -66,9 +67,11 @@ class DataSyncToJob
 
                 $recipientJobs = $group
                     ->map(fn ($r) => [
+                        'blast_id' => $blast->id,
                         'local_contact_id' => $r->contact_id,
                         'phone_num' => $r->mobile_num,
                         'contact_name' => $r->name,
+                        'message' => SMSBlastService::prepareMessage($r, $blast)
                     ])
                     ->chunk(200)
                     ->map(fn ($chunk) => new PushBlastRecipientsJob($blast, $chunk->values()->all()))

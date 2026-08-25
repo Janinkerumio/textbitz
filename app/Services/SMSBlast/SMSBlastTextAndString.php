@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 trait SMSBlastTextAndString
 {
-    protected static function prepareMessage(Model $recipient, Model $blast): string
+    public static function prepareMessage(Model $recipient, Model $blast): string
     {
         $replacements = static::defaultVariables($recipient, $blast);
         //future implementation would have dynamic variables based on a record

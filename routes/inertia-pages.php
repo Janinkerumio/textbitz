@@ -12,6 +12,7 @@ Route::middleware('auth')->name('app.')->group( function () {
     Route::action('/history', 'History')->name('blast.history');
     Route::action('/templates', 'Templates')->name('blast-templates');
     Route::page('/settings', 'Settings')->name('settings');
+    Route::action('/profile', 'Profile')->name('profile.edit');
 
     Route::action('/history/recipients/{id}', 'Recipients')->name('recipients');
 
