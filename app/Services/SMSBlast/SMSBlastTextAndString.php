@@ -39,7 +39,7 @@ trait SMSBlastTextAndString
 
     private static function defaultVariables(Model $recipient, Model $blast): array
     {
-        $contact = Contact::findOrFail($recipient->id);
+        $contact = Contact::findOrFail($recipient->contact_id);
         $business = CorporateInfo::where('user_id', $blast->user_id)->first();
 
         return [

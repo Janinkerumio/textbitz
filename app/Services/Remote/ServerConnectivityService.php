@@ -11,7 +11,7 @@ use Illuminate\Http\Client\ConnectionException;
 class ServerConnectivityService extends RemoteApiClient
 {
     protected static int $cacheSeconds = 15;
-    protected static int $timeoutSeconds = 25;
+    protected static int $timeoutSeconds = 10;
     protected static string $lastKnownStateKey = 'remote_connectivity_last_known';
 
     protected static function healthUrl(): string
@@ -60,6 +60,9 @@ class ServerConnectivityService extends RemoteApiClient
 
         if ($isOnline && !$wasOnline) {
             Log::info('Remote server connection restored');
+            ServerConnectionRestored::dispatch(now());
+        } elseif (!$isOnline && $wasOnline) {
+            Log::warning('Remote server connection lost');
             ServerConnectionRestored::dispatch(now());
         }
 

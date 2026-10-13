@@ -4,12 +4,15 @@ namespace App\Services\Data;
 use App\Models\History;
 use App\Models\Recipients;
 use App\Services\Remote\RemoteApiClient;
+use App\Services\Remote\ServerConnectivityService;
 use Illuminate\Support\Facades\Log;
 
 class PullDataFromServer
 {
     public static function reconcileInFlightBlasts()
     {
+        if(!ServerConnectivityService::isOnline()) { return; }
+
         History::where('sync_status', History::SYNC_STATUS_BLAST_SYNCED)
             ->whereNotNull('remote_id')
             ->each(function (History $blast) {

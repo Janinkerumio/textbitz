@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-
+use App\Services\Remote\RemoteApiClient;
 
 class BroadcastAuthProxyController extends Controller
 {
@@ -25,13 +25,11 @@ class BroadcastAuthProxyController extends Controller
             'socket_id' => 'required|string',
         ]);
 
-        $url = rtrim(config('services.textbitz.server_url'), '/') . '/api/broadcasting/auth';
-
         try {
             $response = Http::withToken($token)
                 ->timeout(10)
                 ->asForm()
-                ->post($url, [
+                ->post(RemoteApiClient::url('/api/broadcasting/auth'), [
                     'channel_name' => $request->input('channel_name'),
                     'socket_id' => $request->input('socket_id'),
                 ]);

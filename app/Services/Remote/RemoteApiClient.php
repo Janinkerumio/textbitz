@@ -100,7 +100,7 @@ class RemoteApiClient
         ];
     }
 
-    protected static function url(string $endpoint): string
+    public static function url(string $endpoint): string
     {
         return rtrim(config('services.textbitz.server_url'), '/') . '/' . ltrim($endpoint, '/');
     }
